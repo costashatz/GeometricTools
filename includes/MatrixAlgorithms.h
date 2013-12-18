@@ -1,5 +1,23 @@
+#ifndef MATRIX_ALGO_H
+#define MATRIX_ALGO_H
+
 #include "Matrix.h"
 
+/**
+* Matrix (Linear Algebra) Algorithms
+* So far:
+*	*Solve Linear System using Gauss Elimination
+*	*LU Decomposition
+*	*Solve Linear System using LU Decomposition
+**/
+
+
+/**
+* Solve Linear System using Gauss Elimination
+* @param A - parameter Matrix
+* @param B - constant Vector
+* @return Vector<D> - solution
+**/
 template<unsigned int D>
 Vector<D> solveGauss(const Matrix<D,D>& A, const Vector<D>& B)
 {
@@ -8,25 +26,6 @@ Vector<D> solveGauss(const Matrix<D,D>& A, const Vector<D>& B)
 	Vector<D> res;
 	for(unsigned int i=0;i<D-1;i++)
 	{
-		/*if(a(i,i)==0.0)
-		{
-			bool t = false;
-			for(unsigned int j=i+1;j<D;j++)
-			{
-				if(a(j,i)!=0.0)
-				{
-					t = true;
-					a.SwapRows(i,j);
-					double temp = b(i);
-					b(i) = b(j);
-					b(j) = temp;
-					break;
-				}
-			}
-			if(!t)
-				return res;
-		}*/
-
 		int m = 0;
 		double temp1 = 0.0;
 		for(unsigned int j=i;j<D;j++)
@@ -75,7 +74,14 @@ Vector<D> solveGauss(const Matrix<D,D>& A, const Vector<D>& B)
 }
 
 
-
+/**
+* Perform LU Decomposition
+* @param a - Matrix to decompose
+* @param L - L Matrix --
+* @param U - U Matrix  |
+* @param P - P Matrix  |
+*					   --> Pass by reference (returns)
+**/
 template<unsigned int D>
 void LUDecomposition(const Matrix<D,D>& a, Matrix<D,D>& L, Matrix<D,D>& U, Matrix<D,D>& P)
 {
@@ -122,7 +128,12 @@ void LUDecomposition(const Matrix<D,D>& a, Matrix<D,D>& L, Matrix<D,D>& U, Matri
 	}
 }
 
-
+/**
+* Solve Linear System using LU Decomposition
+* @param A - parameter Matrix
+* @param B - constant Vector
+* @return Vector<D> - solution
+**/
 template<unsigned int D>
 Vector<D> solveLU(const Matrix<D,D>& A, const Vector<D>& B)
 {
@@ -155,3 +166,5 @@ Vector<D> solveLU(const Matrix<D,D>& A, const Vector<D>& B)
 
 	return res;
 }
+
+#endif
