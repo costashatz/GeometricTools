@@ -10,8 +10,6 @@
 #include "CStrassen.h"
 using namespace std;
 
-#define MAX(a,b) a>b?a:b
-
 /**
 * General Matrix Class
 * Supports NxM-dimension matrices
@@ -418,7 +416,7 @@ Matrix<C1,R2> operator*(const Matrix<C1,K>& r1, const Matrix<K,R2>& r2)
 	Matrix<K,R2> rb = r2;
 	double** a, **b, **c;
 	double D1=(ceil(log(K)/log(2.))), D2=(ceil(log(C1)/log(2.))),D3=(ceil(log(R2)/log(2.)));
-	unsigned int DIM = MAX(D1,MAX(D2,D3));
+	unsigned int DIM = maximum(D1,maximum(D2,D3));
 	DIM = (unsigned int)pow(2,DIM);
 	a = allocate_real_matrix(DIM,0);
 	b = allocate_real_matrix(DIM,0);

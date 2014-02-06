@@ -3,6 +3,7 @@
 #include <iostream>
 #include <limits>
 #define minimum(x,y) (x>y)?x:y
+#define maximum(a,b) a>b?a:b
 using namespace std;
 
 const int     MaxInt    = (std::numeric_limits<int>::max)();
