@@ -46,7 +46,6 @@ make
 
 1. Generic Templated Class for Matrices
     * Supports any dimension and many properties (many need to be added and some to improve)
-    * Supports Strassen's algorithm for fast matrix-matrix multiplications (needs improvement)
 2. Generic Templated Class for Vectors
     * Supports any dimension and most of the vector properties (cross product need to be added)
 3. Solve Linear Systems
@@ -64,7 +63,7 @@ make
 1. Improve the templated classes for Matrices and Vectors
     * Eigen-values and eigen-vectors computation
     * Cleanify code/add comments
-    * ...general imporvement (e.g. write Strassen's algorithm using my classes)
+    * Integrate BLAS subroutines
 2. Add more linear systems solving mechanisms (algorithms)
 3. Add more decomposition techniques (e.g. SVD)
 4. More primitives (both in 2D and 3D)
