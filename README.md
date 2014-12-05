@@ -1,4 +1,4 @@
-###Library for Linear Algebra and Numerical Analysis Algorithms
+###Math Library for Linear Algebra, Numerical Analysis and Collision Detection Algorithms
 
 ####Needs C++11 compatible compiler to compile!
 
@@ -21,9 +21,8 @@
     * Eigen-values and eigen-vectors computation
     * Cleanify code/add comments
     * ...general imporvement (e.g. write Strassen's algorithm using my classes)
-2. Improve code for Matrix Algorithms file
-3. Add more linear systems solving mechanisms (algorithms)
-4. Add more decomposition techniques (e.g. SVD)
+2. Add more linear systems solving mechanisms (algorithms)
+3. Add more decomposition techniques (e.g. SVD)
 
 
 ####WORK IN PROGRESS - WILL BE UPDATED FREQUENTLY
