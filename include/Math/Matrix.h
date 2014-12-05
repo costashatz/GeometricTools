@@ -121,88 +121,72 @@ public:
     }
 
     /**
-    * Overloading + operator
+    * Overloading () operator - const version
+    * Access Matrix Matlab-like
+    * @param i - row index to return
+    * @param j - column index to return
+    * @return double - value of i-th element
+    **/
+    double operator()(unsigned int i, unsigned int j) const //assert legal index
+    {
+        return values[i*COLS+j];
+    }
+
+    /**
+    * Overloading += operator
     * Addition of 2 Matrices
     * @param other - Matrix to perform addition with
     * @return Matrix - the result of the addition
     **/
-    Matrix operator+(const Matrix& other)
-    {
-        unsigned int N = COLS*ROWS;
-        Matrix t = Matrix(*this);
-        for(unsigned int i=0;i<N;i++)
-            t.values[i] += other.values[i];
-        return t;
-    }
-
     Matrix operator+=(const Matrix& other)
     {
-        *this = *this+other;
+        unsigned int N = COLS*ROWS;
+        for(unsigned int i=0;i<N;i++)
+            (*this).values[i] += other.values[i];
         return *this;
     }
 
     /**
-    * Overloading - operator
-    * Addition of 2 Matrices
+    * Overloading -= operator
+    * Subtration of 2 Matrices
     * @param other - Matrix to perform subtraction with
     * @return Matrix - the result
     **/
-    Matrix operator-(const Matrix& other)
-    {
-        unsigned int N = COLS*ROWS;
-        Matrix t = Matrix(*this);
-        for(unsigned int i=0;i<N;i++)
-            t.values[i] -= other.values[i];
-        return t;
-    }
-
     Matrix operator-=(const Matrix& other)
     {
-        *this = *this-other;
+        unsigned int N = COLS*ROWS;
+        for(unsigned int i=0;i<N;i++)
+            (*this).values[i] -= other.values[i];
         return *this;
     }
 
     /**
-    * Overloading * operator
+    * Overloading *= operator
     * Multiplication with scalar (double)
     * @param other - double to multiply with
     * @return Matrix - the result
     **/
-    Matrix operator*(const double& other)
-    {
-        unsigned int N = COLS*ROWS;
-        Matrix t = Matrix(*this);
-        for(unsigned int i=0;i<N;i++)
-            t.values[i] *= other;
-        return t;
-    }
-
     Matrix operator*=(const double& other)
     {
-        *this = *this*other;
+        unsigned int N = COLS*ROWS;
+        for(unsigned int i=0;i<N;i++)
+            (*this).values[i] *= other;
         return *this;
     }
 
     /**
-    * Overloading / operator
+    * Overloading /= operator
     * Division with scalar (double) - if zero ignores division (returns self)
     * @param other - double to divide with
     * @return Matrix - the result
     **/
-    Matrix operator/(const double& other)
+    Matrix operator/=(const double& other)
     {
         if(std::abs(other) < std::numeric_limits<double>::epsilon())
             return (*this);
         unsigned int N = COLS*ROWS;
-        Matrix t = Matrix(*this);
         for(unsigned int i=0;i<N;i++)
-            t.values[i] /= other;
-        return t;
-    }
-
-    Matrix operator/=(const double& other)
-    {
-        *this = *this/other;
+            (*this).values[i] /= other;
         return *this;
     }
 
@@ -301,6 +285,60 @@ public:
         return COLS;
     }
 };
+
+/**
+* Overloading + operator
+* Addition of 2 Matrices
+* @return Matrix - the result of the addition
+**/
+template <unsigned int ROWS, unsigned int COLS>
+Matrix<ROWS,COLS> operator+(const Matrix<ROWS,COLS>& mat1, const Matrix<ROWS,COLS>& mat2)
+{
+    Matrix<ROWS,COLS> t = mat1;
+    mat1 += mat2;
+    return t;
+}
+
+/**
+* Overloading - operator
+* Subtraction of 2 Matrices
+* @return Matrix - the result of the subtraction
+**/
+template <unsigned int ROWS, unsigned int COLS>
+Matrix<ROWS,COLS> operator-(const Matrix<ROWS,COLS>& mat1, const Matrix<ROWS,COLS>& mat2)
+{
+    Matrix<ROWS,COLS> t = mat1;
+    mat1 -= mat2;
+    return t;
+}
+
+/**
+* Overloading * operator
+* Multiplication with scalar (double)
+* @param other - double to multiply with
+* @return Matrix - the result
+**/
+template <unsigned int ROWS, unsigned int COLS>
+Matrix<ROWS,COLS> operator*(const Matrix<ROWS,COLS>& mat, const double& other)
+{
+    Matrix<ROWS,COLS> t = mat;
+    t *= other;
+    return t;
+}
+
+/**
+* Overloading / operator
+* Division with scalar (double) - if zero ignores division (returns self)
+* @param other - double to divide with
+* @return Matrix - the result
+**/
+template <unsigned int ROWS, unsigned int COLS>
+Matrix<ROWS,COLS> operator/(const Matrix<ROWS,COLS>& mat, const double& other)
+{
+    Matrix<ROWS,COLS> t = mat;
+    t /= other;
+    return t;
+}
 
 /**
 * Overloading << operator

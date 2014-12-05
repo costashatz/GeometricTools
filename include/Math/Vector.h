@@ -16,7 +16,7 @@ namespace LinearAlgebraTools { namespace Math {
 * General Vector Class
 * Supports N-dimension vectors
 **/
-template<unsigned int N=2>
+template<unsigned int N>
 class Vector
 {
 protected:
@@ -87,20 +87,6 @@ public:
     }
 
     /**
-    * Overloading + operator
-    * Addition of 2 Vectors
-    * @param other - vector to perform addition with
-    * @return Vector - the result of the addition
-    **/
-    Vector operator+(const Vector& other)
-    {
-        Vector t = Vector(*this);
-        for(int i=0;i<N;i++)
-            t[i] += other.values[i];
-        return t;
-    }
-
-    /**
     * Overloading += operator
     * Addition of 2 Vectors
     * @param other - vector to perform addition with
@@ -110,20 +96,6 @@ public:
     {
         *this = *this+other;
         return *this;
-    }
-
-    /**
-    * Overloading - operator
-    * Subtraction of 2 Vectors
-    * @params other - vector to perform subtraction with
-    * @return Vector - the result of the subtraction
-    **/
-    Vector operator-(const Vector& other)
-    {
-        Vector t = Vector(*this);
-        for(int i=0;i<N;i++)
-            t[i] -= other.values[i];
-        return t;
     }
 
     /**
@@ -139,17 +111,29 @@ public:
     }
 
     /**
-    * Overloading * operator
-    * Multiplication with scalar (double)
-    * @param other - double to multiply with
-    * @return Vector - the result
+    * Overloading += operator
+    * Addition with scalar (double)
+    * @param other - double to add with
+    * @return Vector - self (result)
     **/
-    Vector operator*(const double& other)
+    Vector operator+=(const double& other)
     {
-        Vector t = Vector(*this);
         for(int i=0;i<N;i++)
-            t[i] *= other;
-        return t;
+            (*this)[i] += other;
+        return *this;
+    }
+
+    /**
+    * Overloading -= operator
+    * Subtraction of scalar (double)
+    * @param other - double to substract
+    * @return Vector - self (result)
+    **/
+    Vector operator-=(const double& other)
+    {
+        for(int i=0;i<N;i++)
+            (*this)[i] -= other;
+        return *this;
     }
 
     /**
@@ -160,24 +144,9 @@ public:
     **/
     Vector operator*=(const double& other)
     {
-        *this = *this*other;
-        return *this;
-    }
-
-    /**
-    * Overloading / operator
-    * Division with scalar (double) - if zero ignores division (returns self)
-    * @param other - double to divide with
-    * @return Vector - the result
-    **/
-    Vector operator/(const double& other)
-    {
-        if(std::abs(other) < std::numeric_limits<double>::epsilon())
-            return (*this);
-        Vector t = Vector(*this);
         for(int i=0;i<N;i++)
-            t[i] /= other;
-        return t;
+            (*this)[i] *= other;
+        return *this;
     }
 
     /**
@@ -188,7 +157,10 @@ public:
     **/
     Vector operator/=(const double& other)
     {
-        *this = *this/other;
+        if(std::abs(other) < std::numeric_limits<double>::epsilon())
+            return (*this);
+        for(int i=0;i<N;i++)
+            (*this)[i] /= other;
         return *this;
     }
 
@@ -250,6 +222,17 @@ public:
     }
 
     /**
+    * Overloading () operator - const version
+    * Access Vector Matlab-like
+    * @param i - index to return
+    * @return double - value of i-th element
+    **/
+    double operator()(int i) const //needs assert legal index
+    {
+        return values[i];
+    }
+
+    /**
     * Overloading [] operator
     * Access Vector Array-like
     * @param i - index to return
@@ -261,17 +244,14 @@ public:
     }
 
     /**
-    * Overloading * operator
-    * Dot product with other vector
-    * @param other - vector to perform dot product with
-    * @return double - the dot product
+    * Overloading [] operator - const version
+    * Access Vector Array-like
+    * @param i - index to return
+    * @return double - value of i-th element
     **/
-    double operator*(const Vector& other)
+    double operator[](int i) const //assert legal index
     {
-        double s=0.0;
-        for(int i=0;i<N;i++)
-            s += values[i]*other.values[i];
-        return s;
+        return values[i];
     }
 
     template <unsigned int U>
@@ -298,6 +278,102 @@ public:
     {
     }
 };
+
+/**
+* Overloading + operator
+* Addition of 2 Vectors
+* @return Vector - the result of the addition
+**/
+template <unsigned int N>
+Vector<N> operator+(const Vector<N>& rh, const Vector<N>& lh)
+{
+    Vector<N> t = rh;
+    t += lh;
+    return t;
+}
+
+/**
+* Overloading - operator
+* Subtraction of 2 Vectors
+* @return Vector - the result of the subtraction
+**/
+template <unsigned int N>
+Vector<N> operator-(const Vector<N>& rh, const Vector<N>& lh)
+{
+    Vector<N> t = rh;
+    t -= lh;
+    return t;
+}
+
+/**
+* Overloading * operator
+* Multiplication of 2 Vectors (Dot product)
+* @return double - the result of the multiplication
+**/
+template <unsigned int N>
+double operator*(const Vector<N>& rh, const Vector<N>& lh)
+{
+    double s=0.0;
+    for(int i=0;i<N;i++)
+        s += rh[i]*lh[i];
+    return s;
+}
+
+/**
+* Overloading + operator
+* Addition with scalar (double)
+* @param other - double to add with
+* @return Vector - the result
+**/
+template <unsigned int N>
+Vector<N> operator+(const Vector<N>& vec, const double& other)
+{
+    Vector<N> tmp = vec;
+    tmp += other;
+    return tmp;
+}
+
+/**
+* Overloading - operator
+* Subtraction of scalar (double)
+* @param other - double to subtract
+* @return Vector - the result
+**/
+template <unsigned int N>
+Vector<N> operator-(const Vector<N>& vec, const double& other)
+{
+    Vector<N> tmp = vec;
+    tmp -= other;
+    return tmp;
+}
+
+/**
+* Overloading * operator
+* Multiplication with scalar (double)
+* @param other - double to multiply with
+* @return Vector - the result
+**/
+template <unsigned int N>
+Vector<N> operator*(const Vector<N>& vec, const double& other)
+{
+    Vector<N> tmp = vec;
+    tmp *= other;
+    return tmp;
+}
+
+/**
+* Overloading / operator
+* Division with scalar (double) - if zero ignores division (returns self)
+* @param other - double to divide with
+* @return Vector - the result
+**/
+template <unsigned int N>
+Vector<N> operator/(const Vector<N>& vec, const double& other)
+{
+    Vector<N> tmp = vec;
+    tmp /= other;
+    return tmp;
+}
 
 /**
 * Overloading << operator
