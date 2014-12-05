@@ -165,6 +165,28 @@ public:
     }
 
     /**
+    * Overloading == operator
+    * @param other - Vector to compare
+    * @return bool
+    **/
+    bool operator==(const Vector& other)
+    {
+        Vector tmp = (*this)-other;
+        return (tmp.lengthSq()<std::numeric_limits<double>::epsilon());
+    }
+
+    /**
+    * Overloading != operator
+    * @param other - Vector to compare
+    * @return bool
+    **/
+    bool operator!=(const Vector& other)
+    {
+        Vector tmp = (*this)-other;
+        return (tmp.lengthSq()>=std::numeric_limits<double>::epsilon());
+    }
+
+    /**
     * Get Length of Vector
     * @return double - length
     **/

@@ -36,6 +36,15 @@ public:
     {
         return;
     }
+
+    /**
+    * Overwrite virtual method RemovePoint so that it does nothing
+    * We do not want points to be removed in a triangle
+    **/
+    void RemovePoint(const Vector2& point)
+    {
+        return;
+    }
 };
 
 } }

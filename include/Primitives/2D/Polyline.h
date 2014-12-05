@@ -6,7 +6,9 @@
 **/
 #include <Math/Vector.h>
 #include <vector>
+#include <algorithm>
 using std::vector;
+using std::remove;
 
 namespace LinearAlgebraTools {
 
@@ -42,6 +44,16 @@ public:
     virtual void AddPoint(const Vector2& point)
     {
         verts.push_back(point);
+    }
+
+    /**
+    * Removes point from the polyline
+    * virtual method - can be overwritten by subclasses
+    * @param point - point to be removed
+    **/
+    virtual void RemovePoint(const Vector2& point)
+    {
+        remove(verts.begin(), verts.end(), point);
     }
 
     /**
