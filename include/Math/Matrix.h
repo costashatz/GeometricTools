@@ -7,7 +7,6 @@
 #include <iostream>
 #include <cassert>
 #include <Math/Vector.h>
-#include <Math/CStrassen.h>
 #include <Math/LinearSystems/SolveLU.h>
 
 namespace LinearAlgebraTools { namespace Math {
@@ -217,6 +216,8 @@ public:
     friend std::istream& operator>>(std::istream& in, Matrix<R,C>& obj);
     template <unsigned int R, unsigned int C>
     friend Matrix<R,C>& operator/(const double& a, const Matrix<R,C>& b);
+    template<unsigned int C1, unsigned int K, unsigned int R2>
+    friend Matrix<C1,R2> operator*(const Matrix<C1,K>& r1, const Matrix<K,R2>& r2);
 
     /**
     * Get Norm of Matrix
@@ -539,41 +540,20 @@ double determinant(Matrix<1,1> m)
 template<unsigned int C1, unsigned int K, unsigned int R2>
 Matrix<C1,R2> operator*(const Matrix<C1,K>& r1, const Matrix<K,R2>& r2)
 {
-    Matrix<C1,K> r = r1;
-    Matrix<K,R2> rb = r2;
-    double** a, **b, **c;
-    double D1=(ceil(log(K)/log(2.))), D2=(ceil(log(C1)/log(2.))),D3=(ceil(log(R2)/log(2.)));
-    unsigned int DIM = std::max(D1,std::max(D2,D3));
-    DIM = (unsigned int)pow(2,DIM);
-    a = allocate_real_matrix(DIM,0);
-    b = allocate_real_matrix(DIM,0);
-    c = allocate_real_matrix(DIM,0);
-    for(unsigned int i=0;i<C1;i++)
-    {
-        for(unsigned int j=0;j<K;j++)
-        {
-            a[i][j] = r(i,j);
-        }
-    }
-    for(unsigned int i=0;i<K;i++)
-    {
-        for(unsigned int j=0;j<R2;j++)
-        {
-            b[i][j] = rb(i,j);
-        }
-    }
-    strassen(a,b,c,DIM);
-    a = free_real_matrix(a,DIM);
-    b = free_real_matrix(b,DIM);
     Matrix<C1,R2> res;
     for(unsigned int i=0;i<C1;i++)
     {
         for(unsigned int j=0;j<R2;j++)
         {
-            res(i,j) = c[i][j];
+            double sum = 0.0;
+            for(unsigned int k=0;k<K;k++)
+            {
+                sum += r1.values[i*K+k]*r2.values[k*R2+j];
+            }
+            res.values[i*R2+j] = sum;
         }
     }
-    c = free_real_matrix(c,DIM);
+
     return res;
 }
 
