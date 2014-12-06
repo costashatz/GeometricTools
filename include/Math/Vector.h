@@ -12,6 +12,9 @@
 
 namespace LinearAlgebraTools { namespace Math {
 
+template<unsigned int ROWS, unsigned int COLS>
+class Matrix;
+
 /**
 * General Vector Class
 * Supports N-dimension vectors
@@ -94,7 +97,8 @@ public:
     **/
     Vector operator+=(const Vector& other)
     {
-        *this = *this+other;
+        for(int i=0;i<N;i++)
+            (*this)[i] += other[i];
         return *this;
     }
 
@@ -106,7 +110,8 @@ public:
     **/
     Vector operator-=(const Vector& other)
     {
-        *this = *this-other;
+        for(int i=0;i<N;i++)
+            (*this)[i] -= other[i];
         return *this;
     }
 
@@ -280,6 +285,8 @@ public:
     friend std::ostream& operator<<(std::ostream& os, const Vector<U>& obj);
     template <unsigned int U>
     friend std::istream& operator>>(std::istream& in, Vector<U>& obj);
+    template <unsigned int, unsigned int>
+    friend class Matrix;
 
     /**
     * Get ith unit vector with size N
@@ -309,6 +316,16 @@ public:
 Vector<3> cross(const Vector<3>& rh, const Vector<3>& lh)
 {
     return Vector<3>(rh[1]*lh[2]-rh[2]*lh[1], rh[2]*lh[0]-rh[0]*lh[2], rh[0]*lh[1]-rh[1]*lh[0]);
+}
+
+/**
+* Projection of a to e
+* @return Vector - the result of the cross product
+**/
+template <unsigned int N>
+Vector<N> projection(const Vector<N>& a, const Vector<N>& e)
+{
+    return ((e*a)*e/(e*e));
 }
 
 /**

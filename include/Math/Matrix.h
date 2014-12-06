@@ -218,6 +218,8 @@ public:
     friend Matrix<R,C>& operator/(const double& a, const Matrix<R,C>& b);
     template<unsigned int C1, unsigned int K, unsigned int R2>
     friend Matrix<C1,R2> operator*(const Matrix<C1,K>& r1, const Matrix<K,R2>& r2);
+    template<unsigned int>
+    friend class Vector;
 
     /**
     * Get Norm of Matrix
@@ -232,6 +234,48 @@ public:
                 s += (*this)(i,j)*(*this)(i,j);
         }
         return sqrt(s);
+    }
+
+    /**
+    * Get ith Row
+    * @param i - row index i
+    **/
+    Vector<COLS> getRow(const unsigned int& i)
+    {
+        Vector<COLS> tmp;
+        memcpy(&tmp.values[0], &values[i*COLS], COLS*sizeof(double));
+        return tmp;
+    }
+
+    /**
+    * Set ith Row
+    * @param vec - Vector
+    **/
+    void setRow(const unsigned int& i, const Vector<COLS>& vec)
+    {
+        memcpy(&values[i*COLS], &vec.values[0], COLS*sizeof(double));
+    }
+
+    /**
+    * Get ith Column
+    * @param i - column index i
+    **/
+    Vector<ROWS> getCol(const unsigned int& i)
+    {
+        Vector<COLS> tmp;
+        for(unsigned int j=0;j<ROWS;j++)
+            tmp[j] = values[j*COLS+i];
+        return tmp;
+    }
+
+    /**
+    * Set ith Column
+    * @param vec - Vector
+    **/
+    void setCol(const unsigned int& i, const Vector<ROWS>& vec)
+    {
+        for(unsigned int j=0;j<ROWS;j++)
+            values[j*COLS+i] = vec[j];
     }
 
     /**
