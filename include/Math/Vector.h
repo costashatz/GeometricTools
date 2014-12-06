@@ -302,6 +302,16 @@ public:
 };
 
 /**
+* Cross Product
+* Applies only to 3D Vectors
+* @return Vector - the result of the cross product
+**/
+Vector<3> cross(const Vector<3>& rh, const Vector<3>& lh)
+{
+    return Vector<3>(rh[1]*lh[2]-rh[2]*lh[1], rh[2]*lh[0]-rh[0]*lh[2], rh[0]*lh[1]-rh[1]*lh[0]);
+}
+
+/**
 * Overloading + operator
 * Addition of 2 Vectors
 * @return Vector - the result of the addition
