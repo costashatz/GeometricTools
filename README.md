@@ -57,6 +57,8 @@ make
 	* Classes for basic 2D linear shapes (line, ray, segment)
 6. Polygons
 	* Classes for basic 2D polygons (triangle, rectangle, polyline, general polygons)
+7. Distances in 2D
+	* Functions for computing distances between 2D primitives (point-linear shapes, point-polyline, linear shapes-linear shapes)
 
 ####Planning to implement:
 
