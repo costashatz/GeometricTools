@@ -21,14 +21,14 @@ namespace Distances {
 * @param point
 * @param line
 **/
-double DistanceSq(Vector2 point, Line2 line)
+double DistanceSq(const Vector2& point, const Line2& line)
 {
     Vector2 y_p = point-line.p();
     double k = (line.d()*y_p);
     return (y_p.lengthSq()-k*k);
 }
 
-double DistanceSq(Line2 line, Vector2 point)
+double DistanceSq(const Line2& line, const Vector2& point)
 {
     return DistanceSq(point,line);
 }
@@ -38,12 +38,12 @@ double DistanceSq(Line2 line, Vector2 point)
 * @param point
 * @param line
 **/
-double Distance(Vector2 point, Line2 line)
+double Distance(const Vector2& point, const Line2& line)
 {
     return sqrt(DistanceSq(point, line));
 }
 
-double Distance(Line2 line, Vector2 point)
+double Distance(const Line2& line, const Vector2& point)
 {
     return Distance(point,line);
 }
@@ -53,7 +53,7 @@ double Distance(Line2 line, Vector2 point)
 * @param point
 * @param ray
 **/
-double DistanceSq(Vector2 point, Ray2 ray)
+double DistanceSq(const Vector2& point, const Ray2& ray)
 {
     Vector2 toP = point-ray.p();
     if((ray.d()*toP)>0)
@@ -61,7 +61,7 @@ double DistanceSq(Vector2 point, Ray2 ray)
     return toP.lengthSq();
 }
 
-double DistanceSq(Ray2 ray, Vector2 point)
+double DistanceSq(const Ray2& ray, const Vector2& point)
 {
     return DistanceSq(point,ray);
 }
@@ -71,7 +71,7 @@ double DistanceSq(Ray2 ray, Vector2 point)
 * @param point
 * @param ray
 **/
-double Distance(Vector2 point, Ray2 ray)
+double Distance(const Vector2& point, const Ray2& ray)
 {
     Vector2 toP = point-ray.p();
     if((ray.d()*toP)>0)
@@ -79,7 +79,7 @@ double Distance(Vector2 point, Ray2 ray)
     return toP.length();
 }
 
-double Distance(Ray2 ray, Vector2 point)
+double Distance(const Ray2& ray, const Vector2& point)
 {
     return Distance(point,ray);
 }
@@ -89,7 +89,7 @@ double Distance(Ray2 ray, Vector2 point)
 * @param point
 * @param seg
 **/
-double DistanceSq(Vector2 point, Segment2 seg)
+double DistanceSq(const Vector2& point, const Segment2& seg)
 {
     Vector2 D = seg.d();
     Vector2 toP = point-seg.p();
@@ -107,7 +107,7 @@ double DistanceSq(Vector2 point, Segment2 seg)
     return DistanceSq(point, Line2(seg.P0(), seg.d()));
 }
 
-double DistanceSq(Segment2 seg, Vector2 point)
+double DistanceSq(const Segment2& seg, const Vector2& point)
 {
     return DistanceSq(point,seg);
 }
@@ -117,7 +117,7 @@ double DistanceSq(Segment2 seg, Vector2 point)
 * @param point
 * @param seg
 **/
-double Distance(Vector2 point, Segment2 seg)
+double Distance(const Vector2& point, const Segment2& seg)
 {
     Vector2 D = seg.d();
     Vector2 toP = point-seg.p();
@@ -135,7 +135,7 @@ double Distance(Vector2 point, Segment2 seg)
     return Distance(point, Line2(seg.P0(), seg.d()));
 }
 
-double Distance(Segment2 seg, Vector2 point)
+double Distance(const Segment2& seg, const Vector2& point)
 {
     return Distance(point,seg);
 }
