@@ -1,5 +1,9 @@
 #ifndef LU_DECOMPOSITION
 #define LU_DECOMPOSITION
+
+/**
+* Includes
+**/
 #include <Math/Matrix.h>
 
 namespace LinearAlgebraTools {

@@ -1,6 +1,9 @@
 #ifndef TRIANGLE_H
 #define TRIANGLE_H
 
+/**
+* Includes
+**/
 #include <Primitives/2D/Polygon.h>
 
 namespace LinearAlgebraTools {

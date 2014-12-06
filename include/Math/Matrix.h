@@ -2,7 +2,7 @@
 #define MATRIX_H
 
 /**
-* Includes and Defines
+* Includes
 **/
 #include <iostream>
 #include <cassert>

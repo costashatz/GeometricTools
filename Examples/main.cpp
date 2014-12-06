@@ -1,10 +1,6 @@
 #include <iostream>
 #include <Math/LinearSystems/SolveGauss.h>
 #include <Math/LinearSystems/SolveLU.h>
-#include <Primitives/LinearShapes.h>
-#include <Primitives/2D/Polygon.h>
-#include <Primitives/2D/Triangle.h>
-#include <Primitives/2D/Rectangle.h>
 using namespace std;
 
 using namespace LinearAlgebraTools::Math;

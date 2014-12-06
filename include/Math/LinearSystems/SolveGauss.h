@@ -1,5 +1,9 @@
 #ifndef SOLVE_GAUSS_H
 #define SOLVE_GAUSS_H
+
+/**
+* Includes
+**/
 #include <Math/Matrix.h>
 
 namespace LinearAlgebraTools {

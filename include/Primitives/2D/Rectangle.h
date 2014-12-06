@@ -1,6 +1,9 @@
 #ifndef RECTANGLE_H
 #define RECTANGLE_H
 
+/**
+* Includes
+**/
 #include <Math/Vector.h>
 #include <Primitives/2D/Polygon.h>
 

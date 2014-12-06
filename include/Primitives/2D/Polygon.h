@@ -1,6 +1,9 @@
 #ifndef POLYGON_H
 #define POLYGON_H
 
+/**
+* Includes
+**/
 #include <Primitives/2D/Polyline.h>
 
 namespace LinearAlgebraTools {
