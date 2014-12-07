@@ -30,10 +30,10 @@ public:
     {
         if((e0*e1)!=0)
             e1 = Vector2(-e0[0], e0[1]);
-        Polygon::AddPoint(p0);
-        Polygon::AddPoint(p0+e0);
-        Polygon::AddPoint(p0+e0+e1);
-        Polygon::AddPoint(p0+e1);
+        Polygon::addPoint(p0);
+        Polygon::addPoint(p0+e0);
+        Polygon::addPoint(p0+e0+e1);
+        Polygon::addPoint(p0+e1);
     }
 
     /**
@@ -46,20 +46,20 @@ public:
     Rectangle(const Vector2& p, const double& a, const double& b)
     {
         Vector2 p0 = Vector2(p[0]-a/2.0, p[1]-b/2.0);
-        Polygon::AddPoint(p0);
+        Polygon::addPoint(p0);
         Vector2 p1 = Vector2(p[0]+a/2.0, p[1]-b/2.0);
-        Polygon::AddPoint(p1);
+        Polygon::addPoint(p1);
         Vector2 p2 = Vector2(p[0]+a/2.0, p[1]+b/2.0);
-        Polygon::AddPoint(p2);
+        Polygon::addPoint(p2);
         Vector2 p3 = Vector2(p[0]-a/2.0, p[1]+b/2.0);
-        Polygon::AddPoint(p3);
+        Polygon::addPoint(p3);
     }
 
     /**
     * Overwrite virtual method AddPoint so that it does nothing
     * We do not want other points to be added in a triangle
     **/
-    void AddPoint(const Vector2& point)
+    void addPoint(const Vector2& point)
     {
         return;
     }
@@ -68,7 +68,7 @@ public:
     * Overwrite virtual method RemovePoint so that it does nothing
     * We do not want points to be removed in a triangle
     **/
-    void RemovePoint(const Vector2& point)
+    void removePoint(const Vector2& point)
     {
         return;
     }

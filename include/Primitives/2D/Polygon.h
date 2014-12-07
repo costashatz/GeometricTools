@@ -29,7 +29,7 @@ public:
     * gives correct answer if polygon is simple/convex (=non-adjacent segments do not intersect)
     * @return double - the area
     **/
-    virtual double Area()
+    virtual double area()
     {
         double sum = 0.0;
         for(int i=0;i<this->verts.size();i++)
@@ -45,7 +45,7 @@ public:
     * Check if vertices/points are clockwise ordered or not
     * @return bool - a boolean indicating if points are clockwise ordered
     **/
-    bool ClockwiseOrdered()
+    bool clockwiseOrdered()
     {
         //clockwise (sum<0)
         double sum = 0.0;
@@ -63,7 +63,7 @@ public:
     * Check if polygon is convex
     * @return bool - a boolean indicating whether the polygon is convex
     **/
-    bool Convex()
+    bool convex()
     {
         //convex (all cross products same sign)
         int plus=0,minus=0;

@@ -41,7 +41,7 @@ public:
     * virtual method - can be overwritten by subclasses
     * @param point - point to be added
     **/
-    virtual void AddPoint(const Vector2& point)
+    virtual void addPoint(const Vector2& point)
     {
         verts.push_back(point);
     }
@@ -51,7 +51,7 @@ public:
     * virtual method - can be overwritten by subclasses
     * @param point - point to be removed
     **/
-    virtual void RemovePoint(const Vector2& point)
+    virtual void removePoint(const Vector2& point)
     {
         remove(verts.begin(), verts.end(), point);
     }

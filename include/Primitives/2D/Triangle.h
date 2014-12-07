@@ -26,16 +26,16 @@ public:
     **/
     Triangle(const Vector2& p0, const Vector2& p1, const Vector2& p2):Polygon()
     {
-        Polygon::AddPoint(p0);
-        Polygon::AddPoint(p1);
-        Polygon::AddPoint(p2);
+        Polygon::addPoint(p0);
+        Polygon::addPoint(p1);
+        Polygon::addPoint(p2);
     }
 
     /**
     * Overwrite virtual method AddPoint so that it does nothing
     * We do not want other points to be added in a triangle
     **/
-    void AddPoint(const Vector2& point)
+    void addPoint(const Vector2& point)
     {
         return;
     }
@@ -44,7 +44,7 @@ public:
     * Overwrite virtual method RemovePoint so that it does nothing
     * We do not want points to be removed in a triangle
     **/
-    void RemovePoint(const Vector2& point)
+    void removePoint(const Vector2& point)
     {
         return;
     }
