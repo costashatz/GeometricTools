@@ -1,7 +1,6 @@
 #include <iostream>
 #include <Math/LinearSystems/SolveGauss.h>
 #include <Math/LinearSystems/SolveLU.h>
-#include <Math/Matrix.h>
 using namespace std;
 
 using namespace LinearAlgebraTools::Math;

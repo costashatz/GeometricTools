@@ -11,10 +11,10 @@
 
 namespace LinearAlgebraTools {
 
-using Math::Vector2;
-using Primitives::Line2;
-using Primitives::Ray2;
-using Primitives::Segment2;
+using Math::Vector;
+using Primitives::Line;
+using Primitives::Ray;
+using Primitives::Segment;
 using Primitives::Polyline;
 
 namespace Distances {
@@ -24,10 +24,10 @@ namespace Distances {
 * @param point
 * @param line
 **/
-double DistanceSq(const Vector2& point, const Polyline& line)
+double DistanceSq(const Vector<2>& point, const Polyline& line)
 {
-    double m = DistanceSq(point, Segment2(line.vertices()[0], line.vertices()[1]));
-    Vector2 prev = line.vertices()[1];
+    double m = DistanceSq(point, Segment<2>(line.vertices()[0], line.vertices()[1]));
+    Vector<2> prev = line.vertices()[1];
     double prevX = abs(prev[0]-point[0]);
     double prevY = abs(prev[1]-point[1]);
     double currX, currY;
@@ -37,7 +37,7 @@ double DistanceSq(const Vector2& point, const Polyline& line)
         currY = abs(line.vertices()[i][1]-point[1]);
         if((prevX <= m && currX <= m && (prevX*currX)>0) && (prevY <= m && currY <= m && (prevY*currY)>0))
         {
-            m = DistanceSq(point, Segment2(line.vertices()[i], line.vertices()[i+1]));
+            m = DistanceSq(point, Segment<2>(line.vertices()[i], line.vertices()[i+1]));
         }
         prevX = currX;
         prevY = currY;
@@ -45,7 +45,7 @@ double DistanceSq(const Vector2& point, const Polyline& line)
     return m;
 }
 
-double DistanceSq(const Polyline& line, const Vector2& point)
+double DistanceSq(const Polyline& line, const Vector<2>& point)
 {
     return DistanceSq(point,line);
 }
@@ -54,10 +54,10 @@ double DistanceSq(const Polyline& line, const Vector2& point)
 * @param point
 * @param line
 **/
-double Distance(const Vector2& point, const Polyline& line)
+double Distance(const Vector<2>& point, const Polyline& line)
 {
-    double m = Distance(point, Segment2(line.vertices()[0], line.vertices()[1]));
-    Vector2 prev = line.vertices()[1];
+    double m = Distance(point, Segment<2>(line.vertices()[0], line.vertices()[1]));
+    Vector<2> prev = line.vertices()[1];
     double prevX = abs(prev[0]-point[0]);
     double prevY = abs(prev[1]-point[1]);
     double currX, currY;
@@ -67,7 +67,7 @@ double Distance(const Vector2& point, const Polyline& line)
         currY = abs(line.vertices()[i][1]-point[1]);
         if((prevX <= m && currX <= m && (prevX*currX)>0) && (prevY <= m && currY <= m && (prevY*currY)>0))
         {
-            m = Distance(point, Segment2(line.vertices()[i], line.vertices()[i+1]));
+            m = Distance(point, Segment<2>(line.vertices()[i], line.vertices()[i+1]));
         }
         prevX = currX;
         prevY = currY;
@@ -75,7 +75,7 @@ double Distance(const Vector2& point, const Polyline& line)
     return m;
 }
 
-double Distance(const Polyline& line, const Vector2& point)
+double Distance(const Polyline& line, const Vector<2>& point)
 {
     return Distance(point,line);
 }

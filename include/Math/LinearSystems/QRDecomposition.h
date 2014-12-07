@@ -5,6 +5,7 @@
 * Includes
 **/
 #include <Math/Matrix.h>
+#include <lapacke.h>
 
 namespace LinearAlgebraTools {
 
@@ -23,24 +24,18 @@ template<unsigned int D>
 void QRDecomposition(const Matrix<D,D>& a, Matrix<D,D>& Q, Matrix<D,D>& R)
 {
     Q.identity();
-    R.identity();
-    Vector<D>* u = new Vector<D>[D];
-    Vector<D>* e = new Vector<D>[D];
+    R = a;
+    double* tau = new double[D];
+    LAPACKE_dgeqrf(LAPACK_ROW_MAJOR, D, D, R.values, D, tau);
+    Q = R;
     for(unsigned int i=0;i<D;i++)
     {
-        u[i] = a.getCol(i);
         for(unsigned int j=0;j<i;j++)
-            u[i] -= projection(a.getCol(i), e[j]);
-        e[i] = u[i].normalized();
-        Q.setCol(i, e[i]);
-    }
-    for(unsigned int i=0;i<D;i++)
-    {
-        for(unsigned int j=i;j<D;j++)
         {
-            R(i,j) = e[i]*a.getCol(j);
+            R(i,j) = 0.0;
         }
     }
+    LAPACKE_dorgqr(LAPACK_ROW_MAJOR, D, D, D, Q.values, D, tau);
 }
 
 } } }

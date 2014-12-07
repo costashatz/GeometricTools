@@ -4,6 +4,7 @@
 /**
 * Includes
 **/
+#include <Math/Matrix.h>
 #include <lapacke.h>
 
 namespace LinearAlgebraTools {

@@ -11,6 +11,20 @@
 
 namespace LinearAlgebraTools { namespace Math {
 
+namespace LinearSystems {
+    template<unsigned int D>
+    void SVDDecomposition(const Matrix<D,D>& a, Matrix<D,D>& U, Matrix<D,D>& S, Matrix<D,D>& V);
+
+    template<unsigned int D>
+    void LUDecomposition(const Matrix<D,D>& a, Matrix<D,D>& L, Matrix<D,D>& U, Matrix<D,D>& P);
+
+    template<unsigned int D>
+    Vector<D> solveLU(const Matrix<D,D>& A, const Vector<D>& B);
+
+    template<unsigned int D>
+    void QRDecomposition(const Matrix<D,D>& a, Matrix<D,D>& Q, Matrix<D,D>& R);
+}
+
 /**
 * General Matrix Class
 * Supports NxM-dimension matrices
@@ -130,6 +144,18 @@ public:
     }
 
     /**
+    * Overloading *= operator
+    * Multiplication of 2 Matrices
+    * @param other - Matrix to multiply with
+    * @return Matrix - the result
+    **/
+    Matrix operator*=(const Matrix<COLS,ROWS>& other)
+    {
+        *this = (*this)*other;
+        return *this;
+    }
+
+    /**
     * Overloading += operator
     * Addition of 2 Matrices
     * @param other - Matrix to perform addition with
@@ -218,14 +244,16 @@ public:
     friend Vector<C1> operator*(const Matrix<C1,K>& r1, const Vector<K>& r2);
     template<unsigned int D>
     friend Matrix<D,D> inverse(const Matrix<D,D>& mat);
-#ifdef LU_DECOMPOSITION
     template<unsigned int D>
     friend void LinearSystems::LUDecomposition(const Matrix<D,D>& a, Matrix<D,D>& L, Matrix<D,D>& U, Matrix<D,D>& P);
-#endif
-#ifdef SOLVE_LU_H
     template<unsigned int D>
     friend Vector<D> LinearSystems::solveLU(const Matrix<D,D>& A, const Vector<D>& B);
-#endif
+    template<unsigned int D>
+    friend void LinearSystems::SVDDecomposition(const Matrix<D,D>& a, Matrix<D,D>& U, Matrix<D,D>& S, Matrix<D,D>& V);
+    template<unsigned int D>
+    friend void LinearSystems::QRDecomposition(const Matrix<D,D>& a, Matrix<D,D>& Q, Matrix<D,D>& R);
+    template<unsigned int N>
+    friend Matrix<N,N> operator*(const Vector<N>& v1, const Matrix<N,1>& v2);
 
     /**
     * Get Norm of Matrix
@@ -572,6 +600,31 @@ Matrix<C1,R2> operator*(const Matrix<C1,K>& r1, const Matrix<K,R2>& r2)
 {
     Matrix<C1,R2> res;
     cblas_dgemm(CblasRowMajor, CblasNoTrans, CblasNoTrans, C1, R2, K, 1.0, &r1.values[0], C1, &r2.values[0], K, 0.0, &res.values[0], C1);
+    return res;
+}
+
+/**
+* Overloading ~ operator
+* Vector tranpose - Returns Matrix
+**/
+template<unsigned int N>
+Matrix<N,1> operator~(const Vector<N>& vec)
+{
+    Matrix<N,1> res;
+    for(unsigned int i=0;i<N;i++)
+        res(i,0) = vec[i];
+    return res;
+}
+
+/**
+* Overloading * operator
+* Multiplication Vector with Vector Transpose
+**/
+template<unsigned int N>
+Matrix<N,N> operator*(const Vector<N>& v1, const Matrix<N,1>& v2)
+{
+    Matrix<N,N> res;
+    cblas_dgemm(CblasRowMajor, CblasNoTrans, CblasNoTrans, N, N, 1, 1.0, v1.values, 1, v2.values, N, 0.0, res.values, N);
     return res;
 }
 

@@ -13,6 +13,12 @@
 
 namespace LinearAlgebraTools { namespace Math {
 
+namespace LinearSystems {
+
+    template<unsigned int D>
+    Vector<D> solveLU(const Matrix<D,D>& A, const Vector<D>& B);
+}
+
 template<unsigned int ROWS, unsigned int COLS>
 class Matrix;
 
@@ -295,6 +301,8 @@ public:
     friend Vector<C1> operator*(const Matrix<C1,K>& r1, const Vector<K>& r2);
     template<unsigned int D>
     friend Vector<D> LinearSystems::solveLU(const Matrix<D,D>& A, const Vector<D>& B);
+    template<unsigned int U>
+    friend Matrix<U,U> operator*(const Vector<U>& v1, const Matrix<U,1>& v2);
 
     /**
     * Get ith unit vector with size N
