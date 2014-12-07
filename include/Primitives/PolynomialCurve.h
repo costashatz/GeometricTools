@@ -88,7 +88,7 @@ public:
             s += (N-i-1)*(N-i-2)*coefficients[i]*std::pow(u, N-i-3);
         return s;
     }
-//protected:
+protected:
     void calculateCoefficients()
     {
         // NEEDS CHECKING FOR THE MATH
