@@ -53,6 +53,8 @@ make
     * Using LU Decomposition
 4. Decompositions
     * LU Decomposition
+    * QR Decomposition
+    * SVD Decomposition
 5. Linear Shapes
 	* Classes for basic 2D linear shapes (line, ray, segment)
 6. Polygons
@@ -62,15 +64,12 @@ make
 
 ####Planning to implement:
 
-1. Improve the templated classes for Matrices and Vectors
-    * Eigen-values and eigen-vectors computation
+1. More primitives (both in 2D and 3D)
+2. Distances, Intersections in 2D/3D
+3. gtests
+4. Improve the templated classes for Matrices and Vectors
     * Cleanify code/add comments
-    * Integrate BLAS subroutines
-2. Add more linear systems solving mechanisms (algorithms)
-3. Add more decomposition techniques (e.g. SVD)
-4. More primitives (both in 2D and 3D)
-5. Distances, Intersections in 2D/3D
-6. gtests
+5. Add more linear systems solving mechanisms (algorithms)
 
 
 ####WORK IN PROGRESS - WILL BE UPDATED FREQUENTLY
