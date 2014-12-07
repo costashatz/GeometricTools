@@ -43,7 +43,7 @@ public:
 
     virtual void addPoint(const Vector<D>& point)
     {
-        if(defined() || find(points.begin(), points.end(), point) == points.end())
+        if(defined() || find(points.begin(), points.end(), point) != points.end())
             return;
         points.push_back(point);
     }
@@ -59,7 +59,7 @@ public:
 
     virtual void addDotPoint(const Vector<D>& point)
     {
-        if(defined() || find(dot_points.begin(), dot_points.end(), point) == dot_points.end())
+        if(defined() || find(dot_points.begin(), dot_points.end(), point) != dot_points.end() || N <= 1)
             return;
         dot_points.push_back(point);
     }
@@ -75,7 +75,7 @@ public:
 
     virtual void addDDotPoint(const Vector<D>& point)
     {
-        if(defined() || find(ddot_points.begin(), ddot_points.end(), point) == ddot_points.end())
+        if(defined() || find(ddot_points.begin(), ddot_points.end(), point) != ddot_points.end() || N <= 2)
             return;
         ddot_points.push_back(point);
     }
@@ -102,7 +102,7 @@ protected:
         for(int i=0;i<ddot;i++)
         {
             y[i] = ddot_points[i][1];
-            for(int j=0;j<N;j++)
+            for(int j=0;j<N-2;j++)
             {
                 A(i,j) = (N-j)*(N-j-1)*std::pow(ddot_points[i][0], N-j-2);
             }
@@ -110,7 +110,7 @@ protected:
         for(int i=ddot;i<dot;i++)
         {
             y[i] = dot_points[i-ddot][1];
-            for(int j=0;j<N;j++)
+            for(int j=0;j<N-1;j++)
             {
                 A(i,j) = (N-j)*std::pow(dot_points[i-ddot][0], N-j-1);
             }
@@ -130,20 +130,18 @@ protected:
     {
         if (points.size() + dot_points.size() + ddot_points.size() < N)
             return false;
-
-        switch (points.size())
+        for(int i=0;i<N;i++)
         {
-        case 0:
-            return false;
-        case 1:
-            if (dot_points.size() > 0)
-                return true;
-            return false;
-        default:
-            return true;;
+            int d = dot_points.size();
+            int dd = ddot_points.size();
+            if(i>=(N-1))
+                d = 0;
+            if(i>=((int)N-2))
+                dd = 0;
+            if((points.size()+d+dd)==0)
+                return false;
         }
-
-        return false;
+        return true;
     }
 };
 
