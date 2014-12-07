@@ -7,7 +7,7 @@
 #include <iostream>
 #include <cassert>
 #include <Math/Vector.h>
-#include <Math/LinearSystems/SolveLU.h>
+#include <lapacke.h>
 
 namespace LinearAlgebraTools { namespace Math {
 
@@ -33,10 +33,8 @@ protected:
     {
         if(index>=(COLS*ROWS))
             index=0;
-        unsigned int i = index/COLS;
-        unsigned int j = index%COLS;
         // add first argument to the matrix data
-        values[i*COLS+j] = h;
+        values[index] = h;
         index++;
         // Initialize with rest of arguments
         initialize(std::forward<Args>(args)...);
@@ -140,8 +138,7 @@ public:
     Matrix operator+=(const Matrix& other)
     {
         unsigned int N = COLS*ROWS;
-        for(unsigned int i=0;i<N;i++)
-            (*this).values[i] += other.values[i];
+        cblas_daxpy(N, 1.0, &other.values[0], 1, &values[0], 1);
         return *this;
     }
 
@@ -154,8 +151,7 @@ public:
     Matrix operator-=(const Matrix& other)
     {
         unsigned int N = COLS*ROWS;
-        for(unsigned int i=0;i<N;i++)
-            (*this).values[i] -= other.values[i];
+        cblas_daxpy(N, -1.0, &other.values[0], 1, &values[0], 1);
         return *this;
     }
 
@@ -168,8 +164,7 @@ public:
     Matrix operator*=(const double& other)
     {
         unsigned int N = COLS*ROWS;
-        for(unsigned int i=0;i<N;i++)
-            (*this).values[i] *= other;
+        cblas_dscal(N, other, &values[0], 1);
         return *this;
     }
 
@@ -184,8 +179,7 @@ public:
         if(std::abs(other) < std::numeric_limits<double>::epsilon())
             return (*this);
         unsigned int N = COLS*ROWS;
-        for(unsigned int i=0;i<N;i++)
-            (*this).values[i] /= other;
+        cblas_dscal(N, 1.0/other, &values[0], 1);
         return *this;
     }
 
@@ -220,6 +214,18 @@ public:
     friend Matrix<C1,R2> operator*(const Matrix<C1,K>& r1, const Matrix<K,R2>& r2);
     template<unsigned int>
     friend class Vector;
+    template<unsigned int C1, unsigned int K>
+    friend Vector<C1> operator*(const Matrix<C1,K>& r1, const Vector<K>& r2);
+    template<unsigned int D>
+    friend Matrix<D,D> inverse(const Matrix<D,D>& mat);
+#ifdef LU_DECOMPOSITION
+    template<unsigned int D>
+    friend void LinearSystems::LUDecomposition(const Matrix<D,D>& a, Matrix<D,D>& L, Matrix<D,D>& U, Matrix<D,D>& P);
+#endif
+#ifdef SOLVE_LU_H
+    template<unsigned int D>
+    friend Vector<D> LinearSystems::solveLU(const Matrix<D,D>& A, const Vector<D>& B);
+#endif
 
     /**
     * Get Norm of Matrix
@@ -227,13 +233,8 @@ public:
     **/
     double norm()
     {
-        double s = 0.;
-        for(unsigned int i=0;i<ROWS;i++)
-        {
-            for(unsigned int j=0;j<COLS;j++)
-                s += (*this)(i,j)*(*this)(i,j);
-        }
-        return sqrt(s);
+        unsigned int N = COLS*ROWS;
+        return cblas_dnrm2(N, &values[0], 1);
     }
 
     /**
@@ -469,15 +470,8 @@ Matrix<N,M> operator-(Matrix<N,M>& b)
 template<unsigned int C1, unsigned int K>
 Vector<C1> operator*(const Matrix<C1,K>& r1, const Vector<K>& r2)
 {
-    Matrix<K,1> b;
-    Vector<K> v = r2;
-    for(unsigned int i=0;i<K;i++)
-        b(i,0) = v[i];
-    Matrix<C1,1> c;
-    c = r1*b;
     Vector<C1> res;
-    for(unsigned int i=0;i<K;i++)
-        res[i] = c(i,0);
+    cblas_dgemv(CblasRowMajor, CblasNoTrans, C1, K, 1.0, &r1.values[0], C1, &r2.values[0], 1, 1.0, &res.values[0], 1);
     return res;
 }
 
@@ -488,15 +482,8 @@ Vector<C1> operator*(const Matrix<C1,K>& r1, const Vector<K>& r2)
 template<unsigned int C1, unsigned int K>
 Vector<C1> operator*(const Vector<K>& r2, const Matrix<K, C1>& r1)
 {
-    Matrix<K,1> b;
-    Vector<K> v = r2;
-    for(unsigned int i=0;i<K;i++)
-        b(i,0) = v[i];
-    Matrix<C1,1> c;
-    c = r1*b;
     Vector<C1> res;
-    for(unsigned int i=0;i<K;i++)
-        res[i] = c(i,0);
+    cblas_dgemv(CblasRowMajor, CblasTrans, C1, K, 1.0, &r1.values[0], C1, &r2.values[0], 1, 1.0, &res.values[0], 1);
     return res;
 }
 
@@ -532,13 +519,12 @@ Matrix<ROWS-1,COLS-1> Minor(Matrix<ROWS,COLS> m, unsigned int i, unsigned int j)
 template<unsigned int D>
 Matrix<D,D> inverse(const Matrix<D,D>& mat)
 {
-    Matrix<D,D> res;
-    for(unsigned int i=0;i<D;i++)
-    {
-        Vector<D> tmp = LinearAlgebraTools::Math::LinearSystems::solveLU(mat, Vector<D>::e(i));
-        for(unsigned int j=0;j<D;j++)
-            res(j, i) = tmp[j];
-    }
+    Matrix<D,D> res = mat;
+    unsigned int d = D;
+    int* ipiv = new int[D];
+    LAPACKE_dgetrf(LAPACK_ROW_MAJOR, d, d, res.values, d, ipiv);
+    LAPACKE_dgetri(LAPACK_ROW_MAJOR, d, res.values, d, ipiv);
+    delete ipiv;
     return res;
 }
 
@@ -585,19 +571,7 @@ template<unsigned int C1, unsigned int K, unsigned int R2>
 Matrix<C1,R2> operator*(const Matrix<C1,K>& r1, const Matrix<K,R2>& r2)
 {
     Matrix<C1,R2> res;
-    for(unsigned int i=0;i<C1;i++)
-    {
-        for(unsigned int j=0;j<R2;j++)
-        {
-            double sum = 0.0;
-            for(unsigned int k=0;k<K;k++)
-            {
-                sum += r1.values[i*K+k]*r2.values[k*R2+j];
-            }
-            res.values[i*R2+j] = sum;
-        }
-    }
-
+    cblas_dgemm(CblasRowMajor, CblasNoTrans, CblasNoTrans, C1, R2, K, 1.0, &r1.values[0], C1, &r2.values[0], K, 0.0, &res.values[0], C1);
     return res;
 }
 

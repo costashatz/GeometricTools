@@ -1,6 +1,7 @@
 #include <iostream>
 #include <Math/LinearSystems/SolveGauss.h>
 #include <Math/LinearSystems/SolveLU.h>
+#include <Math/Matrix.h>
 using namespace std;
 
 using namespace LinearAlgebraTools::Math;
@@ -11,8 +12,12 @@ using namespace LinearAlgebraTools::Math::LinearSystems;
 int main(int argc, char *argv[])
 {
     Matrix<3,3> A = Matrix<3,3>(3.,-6.,-3,2.,0.,6.,-4.,7.,4.);
+//    Matrix<4,4> A = Matrix<4,4>(5., 7., 6., 5.,
+//                                7., 10., 8., 7,
+//                                6., 8., 10., 9.,
+//                                5., 7., 9., 10.);
     Vector<3> B = Vector<3>(-3.,-22.,3.);
-    Vector<3> x = solveGauss(A,B);
+    Vector<3> x = solveLU(A,B);
     cout<<"Solving System: \n";
     cout<<A<<endl;
     cout<<" = \n";

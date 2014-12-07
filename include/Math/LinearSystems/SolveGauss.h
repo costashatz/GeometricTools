@@ -4,11 +4,17 @@
 /**
 * Includes
 **/
-#include <Math/Matrix.h>
+#include <limits>
 
 namespace LinearAlgebraTools {
 
 namespace Math {
+
+template<unsigned int ROWS, unsigned int COLS>
+class Matrix;
+
+template<unsigned int N>
+class Vector;
 
 namespace LinearSystems {
 

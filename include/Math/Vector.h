@@ -9,6 +9,7 @@
 #include <cmath>
 #include <cstring>
 #include <Misc/Helper.h>
+#include <cblas.h>
 
 namespace LinearAlgebraTools { namespace Math {
 
@@ -97,8 +98,7 @@ public:
     **/
     Vector operator+=(const Vector& other)
     {
-        for(int i=0;i<N;i++)
-            (*this)[i] += other[i];
+        cblas_daxpy(N, 1.0, &other.values[0], 1, &values[0], 1);
         return *this;
     }
 
@@ -110,8 +110,7 @@ public:
     **/
     Vector operator-=(const Vector& other)
     {
-        for(int i=0;i<N;i++)
-            (*this)[i] -= other[i];
+        cblas_daxpy(N, -1.0, &other.values[0], 1, &values[0], 1);
         return *this;
     }
 
@@ -123,8 +122,9 @@ public:
     **/
     Vector operator+=(const double& other)
     {
-        for(int i=0;i<N;i++)
-            (*this)[i] += other;
+        Vector tmp;
+        tmp.ones();
+        cblas_daxpy(N, other, &tmp.values[0], 1, &values[0], 1);
         return *this;
     }
 
@@ -136,8 +136,9 @@ public:
     **/
     Vector operator-=(const double& other)
     {
-        for(int i=0;i<N;i++)
-            (*this)[i] -= other;
+        Vector tmp;
+        tmp.ones();
+        cblas_daxpy(N, -other, &tmp.values[0], 1, &values[0], 1);
         return *this;
     }
 
@@ -149,8 +150,7 @@ public:
     **/
     Vector operator*=(const double& other)
     {
-        for(int i=0;i<N;i++)
-            (*this)[i] *= other;
+        cblas_dscal(N, other, &values[0], 1);
         return *this;
     }
 
@@ -164,8 +164,7 @@ public:
     {
         if(std::abs(other) < std::numeric_limits<double>::epsilon())
             return (*this);
-        for(int i=0;i<N;i++)
-            (*this)[i] /= other;
+        cblas_dscal(N, 1.0/other, &values[0], 1);
         return *this;
     }
 
@@ -197,10 +196,15 @@ public:
     **/
     double length()
     {
-        double s = 0.0;
-        for(int i=0;i<N;i++)
-            s += values[i]*values[i];
-        return sqrt(s);
+        return cblas_dnrm2(N, &values[0], 1);
+    }
+
+    /**
+    * Set vector to 1s
+    **/
+    void ones()
+    {
+        memset(&values[0], 1, N*sizeof(double));
     }
 
 
@@ -210,10 +214,8 @@ public:
     **/
     double lengthSq()
     {
-        double s = 0.0;
-        for(int i=0;i<N;i++)
-            s += values[i]*values[i];
-        return s;
+        double s = cblas_dnrm2(N, &values[0], 1);
+        return s*s;
     }
 
 
@@ -287,6 +289,12 @@ public:
     friend std::istream& operator>>(std::istream& in, Vector<U>& obj);
     template <unsigned int, unsigned int>
     friend class Matrix;
+    template <unsigned int U>
+    friend double operator*(const Vector<U>& rh, const Vector<U>& lh);
+    template<unsigned int C1, unsigned int K>
+    friend Vector<C1> operator*(const Matrix<C1,K>& r1, const Vector<K>& r2);
+    template<unsigned int D>
+    friend Vector<D> LinearSystems::solveLU(const Matrix<D,D>& A, const Vector<D>& B);
 
     /**
     * Get ith unit vector with size N
@@ -362,10 +370,7 @@ Vector<N> operator-(const Vector<N>& rh, const Vector<N>& lh)
 template <unsigned int N>
 double operator*(const Vector<N>& rh, const Vector<N>& lh)
 {
-    double s=0.0;
-    for(int i=0;i<N;i++)
-        s += rh[i]*lh[i];
-    return s;
+    return cblas_ddot(N, &rh.values[0], 1, &lh.values[0], 1);
 }
 
 /**
