@@ -53,7 +53,7 @@ public:
         double uu = std::min(max_u, std::max(min_u, u));
         double s = 0.0;
         for(unsigned int i=0;i<N;i++)
-            s += coefficients[i]*std::pow(uu, N-i);
+            s += coefficients[i]*std::pow(uu, N-i-1);
         return s;
     }
 
@@ -69,7 +69,7 @@ public:
         double uu = std::min(max_u, std::max(min_u, u));
         double s = 0.0;
         for(int i=0;i<N-1;i++)
-            s += (N-i)*coefficients[i]*std::pow(u, N-i-1);
+            s += (N-i-1)*coefficients[i]*std::pow(u, N-i-2);
         return s;
     }
 
@@ -85,10 +85,10 @@ public:
         double uu = std::min(max_u, std::max(min_u, u));
         double s = 0.0;
         for(int i=0;i<N-2;i++)
-            s += (N-i)*(N-i-1)*coefficients[i]*std::pow(u, N-i-2);
+            s += (N-i-1)*(N-i-2)*coefficients[i]*std::pow(u, N-i-3);
         return s;
     }
-protected:
+//protected:
     void calculateCoefficients()
     {
         // NEEDS CHECKING FOR THE MATH
@@ -104,7 +104,7 @@ protected:
             y[i] = ddot_points[i][1];
             for(int j=0;j<N-2;j++)
             {
-                A(i,j) = (N-j)*(N-j-1)*std::pow(ddot_points[i][0], N-j-2);
+                A(i,j) = (N-j-1)*(N-j-2)*std::pow(ddot_points[i][0], N-j-3);
             }
         }
         for(int i=ddot;i<dot;i++)
@@ -112,7 +112,7 @@ protected:
             y[i] = dot_points[i-ddot][1];
             for(int j=0;j<N-1;j++)
             {
-                A(i,j) = (N-j)*std::pow(dot_points[i-ddot][0], N-j-1);
+                A(i,j) = (N-j-1)*std::pow(dot_points[i-ddot][0], N-j-2);
             }
         }
         for(unsigned int i=dot+ddot;i<N;i++)
@@ -120,7 +120,7 @@ protected:
             y[i] = points[i-(dot+ddot)][1];
             for(unsigned int j=0;j<N;j++)
             {
-                A(i,j) = std::pow(points[i-(dot+ddot)][0], N-j);
+                A(i,j) = std::pow(points[i-(dot+ddot)][0], N-j-1);
             }
         }
         coefficients = solveLU(A, y);
