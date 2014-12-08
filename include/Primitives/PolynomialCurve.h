@@ -59,7 +59,7 @@ public:
 
     virtual void addDotPoint(const Vector<D>& point)
     {
-        if(defined() || find(dot_points.begin(), dot_points.end(), point) != dot_points.end() || N <= 1)
+        if(defined() || ((int)N-dot_points.size()) <= 1 || find(dot_points.begin(), dot_points.end(), point) != dot_points.end())
             return;
         dot_points.push_back(point);
     }
@@ -75,7 +75,7 @@ public:
 
     virtual void addDDotPoint(const Vector<D>& point)
     {
-        if(defined() || find(ddot_points.begin(), ddot_points.end(), point) != ddot_points.end() || N <= 2)
+        if(defined() || ((int)N-ddot_points.size()) <= 1 || find(ddot_points.begin(), ddot_points.end(), point) != ddot_points.end())
             return;
         ddot_points.push_back(point);
     }
