@@ -36,10 +36,11 @@ protected:
     vector<Vector<2> > ddot_points;
     double min_u;
     double max_u;
+    bool coeff_defined;
 public:
-    PolynomialCurve(const double& minU = 0.0, const double& maxU = 1.0): min_u(minU), max_u(maxU) {}
+    PolynomialCurve(const double& minU = 0.0, const double& maxU = 1.0): min_u(minU), max_u(maxU), coeff_defined(false) {}
 
-    PolynomialCurve(const Vector<N>& coef, const double& minU = 0.0, const double& maxU = 1.0): min_u(minU), max_u(maxU), coefficients(coef) {}
+    PolynomialCurve(const Vector<N>& coef, const double& minU = 0.0, const double& maxU = 1.0): min_u(minU), max_u(maxU), coefficients(coef), coeff_defined(true) {}
 
     virtual void addPoint(const Vector<2>& point)
     {
@@ -88,7 +89,7 @@ public:
             s += (N-i)*(N-i-1)*coefficients[i]*std::pow(u, N-i-2);
         return s;
     }
-//protected:
+protected:
     void calculateCoefficients()
     {
         // NEEDS CHECKING FOR THE MATH
@@ -129,6 +130,8 @@ public:
 
     bool defined() const
     {
+        if(coeff_defined)
+            return true;
         if (points.size() + dot_points.size() + ddot_points.size() <= N)
             return false;
         for(int i=0;i<=N;i++)
