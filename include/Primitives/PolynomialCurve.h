@@ -125,7 +125,6 @@ protected:
             }
         }
         coefficients = solveLU(A, y);
-        std::cout<<coefficients<<std::endl;
     }
 
     bool defined() const
