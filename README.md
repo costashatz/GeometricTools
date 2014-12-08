@@ -47,7 +47,7 @@ make
 1. Generic Templated Class for Matrices
     * Supports any dimension and many properties (many need to be added and some to improve)
 2. Generic Templated Class for Vectors
-    * Supports any dimension and most of the vector properties (cross product need to be added)
+    * Supports any dimension and most of the vector properties
 3. Solve Linear Systems
     * Using Gauss Elimination
     * Using LU Decomposition
@@ -59,12 +59,17 @@ make
 	* Classes for basic 2D linear shapes (line, ray, segment)
 6. Polygons
 	* Classes for basic 2D polygons (triangle, rectangle, polyline, general polygons)
-7. Distances in 2D
+7. Curves
+	* Specific quadratic curves (defined by xTAx+bTx+c=0)
+	* Generic polynomial curves (templated in size [biggest power of curve])
+8. Distances in 2D
 	* Functions for computing distances between 2D primitives (point-linear shapes, point-polyline, linear shapes-linear shapes)
 
 ####Planning to implement:
 
 1. More primitives (both in 2D and 3D)
+	* Piecewise polynomial curves
+	* Space(3D)/Plane(2D) polynomial curves
 2. Distances, Intersections in 2D/3D
 3. gtests
 4. Improve the templated classes for Matrices and Vectors
