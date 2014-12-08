@@ -29,21 +29,51 @@ namespace Primitives {
 class Curve
 {
 protected:
+    vector<Vector<2> > points;
+    vector<Vector<2> > dot_points;
+    vector<Vector<2> > ddot_points;
+    double min_u;
+    double max_u;
+    double min_x;
+    double max_x;
+protected:
     virtual void calculateCoefficients() = 0;
 
     virtual bool defined() const = 0;
+
+    double mapXtoU(const double& x)
+    {
+        double xx = std::min(max_x, std::max(min_x, x));
+        return min_u+max_u*(xx-min_x)/(max_x-min_x);
+    }
+
+    double mapUtoX(const double& u)
+    {
+        double uu = std::min(max_u, std::max(min_u, u));
+        return min_x+max_x*(uu-min_u)/(max_u-min_u);
+    }
+
+    double& maxU() { return max_u; }
+    double& minU() { return min_u; }
+
+    double& maxX() { return max_x; }
+    double& minX() { return min_x; }
+
+    vector<Vector<2> >& getPoints() { return points; }
+    vector<Vector<2> >& getDotPoints() { return dot_points; }
+    vector<Vector<2> >& getDDotPoints() { return ddot_points; }
 public:
     virtual void addPoint(const Vector<2>& point) = 0;
 
-    virtual double getPoint(const double& u) = 0;
+    virtual double getPoint(const double& x) = 0;
 
     virtual void addDotPoint(const Vector<2>& point) = 0;
 
-    virtual double getDotPoint(const double& u) = 0;
+    virtual double getDotPoint(const double& x) = 0;
 
     virtual void addDDotPoint(const Vector<2>& point) = 0;
 
-    virtual double getDDotPoint(const double& u) = 0;
+    virtual double getDDotPoint(const double& x) = 0;
 
     virtual vector<double> coeff() = 0;
 };
@@ -57,27 +87,41 @@ class PolynomialCurve : public Curve
 {
 protected:
     Vector<N+1> coefficients;
-    vector<Vector<2> > points;
-    vector<Vector<2> > dot_points;
-    vector<Vector<2> > ddot_points;
-    double min_u;
-    double max_u;
     bool coeff_defined;
 public:
-    PolynomialCurve(const double& minU = 0.0, const double& maxU = 1.0): min_u(minU), max_u(maxU), coeff_defined(false) {}
+    PolynomialCurve(const double& minU = 0.0, const double& maxU = 1.0, const double& minX = std::numeric_limits<double>::min(), const double& maxX = std::numeric_limits<double>::max())
+    {
+        min_u = minU;
+        max_u = maxU;
+        min_x = minX;
+        max_x = maxX;
+        coeff_defined = false;
+    }
 
-    PolynomialCurve(const Vector<N+1>& coef, const double& minU = 0.0, const double& maxU = 1.0): min_u(minU), max_u(maxU), coefficients(coef), coeff_defined(true) {}
+    PolynomialCurve(const Vector<N+1>& coef, const double& minU = 0.0, const double& maxU = 1.0, const double& minX = std::numeric_limits<double>::min(), const double& maxX = std::numeric_limits<double>::max())
+    {
+        min_u = minU;
+        max_u = maxU;
+        min_x = minX;
+        max_x = maxX;
+        coefficients = coef;
+        coeff_defined = true;
+    }
 
     virtual void addPoint(const Vector<2>& point)
     {
         if(defined() || find(points.begin(), points.end(), point) != points.end())
             return;
         points.push_back(point);
+        if(point[0]<min_x)
+            min_x = point[0];
+        else if(point[0]>max_x)
+            max_x = point[0];
     }
 
-    virtual double getPoint(const double& u)
+    virtual double getPoint(const double& x)
     {
-        double uu = std::min(max_u, std::max(min_u, u));
+        double uu = mapXtoU(x);
         double s = 0.0;
         for(unsigned int i=0;i<=N;i++)
             s += coefficients[i]*std::pow(uu, N-i);
@@ -89,14 +133,18 @@ public:
         if(defined() || ((int)(N+1)-dot_points.size()) <= 1 || find(dot_points.begin(), dot_points.end(), point) != dot_points.end())
             return;
         dot_points.push_back(point);
+        if(point[0]<min_x)
+            min_x = point[0];
+        else if(point[0]>max_x)
+            max_x = point[0];
     }
 
-    virtual double getDotPoint(const double& u)
+    virtual double getDotPoint(const double& x)
     {
-        double uu = std::min(max_u, std::max(min_u, u));
+        double uu = mapXtoU(x);
         double s = 0.0;
         for(int i=0;i<=N-1;i++)
-            s += (N-i)*coefficients[i]*std::pow(u, N-i-1);
+            s += (N-i)*coefficients[i]*std::pow(uu, N-i-1);
         return s;
     }
 
@@ -105,14 +153,18 @@ public:
         if(defined() || ((int)(N+1)-ddot_points.size()) <= 1 || find(ddot_points.begin(), ddot_points.end(), point) != ddot_points.end())
             return;
         ddot_points.push_back(point);
+        if(point[0]<min_x)
+            min_x = point[0];
+        else if(point[0]>max_x)
+            max_x = point[0];
     }
 
-    virtual double getDDotPoint(const double& u)
+    virtual double getDDotPoint(const double& x)
     {
-        double uu = std::min(max_u, std::max(min_u, u));
+        double uu = mapXtoU(x);
         double s = 0.0;
         for(int i=0;i<=N-2;i++)
-            s += (N-i)*(N-i-1)*coefficients[i]*std::pow(u, N-i-2);
+            s += (N-i)*(N-i-1)*coefficients[i]*std::pow(uu, N-i-2);
         return s;
     }
 
