@@ -29,7 +29,7 @@ void SVDDecomposition(const Matrix<D,D>& a, Matrix<D,D>& U, Matrix<D,D>& S, Matr
     S.identity();
     V.identity();
     double* sup = new double[D];
-    LAPACKE_dgesvd(LAPACK_ROW_MAJOR, 'S', 'S', D, D, tmp.values, D, S.values, U.values, D, V.values, D, sup);
+    LAPACKE_dgesvd(LAPACK_ROW_MAJOR, 'S', 'S', D, D, tmp.data(), D, S.data(), U.data(), D, V.data(), D, sup);
     V = V.transpose();
     for(unsigned int i=1;i<D;i++) {
         S(i,i) = S(0,i);

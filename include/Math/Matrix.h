@@ -11,20 +11,6 @@
 
 namespace LinearAlgebraTools { namespace Math {
 
-namespace LinearSystems {
-    template<unsigned int D>
-    void SVDDecomposition(const Matrix<D,D>& a, Matrix<D,D>& U, Matrix<D,D>& S, Matrix<D,D>& V);
-
-    template<unsigned int D>
-    void LUDecomposition(const Matrix<D,D>& a, Matrix<D,D>& L, Matrix<D,D>& U, Matrix<D,D>& P);
-
-    template<unsigned int D>
-    Vector<D> solveLU(const Matrix<D,D>& A, const Vector<D>& B);
-
-    template<unsigned int D>
-    void QRDecomposition(const Matrix<D,D>& a, Matrix<D,D>& Q, Matrix<D,D>& R);
-}
-
 /**
 * General Matrix Class
 * Supports NxM-dimension matrices
@@ -230,30 +216,14 @@ public:
         return r;
     }
 
-    template <unsigned int R, unsigned int C>
-    friend std::ostream& operator<<(std::ostream& os, const Matrix<R,C>& obj);
-    template <unsigned int R, unsigned int C>
-    friend std::istream& operator>>(std::istream& in, Matrix<R,C>& obj);
-    template <unsigned int R, unsigned int C>
-    friend Matrix<R,C>& operator/(const double& a, const Matrix<R,C>& b);
-    template<unsigned int C1, unsigned int K, unsigned int R2>
-    friend Matrix<C1,R2> operator*(const Matrix<C1,K>& r1, const Matrix<K,R2>& r2);
-    template<unsigned int>
-    friend class Vector;
-    template<unsigned int C1, unsigned int K>
-    friend Vector<C1> operator*(const Matrix<C1,K>& r1, const Vector<K>& r2);
-    template<unsigned int D>
-    friend Matrix<D,D> inverse(const Matrix<D,D>& mat);
-    template<unsigned int D>
-    friend void LinearSystems::LUDecomposition(const Matrix<D,D>& a, Matrix<D,D>& L, Matrix<D,D>& U, Matrix<D,D>& P);
-    template<unsigned int D>
-    friend Vector<D> LinearSystems::solveLU(const Matrix<D,D>& A, const Vector<D>& B);
-    template<unsigned int D>
-    friend void LinearSystems::SVDDecomposition(const Matrix<D,D>& a, Matrix<D,D>& U, Matrix<D,D>& S, Matrix<D,D>& V);
-    template<unsigned int D>
-    friend void LinearSystems::QRDecomposition(const Matrix<D,D>& a, Matrix<D,D>& Q, Matrix<D,D>& R);
-    template<unsigned int N>
-    friend Matrix<N,N> operator*(const Vector<N>& v1, const Matrix<N,1>& v2);
+    /**
+    * Get pointer to values array
+    * @return pointer to array
+    **/
+    double* data()
+    {
+        return values;
+    }
 
     /**
     * Get Norm of Matrix
@@ -272,7 +242,7 @@ public:
     Vector<COLS> getRow(const unsigned int& i)
     {
         Vector<COLS> tmp;
-        memcpy(&tmp.values[0], &values[i*COLS], COLS*sizeof(double));
+        memcpy(tmp.data(), &values[i*COLS], COLS*sizeof(double));
         return tmp;
     }
 
@@ -282,7 +252,7 @@ public:
     **/
     void setRow(const unsigned int& i, const Vector<COLS>& vec)
     {
-        memcpy(&values[i*COLS], &vec.values[0], COLS*sizeof(double));
+        memcpy(&values[i*COLS], vec.data(), COLS*sizeof(double));
     }
 
     /**
@@ -464,9 +434,9 @@ Matrix<N,M> operator/(const double& a, const Matrix<N,M>& b)
     Matrix<N,M> tmp = Matrix<N,M>(b);
     unsigned int S = N*M;
     for(unsigned int i=0;i<S;i++) {
-        if(std::abs(tmp.values[i]) < std::numeric_limits<double>::epsilon())
+        if(std::abs(tmp.data()[i]) < std::numeric_limits<double>::epsilon())
             return b;
-        tmp.values[i] = a/tmp.values[i];
+        tmp.data()[i] = a/tmp.data()[i];
     }
     return tmp;
 }
@@ -499,7 +469,7 @@ template<unsigned int C1, unsigned int K>
 Vector<C1> operator*(const Matrix<C1,K>& r1, const Vector<K>& r2)
 {
     Vector<C1> res;
-    cblas_dgemv(CblasRowMajor, CblasNoTrans, C1, K, 1.0, &r1.values[0], C1, &r2.values[0], 1, 1.0, &res.values[0], 1);
+    cblas_dgemv(CblasRowMajor, CblasNoTrans, C1, K, 1.0, r1.data(), C1, r2.data(), 1, 1.0, res.data(), 1);
     return res;
 }
 
@@ -508,10 +478,10 @@ Vector<C1> operator*(const Matrix<C1,K>& r1, const Vector<K>& r2)
 * Multiplication with Vector - (vT*M)T
 **/
 template<unsigned int C1, unsigned int K>
-Vector<C1> operator*(const Vector<K>& r2, const Matrix<K, C1>& r1)
+Vector<C1> operator*(const Vector<K>& v1, const Matrix<K, C1>& v2)
 {
     Vector<C1> res;
-    cblas_dgemv(CblasRowMajor, CblasTrans, C1, K, 1.0, &r1.values[0], C1, &r2.values[0], 1, 1.0, &res.values[0], 1);
+    cblas_dgemv(CblasRowMajor, CblasTrans, C1, K, 1.0, v1.data(), C1, v2.data(), 1, 1.0, res.data(), 1);
     return res;
 }
 
@@ -550,8 +520,8 @@ Matrix<D,D> inverse(const Matrix<D,D>& mat)
     Matrix<D,D> res = mat;
     unsigned int d = D;
     int* ipiv = new int[D];
-    LAPACKE_dgetrf(LAPACK_ROW_MAJOR, d, d, res.values, d, ipiv);
-    LAPACKE_dgetri(LAPACK_ROW_MAJOR, d, res.values, d, ipiv);
+    LAPACKE_dgetrf(LAPACK_ROW_MAJOR, d, d, res.data(), d, ipiv);
+    LAPACKE_dgetri(LAPACK_ROW_MAJOR, d, res.data(), d, ipiv);
     delete ipiv;
     return res;
 }
@@ -599,7 +569,7 @@ template<unsigned int C1, unsigned int K, unsigned int R2>
 Matrix<C1,R2> operator*(const Matrix<C1,K>& r1, const Matrix<K,R2>& r2)
 {
     Matrix<C1,R2> res;
-    cblas_dgemm(CblasRowMajor, CblasNoTrans, CblasNoTrans, C1, R2, K, 1.0, &r1.values[0], C1, &r2.values[0], K, 0.0, &res.values[0], C1);
+    cblas_dgemm(CblasRowMajor, CblasNoTrans, CblasNoTrans, C1, R2, K, 1.0, r1.data(), C1, r2.data(), K, 0.0, res.data(), C1);
     return res;
 }
 
@@ -624,7 +594,7 @@ template<unsigned int N>
 Matrix<N,N> operator*(const Vector<N>& v1, const Matrix<N,1>& v2)
 {
     Matrix<N,N> res;
-    cblas_dgemm(CblasRowMajor, CblasNoTrans, CblasNoTrans, N, N, 1, 1.0, v1.values, 1, v2.values, N, 0.0, res.values, N);
+    cblas_dgemm(CblasRowMajor, CblasNoTrans, CblasNoTrans, N, N, 1, 1.0, v1.data(), 1, v2.data(), N, 0.0, res.data(), N);
     return res;
 }
 

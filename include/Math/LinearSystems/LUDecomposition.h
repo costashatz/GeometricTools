@@ -34,7 +34,7 @@ void LUDecomposition(const Matrix<D,D>& a, Matrix<D,D>& L, Matrix<D,D>& U, Matri
     P.identity();
     U = a;
     int* ipiv = new int[D];
-    LAPACKE_dgetrf(LAPACK_ROW_MAJOR, D, D, U.values, D, ipiv);
+    LAPACKE_dgetrf(LAPACK_ROW_MAJOR, D, D, U.data(), D, ipiv);
     for(unsigned int i=0;i<D;i++) {
         P.swapCols(i, ipiv[i]-1);
         for(unsigned int j=0;j<i;j++) {

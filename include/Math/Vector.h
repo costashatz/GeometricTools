@@ -13,12 +13,6 @@
 
 namespace LinearAlgebraTools { namespace Math {
 
-namespace LinearSystems {
-
-    template<unsigned int D>
-    Vector<D> solveLU(const Matrix<D,D>& A, const Vector<D>& B);
-}
-
 template<unsigned int ROWS, unsigned int COLS>
 class Matrix;
 
@@ -197,6 +191,15 @@ public:
     }
 
     /**
+    * Get pointer to values array
+    * @return pointer to array
+    **/
+    double* data()
+    {
+        return values;
+    }
+
+    /**
     * Get Length of Vector
     * @return double - length
     **/
@@ -288,21 +291,6 @@ public:
     {
         return values[i];
     }
-
-    template <unsigned int U>
-    friend std::ostream& operator<<(std::ostream& os, const Vector<U>& obj);
-    template <unsigned int U>
-    friend std::istream& operator>>(std::istream& in, Vector<U>& obj);
-    template <unsigned int, unsigned int>
-    friend class Matrix;
-    template <unsigned int U>
-    friend double operator*(const Vector<U>& rh, const Vector<U>& lh);
-    template<unsigned int C1, unsigned int K>
-    friend Vector<C1> operator*(const Matrix<C1,K>& r1, const Vector<K>& r2);
-    template<unsigned int D>
-    friend Vector<D> LinearSystems::solveLU(const Matrix<D,D>& A, const Vector<D>& B);
-    template<unsigned int U>
-    friend Matrix<U,U> operator*(const Vector<U>& v1, const Matrix<U,1>& v2);
 
     /**
     * Get ith unit vector with size N

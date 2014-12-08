@@ -23,11 +23,37 @@ using Math::LinearSystems::solveLU;
 namespace Primitives {
 
 /**
+* Curve Class
+* Generic 1D (function) curve - base class for all parametric curves
+**/
+class Curve
+{
+protected:
+    virtual void calculateCoefficients() = 0;
+
+    virtual bool defined() const = 0;
+public:
+    virtual void addPoint(const Vector<2>& point) = 0;
+
+    virtual double getPoint(const double& u) = 0;
+
+    virtual void addDotPoint(const Vector<2>& point) = 0;
+
+    virtual double getDotPoint(const double& u) = 0;
+
+    virtual void addDDotPoint(const Vector<2>& point) = 0;
+
+    virtual double getDDotPoint(const double& u) = 0;
+
+    virtual vector<double> coeff() = 0;
+};
+
+/**
 * PolynomialCurve Class
 * 1D (function) Polynomial curve defined by a series of control points (and slopes, curvatures) OR coefficients
 **/
 template<unsigned int N>
-class PolynomialCurve
+class PolynomialCurve : public Curve
 {
 protected:
     Vector<N+1> coefficients;
@@ -40,7 +66,7 @@ protected:
 public:
     PolynomialCurve(const double& minU = 0.0, const double& maxU = 1.0): min_u(minU), max_u(maxU), coeff_defined(false) {}
 
-    PolynomialCurve(const Vector<N>& coef, const double& minU = 0.0, const double& maxU = 1.0): min_u(minU), max_u(maxU), coefficients(coef), coeff_defined(true) {}
+    PolynomialCurve(const Vector<N+1>& coef, const double& minU = 0.0, const double& maxU = 1.0): min_u(minU), max_u(maxU), coefficients(coef), coeff_defined(true) {}
 
     virtual void addPoint(const Vector<2>& point)
     {
@@ -49,7 +75,7 @@ public:
         points.push_back(point);
     }
 
-    double getPoint(const double& u)
+    virtual double getPoint(const double& u)
     {
         double uu = std::min(max_u, std::max(min_u, u));
         double s = 0.0;
@@ -65,7 +91,7 @@ public:
         dot_points.push_back(point);
     }
 
-    double getDotPoint(const double& u)
+    virtual double getDotPoint(const double& u)
     {
         double uu = std::min(max_u, std::max(min_u, u));
         double s = 0.0;
@@ -81,7 +107,7 @@ public:
         ddot_points.push_back(point);
     }
 
-    double getDDotPoint(const double& u)
+    virtual double getDDotPoint(const double& u)
     {
         double uu = std::min(max_u, std::max(min_u, u));
         double s = 0.0;
@@ -89,6 +115,14 @@ public:
             s += (N-i)*(N-i-1)*coefficients[i]*std::pow(u, N-i-2);
         return s;
     }
+
+    virtual vector<double> coeff()
+    {
+        vector<double> tmp;
+        tmp.insert(tmp.begin(), coefficients.data(), coefficients.data()+(N+1));
+        return tmp;
+    }
+
 protected:
     void calculateCoefficients()
     {

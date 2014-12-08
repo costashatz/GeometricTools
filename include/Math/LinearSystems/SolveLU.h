@@ -24,10 +24,10 @@ Vector<D> solveLU(const Matrix<D,D>& A, const Vector<D>& B)
 {
     Matrix<D,D> U = A;
     int* ipiv = new int[D];
-    LAPACKE_dgetrf(LAPACK_ROW_MAJOR, D, D, U.values, D, ipiv);
+    LAPACKE_dgetrf(LAPACK_ROW_MAJOR, D, D, U.data(), D, ipiv);
 
     Vector<D> res = B;
-    LAPACKE_dgetrs(LAPACK_ROW_MAJOR, 'N', D, 1, U.values, D, ipiv, res.values, 1);
+    LAPACKE_dgetrs(LAPACK_ROW_MAJOR, 'N', D, 1, U.data(), D, ipiv, res.data(), 1);
 
     return res;
 }
