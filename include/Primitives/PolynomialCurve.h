@@ -52,16 +52,6 @@ protected:
         double uu = std::min(max_u, std::max(min_u, u));
         return min_x+max_x*(uu-min_u)/(max_u-min_u);
     }
-
-    double& maxU() { return max_u; }
-    double& minU() { return min_u; }
-
-    double& maxX() { return max_x; }
-    double& minX() { return min_x; }
-
-    vector<Vector<2> >& getPoints() { return points; }
-    vector<Vector<2> >& getDotPoints() { return dot_points; }
-    vector<Vector<2> >& getDDotPoints() { return ddot_points; }
 public:
     virtual void addPoint(const Vector<2>& point) = 0;
 
@@ -76,6 +66,16 @@ public:
     virtual double getDDotPoint(const double& x) = 0;
 
     virtual vector<double> coeff() = 0;
+
+    double& maxU() { return max_u; }
+    double& minU() { return min_u; }
+
+    double& maxX() { return max_x; }
+    double& minX() { return min_x; }
+
+    vector<Vector<2> >& getPoints() { return points; }
+    vector<Vector<2> >& getDotPoints() { return dot_points; }
+    vector<Vector<2> >& getDDotPoints() { return ddot_points; }
 };
 
 /**
