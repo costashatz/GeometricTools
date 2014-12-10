@@ -4,7 +4,7 @@
 /**
 * Includes
 **/
-#include <Primitives/PolynomialCurve.h>
+#include <Primitives/Curve.h>
 
 #include <Math/Vector.h>
 #include <Math/Matrix.h>
@@ -23,7 +23,7 @@ namespace Primitives {
 
 /**
 * PiecewiseCurve Class
-* 1D piecewise curve defined by a series of control points and between each pair a separate curve is defined
+* Abstract 1D piecewise curve - base class for all piecewise curves
 **/
 class PiecewiseCurve : public Curve
 {
