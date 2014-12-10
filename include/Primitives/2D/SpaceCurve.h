@@ -72,8 +72,10 @@ public:
 
     void addPointU(const Vector<4>& point)
     {
-        curve_x->addPointU({point[0], point[2]});
-        curve_y->addPointU({point[1], point[3]});
+        double ux = clamp(point[0], min_u, max_u);
+        double uy = clamp(point[1], min_u, max_u);
+        curve_x->addPointU({ux, point[2]});
+        curve_y->addPointU({uy, point[3]});
     }
 
     Vector<2> getPoint(const Vector<2>& x)
@@ -83,7 +85,9 @@ public:
 
     Vector<2> getPointU(const Vector<2>& u)
     {
-        return {curve_x->getPointU(u[0]), curve_y->getPointU(u[1])};
+        double ux = clamp(u[0], min_u, max_u);
+        double uy = clamp(u[1], min_u, max_u);
+        return {curve_x->getPointU(ux), curve_y->getPointU(uy)};
     }
 
     void addDotPoint(const Vector<4>& point)
@@ -93,8 +97,10 @@ public:
 
     void addDotPointU(const Vector<3>& point)
     {
-        curve_x->addDotPointU({point[0], point[2]});
-        curve_y->addDotPointU({point[1], point[3]});
+        double ux = clamp(point[0], min_u, max_u);
+        double uy = clamp(point[1], min_u, max_u);
+        curve_x->addDotPointU({ux, point[2]});
+        curve_y->addDotPointU({uy, point[3]});
     }
 
     Vector<2> getDotPoint(const Vector<2>& p)
@@ -104,7 +110,9 @@ public:
 
     Vector<2> getDotPointU(const Vector<2>& u)
     {
-        return {curve_x->getDotPointU(u[0]), curve_y->getDotPointU(u[1])};
+        double ux = clamp(u[0], min_u, max_u);
+        double uy = clamp(u[1], min_u, max_u);
+        return {curve_x->getDotPointU(ux), curve_y->getDotPointU(uy)};
     }
 
     void addDDotPoint(const Vector<4>& point)
@@ -114,8 +122,10 @@ public:
 
     void addDDotPointU(const Vector<4>& point)
     {
-        curve_x->addDDotPointU({point[0], point[2]});
-        curve_y->addDDotPointU({point[1], point[3]});
+        double ux = clamp(point[0], min_u, max_u);
+        double uy = clamp(point[1], min_u, max_u);
+        curve_x->addDDotPointU({ux, point[2]});
+        curve_y->addDDotPointU({uy, point[3]});
     }
 
     Vector<2> getDDotPoint(const Vector<2>& p)
@@ -125,7 +135,9 @@ public:
 
     Vector<2> getDDotPointU(const Vector<2>& u)
     {
-        return {curve_x->getDDotPointU(u[0]), curve_y->getDDotPointU(u[1])};
+        double ux = clamp(u[0], min_u, max_u);
+        double uy = clamp(u[1], min_u, max_u);
+        return {curve_x->getDDotPointU(ux), curve_y->getDDotPointU(uy)};
     }
 
     vector<double> coeff(unsigned int i)
