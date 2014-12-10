@@ -65,73 +65,67 @@ public:
         curve_y = new CurveTypeB(minU, maxU, minY, maxY);
     }
 
-    void addPoint(const Vector<3>& point)
+    void addPoint(const Vector<4>& point)
     {
-        addPointU({mapXtoU(point[0]), mapYtoU(point[1]), point[2]});
+        addPointU({mapXtoU(point[0]), mapYtoU(point[1]), point[2], point[3]});
     }
 
-    void addPointU(const Vector<3>& point)
+    void addPointU(const Vector<4>& point)
     {
-        double ux = clamp(point[0], min_u, max_u);
-        double uy = clamp(point[1], min_u, max_u);
-        curve_x->addPointU({ux, point[1]});
-        curve_y->addPointU({uy, point[2]});
+        curve_x->addPointU({point[0], point[2]});
+        curve_y->addPointU({point[1], point[3]});
     }
 
-    Vector<2> getPoint(const double& x)
+    Vector<2> getPoint(const Vector<2>& x)
     {
-        return {curve_x->getPoint(x), curve_y->getPoint(x)};
+        return getPointU(mapXtoU(x[0]), mapYtoU(x[1]));
     }
 
-    Vector<2> getPointU(const double& u)
+    Vector<2> getPointU(const Vector<2>& u)
     {
-        return {curve_x->getPointU(u), curve_y->getPointU(u)};
+        return {curve_x->getPointU(u[0]), curve_y->getPointU(u[1])};
     }
 
-    void addDotPoint(const Vector<3>& point)
+    void addDotPoint(const Vector<4>& point)
     {
-        addDotPointU({mapXtoU(point[0]), mapYtoU(point[1]), point[2]});
+        addDotPointU({mapXtoU(point[0]), mapYtoU(point[1]), point[2], point[3]});
     }
 
     void addDotPointU(const Vector<3>& point)
     {
-        double ux = clamp(point[0], min_u, max_u);
-        double uy = clamp(point[1], min_u, max_u);
-        curve_x->addDotPointU({ux, point[1]});
-        curve_y->addDotPointU({uy, point[2]});
+        curve_x->addDotPointU({point[0], point[2]});
+        curve_y->addDotPointU({point[1], point[3]});
     }
 
-    Vector<2> getDotPoint(const double& x)
+    Vector<2> getDotPoint(const Vector<2>& p)
     {
-        return {curve_x->getDotPoint(x), curve_y->getDotPoint(x)};
+        return getDotPointU({mapXtoU(p[0]), mapYtoU(p[1])});
     }
 
-    Vector<2> getDotPointU(const double& u)
+    Vector<2> getDotPointU(const Vector<2>& u)
     {
-        return {curve_x->getDotPointU(u), curve_y->getDotPointU(u)};
+        return {curve_x->getDotPointU(u[0]), curve_y->getDotPointU(u[1])};
     }
 
-    void addDDotPoint(const Vector<3>& point)
+    void addDDotPoint(const Vector<4>& point)
     {
-        addDDotPointU({mapXtoU(point[0]), mapYtoU(point[1]), point[2]});
+        addDDotPointU({mapXtoU(point[0]), mapYtoU(point[1]), point[2], point[3]});
     }
 
-    void addDDotPointU(const Vector<3>& point)
+    void addDDotPointU(const Vector<4>& point)
     {
-        double ux = clamp(point[0], min_u, max_u);
-        double uy = clamp(point[1], min_u, max_u);
-        curve_x->addDDotPointU({ux, point[1]});
-        curve_y->addDDotPointU({uy, point[2]});
+        curve_x->addDDotPointU({point[0], point[2]});
+        curve_y->addDDotPointU({point[1], point[3]});
     }
 
-    Vector<2> getDDotPoint(const double& x)
+    Vector<2> getDDotPoint(const Vector<2>& p)
     {
-        return {curve_x->getDDotPoint(x), curve_y->getDDotPoint(x)};
+        return getDDotPointU(mapXtoU(p[0]), mapYtoU(p[1]));
     }
 
-    Vector<2> getDDotPointU(const double& u)
+    Vector<2> getDDotPointU(const Vector<2>& u)
     {
-        return {curve_x->getDDotPointU(u), curve_y->getDDotPointU(u)};
+        return {curve_x->getDDotPointU(u[0]), curve_y->getDDotPointU(u[1])};
     }
 
     vector<double> coeff(unsigned int i)
