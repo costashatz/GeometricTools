@@ -7,7 +7,7 @@
 #include <Math/Vector.h>
 #include <Math/Matrix.h>
 #include <Math/LinearSystems/SolveLU.h>
-#include <Primitives/Curve.h>
+#include <Primitives/1D/Curve.h>
 #include <vector>
 
 using std::vector;
@@ -32,26 +32,22 @@ protected:
     Vector<N+1> coefficients;
     bool coeff_defined;
 public:
-    PolynomialCurve(const double& minU = 0.0, const double& maxU = 1.0, const double& minX = std::numeric_limits<double>::min(), const double& maxX = std::numeric_limits<double>::max())
+    PolynomialCurve(const double& minU = 0.0, const double& maxU = 1.0)
     {
         min_u = minU;
         max_u = maxU;
-        min_x = minX;
-        max_x = maxX;
         coeff_defined = false;
     }
 
-    PolynomialCurve(const Vector<N+1>& coef, const double& minU = 0.0, const double& maxU = 1.0, const double& minX = std::numeric_limits<double>::min(), const double& maxX = std::numeric_limits<double>::max())
+    PolynomialCurve(const Vector<N+1>& coef, const double& minU = 0.0, const double& maxU = 1.0)
     {
         min_u = minU;
         max_u = maxU;
-        min_x = minX;
-        max_x = maxX;
         coefficients = coef;
         coeff_defined = true;
     }
 
-    virtual double getPointU(const double& u)
+    virtual double getPoint(const double& u)
     {
         double s = 0.0;
         for(unsigned int i=0;i<=N;i++)
@@ -59,7 +55,7 @@ public:
         return s;
     }
 
-    virtual double getDotPointU(const double& u)
+    virtual double getDotPoint(const double& u)
     {
         double s = 0.0;
         for(int i=0;i<=N-1;i++)
@@ -67,7 +63,7 @@ public:
         return s;
     }
 
-    virtual double getDDotPointU(const double& u)
+    virtual double getDDotPoint(const double& u)
     {
         double s = 0.0;
         for(int i=0;i<=N-2;i++)

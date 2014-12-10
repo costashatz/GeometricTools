@@ -4,7 +4,7 @@
 /**
 * Includes
 **/
-#include <Primitives/Curve.h>
+#include <Primitives/1D/Curve.h>
 
 #include <Math/Vector.h>
 #include <Math/Matrix.h>
@@ -30,12 +30,10 @@ class PiecewiseCurve : public Curve
 protected:
     vector<Curve*> curves;
 public:
-    PiecewiseCurve(const double& minU = 0.0, const double& maxU = 1.0, const double& minX = std::numeric_limits<double>::min(), const double& maxX = std::numeric_limits<double>::max())
+    PiecewiseCurve(const double& minU = 0.0, const double& maxU = 1.0)
     {
         min_u = minU;
         max_u = maxU;
-        min_x = minX;
-        max_x = maxX;
     }
 
     virtual vector<double> coeff()
