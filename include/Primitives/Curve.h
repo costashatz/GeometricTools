@@ -6,15 +6,19 @@
 **/
 #include <Math/Vector.h>
 #include <Math/Matrix.h>
+#include <Misc/Helper.h>
 #include <vector>
+#include <algorithm>
 
 using std::vector;
+using std::find;
 
 
 namespace LinearAlgebraTools {
 
 using Math::Matrix;
 using Math::Vector;
+using namespace Helper;
 
 namespace Primitives {
 
@@ -37,59 +41,89 @@ protected:
 
     virtual bool defined() const = 0;
 
+    virtual bool canAddPoint(const Vector<2>& point) = 0;
+
+    virtual bool canAddDotPoint(const Vector<2>& point) = 0;
+
+    virtual bool canAddDDotPoint(const Vector<2>& point) = 0;
+
     double mapXtoU(const double& x)
     {
-        double xx = std::min(max_x, std::max(min_x, x));
+        double xx = clamp(x, min_x, max_x);
         return min_u+max_u*(xx-min_x)/(max_x-min_x);
     }
 
     double mapUtoX(const double& u)
     {
-        double uu = std::min(max_u, std::max(min_u, u));
+        double uu = clamp(u, min_u, max_u);
         return min_x+max_x*(uu-min_u)/(max_u-min_u);
     }
 public:
-    virtual void addPoint(const Vector<2>& point)
+    void addPoint(const Vector<2>& point)
     {
         addPointU({mapXtoU(point[0]), point[1]});
     }
 
-    virtual void addPointU(const Vector<2>& point) = 0;
+    void addPointU(const Vector<2>& point)
+    {
+        if(defined() || find(points.begin(), points.end(), point) != points.end() || !canAddPoint(point))
+            return;
+        double u = clamp(point[0], min_u, max_u);
+        points.push_back({u, point[1]});
+        if(defined())
+            calculateCoefficients();
+    }
 
-    virtual double getPoint(const double& x)
+    double getPoint(const double& x)
     {
         return getPointU(mapXtoU(x));
     }
 
     virtual double getPointU(const double& u) = 0;
 
-    virtual void addDotPoint(const Vector<2>& point)
+    void addDotPoint(const Vector<2>& point)
     {
         addDotPointU({mapXtoU(point[0]), point[1]});
     }
 
-    virtual void addDotPointU(const Vector<2>& point) = 0;
+    void addDotPointU(const Vector<2>& point)
+    {
+        if(defined() || find(dot_points.begin(), dot_points.end(), point) != dot_points.end() || !canAddDotPoint(point))
+            return;
+        double u = clamp(point[0], min_u, max_u);
+        dot_points.push_back({u, point[1]});
+        if(defined())
+            calculateCoefficients();
+    }
 
-    virtual double getDotPoint(const double& x)
+    double getDotPoint(const double& x)
     {
         return getDotPointU(mapXtoU(x));
     }
 
-    virtual double getDotPointU(const double& x) = 0;
+    virtual double getDotPointU(const double& u) = 0;
 
-    virtual void addDDotPoint(const Vector<2>& point)
+    void addDDotPoint(const Vector<2>& point)
     {
         addDDotPointU({mapXtoU(point[0]), point[1]});
     }
 
-    virtual void addDDotPointU(const Vector<2>& point) = 0;
+    void addDDotPointU(const Vector<2>& point)
+    {
+        if(defined() || find(ddot_points.begin(), ddot_points.end(), point) != ddot_points.end()  || !canAddDDotPoint(point))
+            return;
+        double u = clamp(point[0], min_u, max_u);
+        ddot_points.push_back({u, point[1]});
+        if(defined())
+            calculateCoefficients();
+    }
 
-    virtual double getDDotPoint(const double& x)
+    double getDDotPoint(const double& x)
     {
         return getDDotPointU(mapXtoU(x));
     }
 
-    virtual double getDDotPointU(const double& x) = 0;
+    virtual double getDDotPointU(const double& u) = 0;
 
     virtual vector<double> coeff() = 0;
 

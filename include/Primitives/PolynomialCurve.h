@@ -9,10 +9,8 @@
 #include <Math/LinearSystems/SolveLU.h>
 #include <Primitives/Curve.h>
 #include <vector>
-#include <algorithm>
 
 using std::vector;
-using std::find;
 
 
 namespace LinearAlgebraTools {
@@ -53,16 +51,6 @@ public:
         coeff_defined = true;
     }
 
-    virtual void addPointU(const Vector<2>& point)
-    {
-        if(defined() || find(points.begin(), points.end(), point) != points.end())
-            return;
-        double u = std::max(min_u, std::min(max_u, point[0]));
-        points.push_back({u, point[1]});
-        if(defined())
-            calculateCoefficients();
-    }
-
     virtual double getPointU(const double& u)
     {
         double s = 0.0;
@@ -71,32 +59,12 @@ public:
         return s;
     }
 
-    virtual void addDotPointU(const Vector<2>& point)
-    {
-        if(defined() || ((int)(N+1)-dot_points.size()) <= 1 || find(dot_points.begin(), dot_points.end(), point) != dot_points.end())
-            return;
-        double u = std::max(min_u, std::min(max_u, point[0]));
-        dot_points.push_back({u, point[1]});
-        if(defined())
-            calculateCoefficients();
-    }
-
     virtual double getDotPointU(const double& u)
     {
         double s = 0.0;
         for(int i=0;i<=N-1;i++)
             s += (N-i)*coefficients[i]*std::pow(u, N-i-1);
         return s;
-    }
-
-    virtual void addDDotPointU(const Vector<2>& point)
-    {
-        if(defined() || ((int)(N+1)-ddot_points.size()) <= 1 || find(ddot_points.begin(), ddot_points.end(), point) != ddot_points.end())
-            return;
-        double u = std::max(min_u, std::min(max_u, point[0]));
-        ddot_points.push_back({u, point[1]});
-        if(defined())
-            calculateCoefficients();
     }
 
     virtual double getDDotPointU(const double& u)
@@ -169,6 +137,21 @@ protected:
                 return false;
         }
         return true;
+    }
+
+    bool canAddPoint(const Vector<2> &point)
+    {
+        return true;
+    }
+
+    bool canAddDotPoint(const Vector<2> &point)
+    {
+        return (int(N)-dot_points.size()) > 0;
+    }
+
+    bool canAddDDotPoint(const Vector<2> &point)
+    {
+        return (int(N-1)-ddot_points.size()) > 0;
     }
 };
 

@@ -1,6 +1,8 @@
 #ifndef HELPER_H
 #define HELPER_H
 
+#include <iostream>
+
 namespace LinearAlgebraTools { namespace Helper {
 
 const double Pi = 3.14159265358979323846264338327950288419716939937510;
@@ -16,6 +18,11 @@ double radiansToDegrees(double rad)
 double degreesToRadians(double deg)
 {
     return deg*(Pi/180.0);
+}
+
+double clamp(double a, double min, double max)
+{
+    return std::min(max, std::max(min, a));
 }
 
 } }
