@@ -23,6 +23,8 @@ namespace Primitives {
 template <unsigned int N>
 class PolynomialCurve;
 
+class HermitePiecwiseCurve;
+
 template <class CurveTypeA, class CurveTypeB>
 class PlaneCurve
 {
@@ -30,10 +32,11 @@ protected:
     CurveTypeA* curve_x;
     CurveTypeB* curve_y;
 public:
-    PlaneCurve()
+    template<typename...U>
+    PlaneCurve(U... args)
     {
-        curve_x = new CurveTypeA();
-        curve_y = new CurveTypeB();
+        curve_x = new CurveTypeA(std::forward<U>(args)...);
+        curve_y = new CurveTypeB(std::forward<U>(args)...);
     }
 
     void addPoint(const Vector<2>& point)
@@ -65,13 +68,15 @@ public:
 /**
 * Typedefs for frequently used types
 **/
-typedef PlaneCurve<PolynomialCurve<0>,PolynomialCurve<0> > ConstantSpaceCurve;
+typedef PlaneCurve<PolynomialCurve<0>,PolynomialCurve<0> > ConstantPlaneCurve;
 
-typedef PlaneCurve<PolynomialCurve<1>,PolynomialCurve<1> > LinearSpaceCurve;
+typedef PlaneCurve<PolynomialCurve<1>,PolynomialCurve<1> > LinearPlaneCurve;
 
-typedef PlaneCurve<PolynomialCurve<2>,PolynomialCurve<2> > QuadraticSpaceCurve;
+typedef PlaneCurve<PolynomialCurve<2>,PolynomialCurve<2> > QuadraticPlaneCurve;
 
-typedef PlaneCurve<PolynomialCurve<3>,PolynomialCurve<3> > CubicSpaceCurve;
+typedef PlaneCurve<PolynomialCurve<3>,PolynomialCurve<3> > CubicPlaneCurve;
+
+typedef PlaneCurve<HermitePiecwiseCurve,HermitePiecwiseCurve> HermitePlaneCurve;
 
 } }
 

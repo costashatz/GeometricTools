@@ -31,8 +31,6 @@ public:
 
     void addDotPoint(const Vector<2> &point)
     {
-        if(std::find(dot_points.begin(), dot_points.end(), point) != dot_points.end())
-            return;
         points.push_back(point[0]);
         dot_points.push_back(point);
         if(defined())

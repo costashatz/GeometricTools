@@ -7,11 +7,8 @@
 #include <Math/Vector.h>
 #include <Misc/Helper.h>
 #include <vector>
-#include <algorithm>
 
 using std::vector;
-using std::find;
-
 
 namespace LinearAlgebraTools {
 
@@ -43,7 +40,7 @@ protected:
 public:
     void addPoint(const double& point)
     {
-        if(defined() || find(points.begin(), points.end(), point) != points.end() || !canAddPoint(point))
+        if(defined() || !canAddPoint(point))
             return;
         points.push_back(point);
         if(defined())
@@ -52,7 +49,7 @@ public:
 
     void addDotPoint(const Vector<2>& point)
     {
-        if(defined() || find(dot_points.begin(), dot_points.end(), point) != dot_points.end() || !canAddDotPoint(point))
+        if(defined() || !canAddDotPoint(point))
             return;
         points.push_back(point[0]);
         dot_points.push_back(point);
@@ -62,7 +59,7 @@ public:
 
     void addDDotPoint(const Vector<2>& point)
     {
-        if(defined() || find(ddot_points.begin(), ddot_points.end(), point) != ddot_points.end() || !canAddDDotPoint(point))
+        if(defined() || !canAddDDotPoint(point))
             return;
         points.push_back(point[0]);
         ddot_points.push_back(point);
