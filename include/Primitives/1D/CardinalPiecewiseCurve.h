@@ -29,7 +29,7 @@ class CardinalPiecewiseCurve : public PiecewiseCurve
 protected:
     double t_;
 public:
-    CardinalPiecewiseCurve(const double& t = 0.0): t_(t) {std::cout<<t<<std::endl;}
+    CardinalPiecewiseCurve(const double& t = 0.0): t_(t) {}
 
     double& t()
     {
