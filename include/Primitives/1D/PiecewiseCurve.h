@@ -33,9 +33,12 @@ public:
 
     virtual vector<double> coeff()
     {
-        vector<double> coef;
-        for(int i=0;i<curves.size();i++)
-            coef.insert(coef.end(), curves[i]->coeff().begin(), curves[i]->coeff().end());
+        vector<double> coef = curves[0]->coeff();
+        for(int i=1;i<curves.size();i++)
+        {
+            auto tmp = curves[i]->coeff();
+            coef.insert(coef.end(), tmp.begin(), tmp.end());
+        }
         return coef;
     }
 };

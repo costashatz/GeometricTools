@@ -7,7 +7,9 @@
 #include <iostream>
 #include <cassert>
 #include <Math/Vector.h>
-#include <lapacke.h>
+
+extern "C" int dgetrf_(int *m, int *n, double *a, int * lda, int *ipiv, int *info);
+extern "C" int dgetri_(int *n, double *a, int *lda, int *ipiv, double *work, int *lwork, int *info);
 
 namespace LinearAlgebraTools { namespace Math {
 
@@ -518,10 +520,11 @@ template<unsigned int D>
 Matrix<D,D> inverse(const Matrix<D,D>& mat)
 {
     Matrix<D,D> res = mat;
-    unsigned int d = D;
-    int* ipiv = new int[D];
-    LAPACKE_dgetrf(LAPACK_ROW_MAJOR, d, d, res.data(), d, ipiv);
-    LAPACKE_dgetri(LAPACK_ROW_MAJOR, d, res.data(), d, ipiv);
+    int d = D;
+    int* ipiv = new int[D], info;
+    double* work = new double[D];
+    dgetrf_(&d, &d, res.data(), &d, ipiv, &info);
+    dgetri_(&d, res.data(), &d, ipiv, work, &d, &info);
     delete ipiv;
     return res;
 }

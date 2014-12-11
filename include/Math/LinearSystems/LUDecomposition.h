@@ -5,7 +5,8 @@
 * Includes
 **/
 #include <Math/Matrix.h>
-#include <lapacke.h>
+
+extern "C" int dgetrf_(int *m, int *n, double *a, int * lda, int *ipiv, int *info);
 
 namespace LinearAlgebraTools {
 
@@ -34,7 +35,8 @@ void LUDecomposition(const Matrix<D,D>& a, Matrix<D,D>& L, Matrix<D,D>& U, Matri
     P.identity();
     U = a;
     int* ipiv = new int[D];
-    LAPACKE_dgetrf(LAPACK_ROW_MAJOR, D, D, U.data(), D, ipiv);
+    int dim = int(D), info;
+    dgetrf_(&dim, &dim, U.data(), &dim, ipiv, &info);
     for(unsigned int i=0;i<D;i++) {
         P.swapCols(i, ipiv[i]-1);
         for(unsigned int j=0;j<i;j++) {

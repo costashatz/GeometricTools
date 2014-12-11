@@ -6,18 +6,20 @@
 **/
 #include <Math/Vector.h>
 #include <Math/Matrix.h>
-#include <Math/LinearSystems/SolveLU.h>
+#include <Math/LinearSystems/SolveLinear.h>
 #include <Primitives/1D/Curve.h>
 #include <vector>
+#include <map>
 
 using std::vector;
+using std::map;
 
 
 namespace LinearAlgebraTools {
 
 using Math::Matrix;
 using Math::Vector;
-using Math::LinearSystems::solveLU;
+using Math::LinearSystems::solveLinear;
 
 namespace Primitives {
 
@@ -31,34 +33,11 @@ class PolynomialCurve : public Curve
 protected:
     Vector<N+1> coefficients;
     bool coeff_defined;
+    int n;
 public:
-    PolynomialCurve(): coeff_defined(false) {}
+    PolynomialCurve(): coeff_defined(false), n(N) {}
 
-    PolynomialCurve(const Vector<N+1>& coef): coefficients(coef), coeff_defined(true) {}
-
-    virtual double getPoint(const double& u)
-    {
-        double s = 0.0;
-        for(unsigned int i=0;i<=N;i++)
-            s += coefficients[i]*std::pow(u, N-i);
-        return s;
-    }
-
-    virtual double getDotPoint(const double& u)
-    {
-        double s = 0.0;
-        for(int i=0;i<=N-1;i++)
-            s += (N-i)*coefficients[i]*std::pow(u, N-i-1);
-        return s;
-    }
-
-    virtual double getDDotPoint(const double& u)
-    {
-        double s = 0.0;
-        for(int i=0;i<=N-2;i++)
-            s += (N-i)*(N-i-1)*coefficients[i]*std::pow(u, N-i-2);
-        return s;
-    }
+    PolynomialCurve(const Vector<N+1>& coef): coefficients(coef), coeff_defined(true), n(N) {}
 
     virtual vector<double> coeff()
     {
@@ -75,33 +54,41 @@ protected:
 
         Matrix<N+1,N+1> A;
         Vector<N+1> y;
+        map<double,double> us;
+        for(int i=0;i<points.size();i++)
+        {
+            double d = double(points.size()-1);
+            if(points.size()<=1)
+                d = 1.0;
+            us[points[i]] = double(i)/d;
+        }
         int ddot = ddot_points.size();
         int dot = dot_points.size();
         for(int i=0;i<ddot;i++)
         {
             y[i] = ddot_points[i][1];
-            for(int j=0;j<=N-2;j++)
+            for(int j=0;j<=n-2;j++)
             {
-                A(i,j) = (N-j)*(N-j-1)*std::pow(ddot_points[i][0], N-j-2);
+                A(i,j) = (n-j)*(n-j-1)*std::pow(us[ddot_points[i][0]], n-j-2);
             }
         }
-        for(int i=ddot;i<dot;i++)
+        for(int i=ddot;i<ddot+dot;i++)
         {
             y[i] = dot_points[i-ddot][1];
-            for(int j=0;j<=N-1;j++)
+            for(int j=0;j<=n-1;j++)
             {
-                A(i,j) = (N-j)*std::pow(dot_points[i-ddot][0], N-j-1);
+                A(i,j) = (n-j)*std::pow(us[dot_points[i-ddot][0]], n-j-1);
             }
         }
-        for(unsigned int i=dot+ddot;i<=N;i++)
+        for(unsigned int i=dot+ddot;i<=n;i++)
         {
-            y[i] = points[i-(dot+ddot)][1];
-            for(unsigned int j=0;j<=N;j++)
+            y[i] = points[i-(dot+ddot)];
+            for(unsigned int j=0;j<=n;j++)
             {
-                A(i,j) = std::pow(points[i-(dot+ddot)][0], N-j);
+                A(i,j) = std::pow(us[points[i-(dot+ddot)]], n-j);
             }
         }
-        coefficients = solveLU(A, y);
+        coefficients = solveLinear(A, y);
     }
 
     bool defined() const
@@ -110,13 +97,13 @@ protected:
             return true;
         if (points.size() + dot_points.size() + ddot_points.size() <= N)
             return false;
-        for(int i=0;i<=N;i++)
+        for(int i=0;i<=n;i++)
         {
             int d = dot_points.size();
             int dd = ddot_points.size();
-            if(i>=N)
+            if(i>=n)
                 d = 0;
-            if(i>=((int)N-1))
+            if(i>=(n-1))
                 dd = 0;
             if((points.size()+d+dd)==0)
                 return false;
@@ -124,19 +111,19 @@ protected:
         return true;
     }
 
-    bool canAddPoint(const Vector<2> &point)
+    bool canAddPoint(const double& point)
     {
         return true;
     }
 
-    bool canAddDotPoint(const Vector<2> &point)
+    bool canAddDotPoint(const Vector<2>& point)
     {
-        return (int(N)-dot_points.size()) > 0;
+        return int(points.size()+dot_points.size()+ddot_points.size()) <= (n-1);
     }
 
-    bool canAddDDotPoint(const Vector<2> &point)
+    bool canAddDDotPoint(const Vector<2>& point)
     {
-        return (int(N-1)-ddot_points.size()) > 0;
+        return int(points.size()+dot_points.size()+ddot_points.size()) <= (n-1);
     }
 };
 

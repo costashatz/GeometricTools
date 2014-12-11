@@ -5,7 +5,10 @@
 * Includes
 **/
 #include <Math/Matrix.h>
-#include <lapacke.h>
+
+extern "C" int dgetrf_(int *m, int *n, double *a, int * lda, int *ipiv, int *info);
+extern "C" int dgetrs_(char *trans, int *n, int *nrhs,
+                       double *a, int *lda, int *ipiv, double *b, int * ldb, int *info);
 
 namespace LinearAlgebraTools {
 
@@ -22,12 +25,16 @@ namespace LinearSystems {
 template<unsigned int D>
 Vector<D> solveLU(const Matrix<D,D>& A, const Vector<D>& B)
 {
+    int dim = int(D), info, nhrs = 1;
+    char trans = 'T';
     Matrix<D,D> U = A;
-    int* ipiv = new int[D];
-    LAPACKE_dgetrf(LAPACK_ROW_MAJOR, D, D, U.data(), D, ipiv);
+    int* ipiv = new int[dim];
+
+    dgetrf_(&dim, &dim, U.data(), &dim, ipiv, &info);
 
     Vector<D> res = B;
-    LAPACKE_dgetrs(LAPACK_ROW_MAJOR, 'N', D, 1, U.data(), D, ipiv, res.data(), 1);
+
+    dgetrs_(&trans, &dim, &nhrs, U.data(), &dim, ipiv, res.data(), &dim, &info);
 
     return res;
 }

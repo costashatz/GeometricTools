@@ -1,6 +1,7 @@
 #include <iostream>
 #include <Math/LinearSystems/SolveGauss.h>
 #include <Math/LinearSystems/SolveLU.h>
+#include <Math/LinearSystems/SolveLinear.h>
 using namespace std;
 
 using namespace LinearAlgebraTools::Math;
@@ -27,11 +28,16 @@ int main(int argc, char *argv[])
     Matrix<4,4> a = Matrix<4,4>(2,1,1,0,4,3,3,1,8,7,9,5,6,7,9,8);
     Vector<4> b = Vector<4>(1.,2.,3,4);
     cout<<"SOLUTION with LU: ";
+    Matrix<4,4> a1 = a;
     Vector<4> y = solveLU(a,b);
     cout<<y<<endl;
     Vector<4> y2 = solveGauss(a,b);
     cout<<"SOLUTION with Gauss: ";
     cout<<y2<<endl;
+    cout<<"------------------------------------\n\n";
+    Vector<4> y3 = solveLinear(a,b);
+    cout<<"SOLUTION with Linear: ";
+    cout<<y3<<endl;
     cout<<"------------------------------------\n\n";
     return 0;
 }
