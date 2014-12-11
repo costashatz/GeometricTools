@@ -53,9 +53,13 @@ protected:
                       1.0, 1.0, 1.0, 1.0,
                       0.0, 0.0, 1.0, 0.0,
                       3.0, 2.0, 1.0, 0.0};
+        if(p0!=p1)
+        {
+            pd0 /= (p1-p0);
+            pd1 /= (p1-p0);
+        }
         Vector<4> y{p0, p1, pd0, pd1};
         coefficients = solveLU(A, y);
-        std::cout<<coefficients<<std::endl;
     }
 
     bool defined() const
