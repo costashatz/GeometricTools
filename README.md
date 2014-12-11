@@ -62,6 +62,8 @@ make
 7. Curves
 	* Specific quadratic curves (defined by xTAx+bTx+c=0)
 	* Generic polynomial curves (templated in size [biggest power of curve])
+	* Piecewise Curves
+	* Hermite Cubic Curves
 8. Distances in 2D
 	* Functions for computing distances between 2D primitives (point-linear shapes, point-polyline, linear shapes-linear shapes)
 

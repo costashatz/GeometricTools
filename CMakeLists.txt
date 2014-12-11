@@ -36,7 +36,7 @@ include_directories(${LAPACK_INCLUDE_DIR})
 
 add_library(${PROJECT_NAME} SHARED ${_srcs})
 target_include_directories(${PROJECT_NAME} PUBLIC ${PROJECT_SOURCE_DIR}/include)
-target_link_libraries(${PROJECT_NAME} ${LAPACK_LIBRARIES} lapacke)
+target_link_libraries(${PROJECT_NAME} ${LAPACK_LIBRARIES})
 SET_TARGET_PROPERTIES(${PROJECT_NAME} PROPERTIES LINKER_LANGUAGE CXX)
 
 if(BUILD_TEST)
