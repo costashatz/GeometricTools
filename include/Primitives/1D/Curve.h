@@ -32,8 +32,6 @@ protected:
     vector<Vector<2> > points;
     vector<Vector<2> > dot_points;
     vector<Vector<2> > ddot_points;
-    double min_u;
-    double max_u;
 protected:
     virtual void calculateCoefficients() = 0;
 
@@ -49,8 +47,7 @@ public:
     {
         if(defined() || find(points.begin(), points.end(), point) != points.end() || !canAddPoint(point))
             return;
-        double u = clamp(point[0], min_u, max_u);
-        points.push_back({u, point[1]});
+        points.push_back(point);
         if(defined())
             calculateCoefficients();
     }
@@ -61,8 +58,7 @@ public:
     {
         if(defined() || find(dot_points.begin(), dot_points.end(), point) != dot_points.end() || !canAddDotPoint(point))
             return;
-        double u = clamp(point[0], min_u, max_u);
-        dot_points.push_back({u, point[1]});
+        dot_points.push_back(point);
         if(defined())
             calculateCoefficients();
     }
@@ -71,10 +67,9 @@ public:
 
     void addDDotPoint(const Vector<2>& point)
     {
-        if(defined() || find(ddot_points.begin(), ddot_points.end(), point) != ddot_points.end()  || !canAddDDotPoint(point))
+        if(defined() || find(ddot_points.begin(), ddot_points.end(), point) != ddot_points.end() || !canAddDDotPoint(point))
             return;
-        double u = clamp(point[0], min_u, max_u);
-        ddot_points.push_back({u, point[1]});
+        ddot_points.push_back(point);
         if(defined())
             calculateCoefficients();
     }
@@ -82,9 +77,6 @@ public:
     virtual double getDDotPoint(const double& u) = 0;
 
     virtual vector<double> coeff() = 0;
-
-    double& maxU() { return max_u; }
-    double& minU() { return min_u; }
 
     vector<Vector<2> >& getPoints() { return points; }
     vector<Vector<2> >& getDotPoints() { return dot_points; }

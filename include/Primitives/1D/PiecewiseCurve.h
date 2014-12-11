@@ -8,7 +8,6 @@
 
 #include <Math/Vector.h>
 #include <Math/Matrix.h>
-#include <Math/LinearSystems/SolveLU.h>
 #include <vector>
 
 using std::vector;
@@ -23,18 +22,14 @@ namespace Primitives {
 
 /**
 * PiecewiseCurve Class
-* Abstract 1D piecewise curve - base class for all piecewise curves
+* Abstract 1D piecewise curve - base class for all 1D piecewise curves
 **/
 class PiecewiseCurve : public Curve
 {
 protected:
     vector<Curve*> curves;
 public:
-    PiecewiseCurve(const double& minU = 0.0, const double& maxU = 1.0)
-    {
-        min_u = minU;
-        max_u = maxU;
-    }
+    PiecewiseCurve() {}
 
     virtual vector<double> coeff()
     {

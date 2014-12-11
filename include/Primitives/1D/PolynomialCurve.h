@@ -32,20 +32,9 @@ protected:
     Vector<N+1> coefficients;
     bool coeff_defined;
 public:
-    PolynomialCurve(const double& minU = 0.0, const double& maxU = 1.0)
-    {
-        min_u = minU;
-        max_u = maxU;
-        coeff_defined = false;
-    }
+    PolynomialCurve(): coeff_defined(false) {}
 
-    PolynomialCurve(const Vector<N+1>& coef, const double& minU = 0.0, const double& maxU = 1.0)
-    {
-        min_u = minU;
-        max_u = maxU;
-        coefficients = coef;
-        coeff_defined = true;
-    }
+    PolynomialCurve(const Vector<N+1>& coef): coefficients(coef), coeff_defined(true) {}
 
     virtual double getPoint(const double& u)
     {
