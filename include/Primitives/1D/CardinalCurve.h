@@ -1,5 +1,5 @@
-#ifndef CATMULL_ROM_CURVE_H
-#define CATMULL_ROM_CURVE_H
+#ifndef CARDINAL_CURVE_H
+#define CARDINAL_CURVE_H
 
 /**
 * Includes
