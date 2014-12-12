@@ -37,6 +37,31 @@ public:
             calculateCoefficients();
     }
 
+    void addDotPointInPlace(const Vector<2>& point, const unsigned int& i)
+    {
+        if(i>=points.size())
+            return addDotPoint(point);
+        int c = int(i)-1;
+        if(c<0)
+        {
+            points.insert(points.begin(), point[0]);
+            dot_points.insert(dot_points.begin(), point);
+            curves.insert(curves.begin(), new HermiteCurve());
+            ((HermiteCurve*)curves[0])->addDotPoint(dot_points[0]);
+            ((HermiteCurve*)curves[0])->addDotPoint(dot_points[1]);
+            return;
+        }
+        curves[c]->getPoints().clear();
+        curves[c]->getDotPoints().clear();
+        points.insert(points.begin()+i, point[0]);
+        dot_points.insert(dot_points.begin()+i, point);
+        ((HermiteCurve*)curves[c])->addDotPoint(dot_points[i-1]);
+        ((HermiteCurve*)curves[c])->addDotPoint(dot_points[i]);
+        curves.insert(curves.begin()+i, new HermiteCurve());
+        ((HermiteCurve*)curves[i])->addDotPoint(dot_points[i]);
+        ((HermiteCurve*)curves[i])->addDotPoint(dot_points[i+1]);
+    }
+
 protected:
     void calculateCoefficients()
     {

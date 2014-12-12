@@ -47,6 +47,12 @@ public:
             calculateCoefficients();
     }
 
+    void addPointInPlace(const double& point, const unsigned int& i)
+    {
+        //Override to give desired functionality
+        addPoint(point);
+    }
+
     void addDotPoint(const Vector<2>& point)
     {
         if(defined() || !canAddDotPoint(point))
@@ -57,6 +63,12 @@ public:
             calculateCoefficients();
     }
 
+    void addDotPointInPlace(const Vector<2>& point, const unsigned int& i)
+    {
+        //Override to give desired functionality
+        addDotPoint(point);
+    }
+
     void addDDotPoint(const Vector<2>& point)
     {
         if(defined() || !canAddDDotPoint(point))
@@ -65,6 +77,12 @@ public:
         ddot_points.push_back(point);
         if(defined())
             calculateCoefficients();
+    }
+
+    void addDDotPointInPlace(const Vector<2>& point, const unsigned int& i)
+    {
+        //Override to give desired functionality
+        addDDotPoint(point);
     }
 
     virtual double getPoint(const double& u) = 0;

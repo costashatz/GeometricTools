@@ -30,12 +30,15 @@ int main(int argc, char *argv[])
             x = 'y';
         for(int j=0;j<coef.size();j++)
         {
-            if((j%4)!=0 && coef[j]!=0.0)
+            int ind = (j==1)? j-1 : j;
+            if((j%4)!=0 && coef[j]>0.0 && coef[ind]>0.0)
                 cout<<"+ ";
             if((j%4)==0)
                 cout<<x<<j/4<<": ";
             if(coef[j] != 0.0)
-                cout<<coef[j]<<"*u^"<<3-(j%4)<<" ";
+                cout<<coef[j];
+            if(coef[j] != 0.0 && (3-(j%4))!=0.0)
+                cout<<"*u^"<<3-(j%4)<<" ";
             if(j%4==3)
                 cout<<endl;
         }
@@ -49,6 +52,7 @@ int main(int argc, char *argv[])
     hermite.addDotPoint({3,0,-1,-2});
     hermite.addDotPoint({2,-3,10,-8});
     hermite.addDotPoint({0,-7,3,0});
+    hermite.addDotPointInPlace({1.5, 2.5, 0.1, 0.5}, 1);
     cout<<"\n\nHERMITE:\n\n";
     // Get coefficients for each axis
     for(int i=0;i<2;i++)
@@ -61,12 +65,15 @@ int main(int argc, char *argv[])
             x = 'y';
         for(int j=0;j<coef.size();j++)
         {
-            if((j%4)!=0 && coef[j]!=0.0)
+            int ind = (j==1)? j-1 : j;
+            if((j%4)!=0 && coef[j]>0.0 && coef[ind]>0.0)
                 cout<<"+ ";
             if((j%4)==0)
                 cout<<x<<j/4<<": ";
             if(coef[j] != 0.0)
-                cout<<coef[j]<<"*u^"<<3-(j%4)<<" ";
+                cout<<coef[j];
+            if(coef[j] != 0.0 && (3-(j%4))!=0.0)
+                cout<<"*u^"<<3-(j%4)<<" ";
             if(j%4==3)
                 cout<<endl;
         }
