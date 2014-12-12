@@ -12,7 +12,7 @@ using std::remove;
 
 namespace LinearAlgebraTools {
 
-using Math::Vector2;
+using Math::Vector;
 
 namespace Primitives {
 
@@ -25,7 +25,7 @@ class Polyline
 {
 protected:
     // Collection of points (called vertices)
-    vector<Vector2> verts;
+    vector<Vector<2> > verts;
 public:
     /**
     * Default Constructor
@@ -33,7 +33,7 @@ public:
     **/
     Polyline()
     {
-        verts = vector<Vector2>();
+        verts = vector<Vector<2> >();
     }
 
     /**
@@ -41,7 +41,7 @@ public:
     * virtual method - can be overwritten by subclasses
     * @param point - point to be added
     **/
-    virtual void addPoint(const Vector2& point)
+    virtual void addPoint(const Vector<2>& point)
     {
         verts.push_back(point);
     }
@@ -51,16 +51,16 @@ public:
     * virtual method - can be overwritten by subclasses
     * @param point - point to be removed
     **/
-    virtual void removePoint(const Vector2& point)
+    virtual void removePoint(const Vector<2>& point)
     {
         remove(verts.begin(), verts.end(), point);
     }
 
     /**
     * Get Vertices/Points
-    * @return vector<Vector2> - the collection of points/vertices
+    * @return vector<Vector<2> > - the collection of points/vertices
     **/
-    vector<Vector2> vertices() {return verts;}
+    vector<Vector<2> > vertices() {return verts;}
 };
 
 } }

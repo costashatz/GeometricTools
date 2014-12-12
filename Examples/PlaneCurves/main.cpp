@@ -2,6 +2,7 @@
 #include <Primitives/2D/PlaneCurve.h>
 #include <Primitives/1D/CardinalPiecewiseCurve.h>
 #include <Primitives/1D/HermitePiecewiseCurve.h>
+#include <Primitives/Tools/CurveSubdivision.h>
 using namespace std;
 
 using namespace LinearAlgebraTools::Primitives;
@@ -43,11 +44,11 @@ int main(int argc, char *argv[])
 
     // Create Hermite piecewise 2D curve
     PlaneCurve<HermitePiecewiseCurve,HermitePiecewiseCurve> hermite;
-    hermite.addDotPoint({1,2});
-    hermite.addDotPoint({2,7});
-    hermite.addDotPoint({3,0});
-    hermite.addDotPoint({2,-3});
-    hermite.addDotPoint({0,-7});
+    hermite.addDotPoint({1,2,0,1});
+    hermite.addDotPoint({2,7,1,2});
+    hermite.addDotPoint({3,0,-1,-2});
+    hermite.addDotPoint({2,-3,10,-8});
+    hermite.addDotPoint({0,-7,3,0});
     cout<<"\n\nHERMITE:\n\n";
     // Get coefficients for each axis
     for(int i=0;i<2;i++)
