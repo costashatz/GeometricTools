@@ -57,7 +57,7 @@ public:
 
     /**
     * Overwrite virtual method AddPoint so that it does nothing
-    * We do not want other points to be added in a triangle
+    * We do not want other points to be added in a rectangle
     **/
     void addPoint(const Vector2& point)
     {
@@ -66,7 +66,7 @@ public:
 
     /**
     * Overwrite virtual method RemovePoint so that it does nothing
-    * We do not want points to be removed in a triangle
+    * We do not want points to be removed in a rectangle
     **/
     void removePoint(const Vector2& point)
     {
