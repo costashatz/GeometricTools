@@ -20,11 +20,6 @@ using namespace Helper;
 
 namespace Primitives {
 
-template <unsigned int N>
-class PolynomialCurve;
-
-class HermitePiecwiseCurve;
-
 template <class CurveTypeA, class CurveTypeB>
 class PlaneCurve
 {
@@ -64,19 +59,6 @@ public:
         return curve_y->coeff();
     }
 };
-
-/**
-* Typedefs for frequently used types
-**/
-typedef PlaneCurve<PolynomialCurve<0>,PolynomialCurve<0> > ConstantPlaneCurve;
-
-typedef PlaneCurve<PolynomialCurve<1>,PolynomialCurve<1> > LinearPlaneCurve;
-
-typedef PlaneCurve<PolynomialCurve<2>,PolynomialCurve<2> > QuadraticPlaneCurve;
-
-typedef PlaneCurve<PolynomialCurve<3>,PolynomialCurve<3> > CubicPlaneCurve;
-
-typedef PlaneCurve<HermitePiecwiseCurve,HermitePiecwiseCurve> HermitePlaneCurve;
 
 } }
 
