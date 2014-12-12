@@ -33,6 +33,8 @@ public:
 
     virtual vector<double> coeff()
     {
+        if(curves.size()==0)
+            return vector<double>();
         vector<double> coef = curves[0]->coeff();
         for(int i=1;i<curves.size();i++)
         {
@@ -40,6 +42,25 @@ public:
             coef.insert(coef.end(), tmp.begin(), tmp.end());
         }
         return coef;
+    }
+
+    double getPoint(const double &u)
+    {
+        // Assumes that all the piecewise curve is in u[0,1]
+        int c = getCurveFromU(u*curves.size());
+        if(c==-1)
+            return 0.0;
+        return curves[c]->getPoint(u*curves.size()-c);
+    }
+protected:
+    int getCurveFromU(const double& u)
+    {
+        if(curves.size()==0)
+            return -1;
+        int c = int(u);
+        if(c>=curves.size())
+            c = curves.size()-1;
+        return c;
     }
 };
 

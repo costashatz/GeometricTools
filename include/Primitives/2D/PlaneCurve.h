@@ -52,6 +52,11 @@ public:
         curve_y->addDDotPoint({point[1], point[3]});
     }
 
+    Vector<2> getPoint(const double& u)
+    {
+        return {curve_x->getPoint(u), curve_y->getPoint(u)};
+    }
+
     vector<double> coeff(unsigned int i)
     {
         if(i==0)

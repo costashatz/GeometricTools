@@ -42,8 +42,18 @@ public:
     virtual vector<double> coeff()
     {
         vector<double> tmp;
-        tmp.insert(tmp.begin(), coefficients.data(), coefficients.data()+(N+1));
+        tmp.insert(tmp.begin(), coefficients.data(), coefficients.data()+(n+1));
         return tmp;
+    }
+
+    virtual double getPoint(const double &u)
+    {
+        double s = 0.0;
+        for(int i=0;i<=n;i++)
+        {
+            s += coefficients[i]*std::pow(u, double(n-i));
+        }
+        return s;
     }
 
 protected:

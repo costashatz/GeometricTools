@@ -67,6 +67,8 @@ public:
             calculateCoefficients();
     }
 
+    virtual double getPoint(const double& u) = 0;
+
     virtual vector<double> coeff() = 0;
 
     vector<double>& getPoints() { return points; }

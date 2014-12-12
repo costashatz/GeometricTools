@@ -42,6 +42,16 @@ public:
         return tmp;
     }
 
+    virtual double getPoint(const double &u)
+    {
+        double s = 0.0;
+        for(int i=0;i<=3;i++)
+        {
+            s += coefficients[i]*std::pow(u, double(3-i));
+        }
+        return s;
+    }
+
 protected:
     void calculateCoefficients()
     {
