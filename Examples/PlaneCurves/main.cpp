@@ -35,7 +35,7 @@ int main(int argc, char *argv[])
             if((j%4)==0)
                 cout<<x<<j/4<<": ";
             if(coef[j] != 0.0)
-                cout<<coef[j]<<"*"<<x<<"^"<<4-(j%4)<<" ";
+                cout<<coef[j]<<"*u^"<<3-(j%4)<<" ";
             if(j%4==3)
                 cout<<endl;
         }
