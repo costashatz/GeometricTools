@@ -22,14 +22,14 @@ OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISE
 * Includes
 **/
 #include <Primitives/2D/PlaneCurve.h>
-#include <Primitives/2D/Polyline.h>
+#include <Primitives/Polyline.h>
 
 namespace GeometricTools { namespace Primitives {
 
 template<class CurveA, class CurveB>
-Polyline uniformSubdivision(PlaneCurve<CurveA,CurveB>& curve, const int& N)
+Polyline<2> uniformSubdivision(PlaneCurve<CurveA,CurveB>& curve, const int& N)
 {
-    Polyline res;
+    Polyline<2> res;
     for (int i=0;i<=N;i++)
     {
         double u = double(i)/double(N); // assumes curves goes in [0,1]

@@ -36,26 +36,23 @@ namespace Primitives {
 * Circle Class
 * Circle defined by center and radius
 **/
-class Circle : public QuadraticCurve
+class Circle
 {
 protected:
     Vector<2> Center;
     double Radius;
 public:
-    Circle(): QuadraticCurve() {}
+    Circle() {}
 
-    Circle(const Vector<2>& center, const double& radius): Center(center), Radius(radius)
-    {
-        A.identity();
-        B = -2.0*center;
-        C = center*center-radius*radius;
-    }
+    Circle(const Vector<2>& center, const double& radius): Center(center), Radius(radius) {}
 
     Vector<2> center() { return Center; }
 
     double radius() { return Radius; }
 
     double area() { return Helper::Pi*Radius*Radius; }
+
+    QuadraticCurve asQuadratic() { return QuadraticCurve({}, -2.0*Center, Center*Center-Radius*Radius); }
 };
 
 } }

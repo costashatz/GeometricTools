@@ -41,7 +41,7 @@ public:
     * @param p1 - the second point of the triangle
     * @param p2 - the third point of the triangle
     **/
-    Triangle(const Vector2& p0, const Vector2& p1, const Vector2& p2):Polygon()
+    Triangle(const Vector<2>& p0, const Vector<2>& p1, const Vector<2>& p2):Polygon()
     {
         Polygon::addPoint(p0);
         Polygon::addPoint(p1);
@@ -52,7 +52,7 @@ public:
     * Overwrite virtual method AddPoint so that it does nothing
     * We do not want other points to be added in a triangle
     **/
-    void addPoint(const Vector2& point)
+    void addPoint(const Vector<2>& point)
     {
         return;
     }
@@ -61,7 +61,7 @@ public:
     * Overwrite virtual method RemovePoint so that it does nothing
     * We do not want points to be removed in a triangle
     **/
-    void removePoint(const Vector2& point)
+    void removePoint(const Vector<2>& point)
     {
         return;
     }

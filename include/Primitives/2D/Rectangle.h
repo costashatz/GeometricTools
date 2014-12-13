@@ -33,7 +33,6 @@ namespace Primitives {
 /**
 * Rectangle Class
 **/
-template<class T>
 class Rectangle: public Polygon
 {
 public:
@@ -43,14 +42,15 @@ public:
     * @param e0 - direction (with length) of horizontal edge
     * @param e1 - direction (with length) of vertical edge
     **/
-    Rectangle(const Vector2& p0, const Vector2& e0, const Vector2& e1):Polygon()
+    Rectangle(const Vector<2>& p0, const Vector<2>& e0, const Vector<2>& e1):Polygon()
     {
+        Vector<2> E1 = e1;
         if((e0*e1)!=0)
-            e1 = Vector2(-e0[0], e0[1]);
+            E1 = Vector<2>(-e0[0], e0[1]);
         Polygon::addPoint(p0);
         Polygon::addPoint(p0+e0);
-        Polygon::addPoint(p0+e0+e1);
-        Polygon::addPoint(p0+e1);
+        Polygon::addPoint(p0+e0+E1);
+        Polygon::addPoint(p0+E1);
     }
 
     /**
@@ -60,7 +60,7 @@ public:
     * @param a - length of horizontal edge
     * @param b - length of vertical edge
     **/
-    Rectangle(const Vector2& p, const double& a, const double& b)
+    Rectangle(const Vector<2>& p, const double& a, const double& b)
     {
         Vector2 p0 = Vector2(p[0]-a/2.0, p[1]-b/2.0);
         Polygon::addPoint(p0);
@@ -76,7 +76,7 @@ public:
     * Overwrite virtual method AddPoint so that it does nothing
     * We do not want other points to be added in a rectangle
     **/
-    void addPoint(const Vector2& point)
+    void addPoint(const Vector<2>& point)
     {
         return;
     }
@@ -85,7 +85,7 @@ public:
     * Overwrite virtual method RemovePoint so that it does nothing
     * We do not want points to be removed in a rectangle
     **/
-    void removePoint(const Vector2& point)
+    void removePoint(const Vector<2>& point)
     {
         return;
     }

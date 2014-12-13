@@ -21,7 +21,7 @@ OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISE
 /**
 * Includes
 **/
-#include <Primitives/2D/Polyline.h>
+#include <Primitives/Polyline.h>
 
 namespace GeometricTools {
 
@@ -32,14 +32,14 @@ namespace Primitives {
 * Polygon is a closed Polyline (closed means the first and the last points are the same)
 * Assumes there is an extra point in the end identical to the first one
 **/
-class Polygon: public Polyline
+class Polygon: public Polyline<2>
 {
 public:
     /**
     * Default Constructor
     * Initialization
     **/
-    Polygon():Polyline(){}
+    Polygon():Polyline<2>(){}
 
     /**
     * Get the area under the polygon

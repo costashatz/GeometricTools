@@ -15,70 +15,70 @@ INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT
 OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 **/
 
-#ifndef POLYLINE_H
-#define POLYLINE_H
+#ifndef LINEAR_TO_POLYLINE_H
+#define LINEAR_TO_POLYLINE_H
 
 /**
 * Includes
 **/
 #include <Math/Vector.h>
-#include <vector>
-#include <algorithm>
-using std::vector;
-using std::remove;
+#include <Primitives/LinearShapes.h>
+#include <Distances/2D/PointToPolyline.h>
+#include <Distances/LinearToLinear.h>
+#include <Primitives/Polyline.h>
 
 namespace GeometricTools {
 
 using Math::Vector;
+using Primitives::Line;
+using Primitives::Ray;
+using Primitives::Segment;
+using Primitives::Polyline;
 
-namespace Primitives {
+namespace Distances {
+
 
 /**
-* Polyline Class
-* Polyline is a collection of arbitrary segments (or points)
-* I use the form of collection of points..Edges are assumed to be P0->P1->P2->...->Pn
+* Computes Segment to Polyline Distance Squared
+* @param segment
+* @param polyline
 **/
-class Polyline
+template<unsigned int N>
+double DistanceSq(const Segment<N>& seg, const Polyline<N>& polyline)
 {
-protected:
-    // Collection of points (called vertices)
-    vector<Vector<2> > verts;
-public:
-    /**
-    * Default Constructor
-    * Initialization
-    **/
-    Polyline()
+    double m = DistanceSq(seg, Segment<N>(polyline.vertices()[0], polyline.vertices()[1]));
+    for(unsigned int i=1;i<polyline.vertices().size()-1;i++)
     {
-        verts = vector<Vector<2> >();
+        double tmp = DistanceSq(seg, Segment<N>(polyline.vertices()[i], polyline.vertices()[i+1]));
+        if(tmp<m)
+            m = tmp;
     }
+    return m;
+}
 
-    /**
-    * Add new point to the polyline
-    * virtual method - can be overwritten by subclasses
-    * @param point - point to be added
-    **/
-    virtual void addPoint(const Vector<2>& point)
-    {
-        verts.push_back(point);
-    }
+template<unsigned int N>
+double DistanceSq(const Polyline<N>& polyline, const Segment<N>& seg)
+{
+    return DistanceSq(seg, polyline);
+}
 
-    /**
-    * Removes point from the polyline
-    * virtual method - can be overwritten by subclasses
-    * @param point - point to be removed
-    **/
-    virtual void removePoint(const Vector<2>& point)
-    {
-        remove(verts.begin(), verts.end(), point);
-    }
 
-    /**
-    * Get Vertices/Points
-    * @return vector<Vector<2> > - the collection of points/vertices
-    **/
-    vector<Vector<2> > vertices() const {return verts;}
-};
+/**
+* Computes Segment to Polyline Distance
+* @param segment
+* @param polyline
+**/
+template<unsigned int N>
+double Distance(const Segment<N>& seg, const Polyline<N>& polyline)
+{
+    return sqrt(DistanceSq(seg,polyline));
+}
+
+template<unsigned int N>
+double Distance(const Polyline<N>& polyline, const Segment<N>& seg)
+{
+    return Distance(seg, polyline);
+}
 
 } }
 

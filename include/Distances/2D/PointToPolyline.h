@@ -23,8 +23,8 @@ OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISE
 **/
 #include <Math/Vector.h>
 #include <Primitives/LinearShapes.h>
-#include <Distances/2D/PointToLinear.h>
-#include <Primitives/2D/Polyline.h>
+#include <Distances/PointToLinear.h>
+#include <Primitives/Polyline.h>
 
 namespace GeometricTools {
 
@@ -41,7 +41,7 @@ namespace Distances {
 * @param point
 * @param line
 **/
-double DistanceSq(const Vector<2>& point, const Polyline& line)
+double DistanceSq(const Vector<2>& point, const Polyline<2>& line)
 {
     double m = DistanceSq(point, Segment<2>(line.vertices()[0], line.vertices()[1]));
     Vector<2> prev = line.vertices()[1];
@@ -62,7 +62,7 @@ double DistanceSq(const Vector<2>& point, const Polyline& line)
     return m;
 }
 
-double DistanceSq(const Polyline& line, const Vector<2>& point)
+double DistanceSq(const Polyline<2>& line, const Vector<2>& point)
 {
     return DistanceSq(point,line);
 }
@@ -71,7 +71,7 @@ double DistanceSq(const Polyline& line, const Vector<2>& point)
 * @param point
 * @param line
 **/
-double Distance(const Vector<2>& point, const Polyline& line)
+double Distance(const Vector<2>& point, const Polyline<2>& line)
 {
     double m = Distance(point, Segment<2>(line.vertices()[0], line.vertices()[1]));
     Vector<2> prev = line.vertices()[1];
@@ -92,7 +92,7 @@ double Distance(const Vector<2>& point, const Polyline& line)
     return m;
 }
 
-double Distance(const Polyline& line, const Vector<2>& point)
+double Distance(const Polyline<2>& line, const Vector<2>& point)
 {
     return Distance(point,line);
 }

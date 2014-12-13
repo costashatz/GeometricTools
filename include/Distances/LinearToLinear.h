@@ -39,14 +39,30 @@ namespace Distances {
 * @param line1
 * @param line2
 **/
-double DistanceSq(const Line<2>& line1, const Line<2>& line2)
+template<unsigned int N>
+double DistanceSq(const Line<N>& line1, const Line<N>& line2)
 {
-    Vector<2> d2P = Vector<2>(line2.d()[0], -line2.d()[1]);
-    if(line1.d()*d2P!=0)
-        return 0.0;
-    Vector<2> d1P = Vector<2>(line1.d()[0], -line1.d()[1]);
-    double a = d1P*(line2.p()-line1.p());
-    return (a*a)/line1.d().lengthSq();
+    Vector<N> w = line1.p()-line2.p();
+    double a = line1.d()*line1.d();
+    double b = line1.d()*line2.d();
+    double c = line2.d()*line2.d();
+    double d = line1.d()*w;
+    double e = line2.d()*w;
+    double D = a*c-b*b;
+    double sC, tC;
+    if (D<std::numeric_limits<double>::epsilon())
+    {
+        sC = 0.0;
+        tC = (b>c)?(d/b):(e/c);
+    }
+    else
+    {
+        sC = (b*e-c*d)/D;
+        tC = (a*e-b*d)/D;
+    }
+
+    Vector<N> dP = w+(sC*line1.d())-(tC*line2.d());
+    return dP.lengthSq();
 }
 
 /**
@@ -54,14 +70,10 @@ double DistanceSq(const Line<2>& line1, const Line<2>& line2)
 * @param line1
 * @param line2
 **/
-double Distance(const Line<2>& line1, const Line<2>& line2)
+template<unsigned int N>
+double Distance(const Line<N>& line1, const Line<N>& line2)
 {
-    Vector<2> d2P = Vector<2>(line2.d()[0], -line2.d()[1]);
-    if(line1.d()*d2P!=0)
-        return 0.0;
-    Vector<2> d1P = Vector<2>(line1.d()[0], -line1.d()[1]);
-    double a = std::abs(d1P*(line2.p()-line1.p()));
-    return a/line1.d().length();
+    return sqrt(DistanceSq(line1,line2));
 }
 
 /**
@@ -69,18 +81,48 @@ double Distance(const Line<2>& line1, const Line<2>& line2)
 * @param line
 * @param ray
 **/
-double DistanceSq(const Line<2>& line, const Ray<2>& ray)
+template<unsigned int N>
+double DistanceSq(const Line<N>& line, const Ray<N>& ray)
 {
-    Vector<2> d0 = Vector<2>(line.d()[1], -line.d()[0]);
-    Vector<2> d1 = ray.d();
-    Vector<2> D = ray.p()-line.p();
-    if((d0*d1)*(d0*D)<0)
-        return 0.0;
-    double d = (d0*D);
-    return d*d/d0.lengthSq();
+    Vector<N> u = line.d();
+    Vector<N> v = ray.d();
+    Vector<N> w = line.p()-ray.p();
+    double a = u*u, b = u*v, c = v*v, d = u*w, e = v*w;
+    double D = a*c-b*b;
+    double sD = D, tD = D;
+    double sN, tN, sc, tc;
+    if(D<std::numeric_limits<double>::epsilon())
+    {
+        sN = 0.0;
+        sD = 1.0;
+        tN = e;
+        tD = c;
+    }
+    else
+    {
+        sN = b*e-c*d;
+        tN = a*e-b*d;
+    }
+
+    if(tN<0.0)
+        tN = 0.0;
+
+    if(std::abs(sN)<std::numeric_limits<double>::epsilon())
+        sc = 0.0;
+    else
+        sc = sN/sD;
+
+    if(std::abs(tN)<std::numeric_limits<double>::epsilon())
+        tc = 0.0;
+    else
+        tc = tN/tD;
+
+    Vector<N> dP = w+sc*u-tc*v;
+    return dP.lengthSq();
 }
 
-double DistanceSq(const Ray<2>& ray, const Line<2>& line)
+template<unsigned int N>
+double DistanceSq(const Ray<N>& ray, const Line<N>& line)
 {
     return DistanceSq(line,ray);
 }
@@ -91,17 +133,14 @@ double DistanceSq(const Ray<2>& ray, const Line<2>& line)
 * @param line
 * @param ray
 **/
-double Distance(const Line<2>& line, const Ray<2>& ray)
+template<unsigned int N>
+double Distance(const Line<N>& line, const Ray<N>& ray)
 {
-    Vector<2> d0 = Vector<2>(line.d()[1], -line.d()[0]);
-    Vector<2> d1 = ray.d();
-    Vector<2> D = ray.p()-line.p();
-    if((d0*d1)*(d0*D)<0)
-        return 0.0;
-    return std::abs(d0*D)/d0.length();
+    return sqrt(DistanceSq(line,ray));
 }
 
-double Distance(const Ray<2>& ray, const Line<2>& line)
+template<unsigned int N>
+double Distance(const Ray<N>& ray, const Line<N>& line)
 {
     return Distance(line,ray);
 }
@@ -111,19 +150,54 @@ double Distance(const Ray<2>& ray, const Line<2>& line)
 * @param line
 * @param seg
 **/
-double DistanceSq(const Line<2>& line, const Segment<2>& seg)
+template<unsigned int N>
+double DistanceSq(const Line<N>& line, const Segment<N>& seg)
 {
-    Vector<2> d0 = Vector<2>(line.d()[1], -line.d()[0]);
-    Vector<2> d1 = seg.d();
-    double T1 = 1.0;
-    Vector<2> D = seg.p()-line.p();
-    if(((d0*D)*(d0*(D+T1*d1)))<0)
-        return 0.0;
-    double d = std::min(std::abs(d0*D), std::abs(d0*(D+T1*d1)));
-    return d*d/d0.lengthSq();
+    Vector<N> u = line.d();
+    Vector<N> v = seg.P0() - seg.P1();
+    Vector<N> w = line.p() - seg.P0();
+    double a = u*u, b = u*v, c = v*v, d = u*w, e = v*w;
+    double D = a*c-b*b;
+    double sD = D, tD = D;
+    double sN, tN, sc, tc;
+    if(D<std::numeric_limits<double>::epsilon())
+    {
+        sN = 0.0;
+        sD = 1.0;
+        tN = e;
+        tD = c;
+    }
+    else
+    {
+        sN = b*e-c*d;
+        tN = a*e-b*d;
+    }
+
+    if(tN<0.0)
+    {
+        tN = 0.0;
+    }
+    else if(tN>tD)
+    {
+        tN = tD;
+    }
+
+    if(std::abs(sN)<std::numeric_limits<double>::epsilon())
+        sc = 0.0;
+    else
+        sc = sN/sD;
+
+    if(std::abs(tN)<std::numeric_limits<double>::epsilon())
+        tc = 0.0;
+    else
+        tc = tN/tD;
+
+    Vector<N> dP = w+sc*u-tc*v;
+    return dP.lengthSq();
 }
 
-double DistanceSq(const Segment<2>& seg, const Line<2>& line)
+template<unsigned int N>
+double DistanceSq(const Segment<N>& seg, const Line<N>& line)
 {
     return DistanceSq(line,seg);
 }
@@ -134,18 +208,14 @@ double DistanceSq(const Segment<2>& seg, const Line<2>& line)
 * @param line
 * @param seg
 **/
-double Distance(const Line<2>& line, const Segment<2>& seg)
+template<unsigned int N>
+double Distance(const Line<N>& line, const Segment<N>& seg)
 {
-    Vector<2> d0 = Vector<2>(line.d()[1], -line.d()[0]);
-    Vector<2> d1 = seg.d();
-    double T1 = 1.0;
-    Vector<2> D = seg.p()-line.p();
-    if(((d0*D)*(d0*(D+T1*d1)))<0)
-        return 0.0;
-    return std::min(std::abs(d0*D), std::abs(d0*(D+T1*d1)))/d0.length();
+    return sqrt(DistanceSq(line,seg));
 }
 
-double Distance(const Segment<2>& seg, const Line<2>& line)
+template<unsigned int N>
+double Distance(const Segment<N>& seg, const Line<N>& line)
 {
     return Distance(line,seg);
 }
@@ -155,16 +225,17 @@ double Distance(const Segment<2>& seg, const Line<2>& line)
 * @param seg1
 * @param seg2
 **/
-double DistanceSq(const Segment<2>& seg1, const Segment<2>& seg2)
+template<unsigned int N>
+double DistanceSq(const Segment<N>& seg1, const Segment<N>& seg2)
 {
-    Vector<2> u = seg1.P0() - seg1.P1();
-    Vector<2> v = seg2.P0() - seg2.P1();
-    Vector<2> w = seg1.P1() - seg2.P1();
+    Vector<N> u = seg1.P0() - seg1.P1();
+    Vector<N> v = seg2.P0() - seg2.P1();
+    Vector<N> w = seg1.P1() - seg2.P1();
     double a = u*u, b = u*v, c = v*v, d = u*w, e = v*w;
     double D = a*c-b*b;
     double sD = D, tD = D;
     double sN, tN, sc, tc;
-    if(std::abs(D)<std::numeric_limits<double>::epsilon())
+    if(D<std::numeric_limits<double>::epsilon())
     {
         sN = 0.0;
         sD = 1.0;
@@ -226,7 +297,7 @@ double DistanceSq(const Segment<2>& seg1, const Segment<2>& seg2)
     else
         tc = tN/tD;
 
-    Vector<2> dP = w+sc*u-tc*v;
+    Vector<N> dP = w+sc*u-tc*v;
     return dP.lengthSq();
 }
 
@@ -235,7 +306,8 @@ double DistanceSq(const Segment<2>& seg1, const Segment<2>& seg2)
 * @param seg1
 * @param seg2
 **/
-double Distance(const Segment<2>& seg1, const Segment<2>& seg2)
+template<unsigned int N>
+double Distance(const Segment<N>& seg1, const Segment<N>& seg2)
 {
     return sqrt(DistanceSq(seg1, seg2));
 }

@@ -317,7 +317,7 @@ public:
     * Get Length of Vector
     * @return double - length
     **/
-    double length()
+    double length() const
     {
         return cblas_dnrm2(N, &values[0], 1);
     }
@@ -335,7 +335,7 @@ public:
     * Get LengthSq of Vector
     * @return double - length squared
     **/
-    double lengthSq()
+    double lengthSq() const
     {
         double s = cblas_dnrm2(N, &values[0], 1);
         return s*s;

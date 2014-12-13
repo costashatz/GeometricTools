@@ -21,6 +21,14 @@ OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISE
 #include <Math/Transformations/2D/Homogeneous.h>
 #include <Math/Transformations/3D/Homogeneous.h>
 #include <Math/Numerical Optimization/1D/GoldenSearchMinimization.h>
+#include <Primitives/LinearShapes.h>
+#include <Primitives/Polyline.h>
+#include <Primitives/2D/Triangle.h>
+#include <Primitives/2D/Rectangle.h>
+#include <Primitives/2D/Circle.h>
+#include <Distances/PointToLinear.h>
+#include <Distances/LinearToLinear.h>
+#include <Distances/LinearToPolyline.h>
 
 TEST(MathTest, VectorTests)
 {
@@ -111,6 +119,58 @@ TEST(LinearAlgebraTest, FunctionMin1D)
     std::tie(min, fmin) = goldenSearchMinimize(wrapper::f2, 0.0, 0.5, 1.0, tau);
     EXPECT_NEAR(min, 0.0, tau);
     EXPECT_NEAR(fmin, 2.0, tau);
+}
+
+TEST(ShapeTest, LinearShapesTest)
+{
+    using namespace GeometricTools::Primitives;
+    using namespace GeometricTools::Math;
+    Line<2> line({0,1}, {-1,1});
+    EXPECT_EQ(line.p(), Vector<2>(0,1));
+    Segment<2> seg({1,1}, {4,8});
+    EXPECT_DOUBLE_EQ(seg.lengthSq(), 58.0);
+    Ray<2> ray({-20,10}, {0,-1});
+    EXPECT_EQ(ray.d(), Vector<2>(0,-1));
+}
+
+TEST(ShapeTest, PolylineTest)
+{
+    using namespace GeometricTools::Primitives;
+    using namespace GeometricTools::Math;
+    Polyline<3> poly;
+    poly.addPoint({2,3,4});
+    poly.addPoint({1,1,1});
+    EXPECT_EQ(poly.vertices()[0], Vector<3>(2,3,4));
+    EXPECT_EQ(poly.vertices()[1], Vector<3>(1,1,1));
+    EXPECT_EQ(poly.vertices().size(), 2);
+}
+
+TEST(ShapeTest, Shapes2DTest)
+{
+    using namespace GeometricTools::Primitives;
+    using namespace GeometricTools::Math;
+    Triangle t({0,0}, {1,0}, {0,1});
+    EXPECT_DOUBLE_EQ(t.area(), 0.5);
+    t.addPoint({1,1});
+    EXPECT_EQ(t.vertices().size(), 3);
+    Rectangle r({0,0}, 3.0, 4.0);
+    EXPECT_DOUBLE_EQ(r.area(), 12.0);
+    r.addPoint({12,1134});
+    EXPECT_EQ(r.vertices().size(), 4);
+}
+
+TEST(DistanceTest, PointToLinearTest)
+{
+    using namespace GeometricTools::Primitives;
+    using namespace GeometricTools::Math;
+    using namespace GeometricTools::Distances;
+    Vector<2> p{0,1};
+    Line<2> l({0,2}, {1,1});
+    EXPECT_DOUBLE_EQ(Distance(l,p), 1.0/sqrt(2));
+    Ray<2> r({0,2}, {1,1});
+    EXPECT_DOUBLE_EQ(Distance(r,p), 1.0);
+    Segment<2> s({0,2}, {0,1.5});
+    EXPECT_DOUBLE_EQ(Distance(p,s), 0.5);
 }
 
 int main(int argc, char **argv) {

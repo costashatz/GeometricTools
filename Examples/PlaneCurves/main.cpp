@@ -96,6 +96,6 @@ int main(int argc, char *argv[])
         }
     }
     // Subdivide curve to polyline using N segments
-    Polyline poly = uniformSubdivision(hermite, 10);
+    Polyline<2> poly = uniformSubdivision(hermite, 10);
     return 0;
 }

@@ -11,8 +11,9 @@ before_script:
   - mkdir build
   - cd build
 script: cmake -DBUILD_EXAMPLES=ON -DBUILD_TEST=ON .. && make
-# after_script:
-#   - ./simple_client
+after_script:
+  - ./GeometricTools_test
+  - ./
 
 notifications:
   email:
