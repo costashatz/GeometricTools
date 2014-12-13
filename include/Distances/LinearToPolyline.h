@@ -44,12 +44,12 @@ namespace Distances {
 * @param polyline
 **/
 template<unsigned int N>
-double DistanceSq(const Segment<N>& seg, const Polyline<N>& polyline)
+double distanceSq(const Segment<N>& seg, const Polyline<N>& polyline)
 {
-    double m = DistanceSq(seg, Segment<N>(polyline.vertices()[0], polyline.vertices()[1]));
+    double m = distanceSq(seg, Segment<N>(polyline.vertices()[0], polyline.vertices()[1]));
     for(unsigned int i=1;i<polyline.vertices().size()-1;i++)
     {
-        double tmp = DistanceSq(seg, Segment<N>(polyline.vertices()[i], polyline.vertices()[i+1]));
+        double tmp = distanceSq(seg, Segment<N>(polyline.vertices()[i], polyline.vertices()[i+1]));
         if(tmp<m)
             m = tmp;
     }
@@ -57,9 +57,9 @@ double DistanceSq(const Segment<N>& seg, const Polyline<N>& polyline)
 }
 
 template<unsigned int N>
-double DistanceSq(const Polyline<N>& polyline, const Segment<N>& seg)
+double distanceSq(const Polyline<N>& polyline, const Segment<N>& seg)
 {
-    return DistanceSq(seg, polyline);
+    return distanceSq(seg, polyline);
 }
 
 
@@ -69,15 +69,15 @@ double DistanceSq(const Polyline<N>& polyline, const Segment<N>& seg)
 * @param polyline
 **/
 template<unsigned int N>
-double Distance(const Segment<N>& seg, const Polyline<N>& polyline)
+double distance(const Segment<N>& seg, const Polyline<N>& polyline)
 {
-    return sqrt(DistanceSq(seg,polyline));
+    return sqrt(distanceSq(seg,polyline));
 }
 
 template<unsigned int N>
-double Distance(const Polyline<N>& polyline, const Segment<N>& seg)
+double distance(const Polyline<N>& polyline, const Segment<N>& seg)
 {
-    return Distance(seg, polyline);
+    return distance(seg, polyline);
 }
 
 } }

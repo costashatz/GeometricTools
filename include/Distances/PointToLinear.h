@@ -39,7 +39,7 @@ namespace Distances {
 * @param line
 **/
 template<unsigned int N>
-double DistanceSq(const Vector<N>& point, const Line<N>& line)
+double distanceSq(const Vector<N>& point, const Line<N>& line)
 {
     Vector<N> w = point-line.p();
     Vector<N> u = line.d().normalized();
@@ -47,9 +47,9 @@ double DistanceSq(const Vector<N>& point, const Line<N>& line)
 }
 
 template<unsigned int N>
-double DistanceSq(const Line<N>& line, const Vector<N>& point)
+double distanceSq(const Line<N>& line, const Vector<N>& point)
 {
-    return DistanceSq(point,line);
+    return distanceSq(point,line);
 }
 
 /**
@@ -58,7 +58,7 @@ double DistanceSq(const Line<N>& line, const Vector<N>& point)
 * @param line
 **/
 template<unsigned int N>
-double Distance(const Vector<N>& point, const Line<N>& line)
+double distance(const Vector<N>& point, const Line<N>& line)
 {
     Vector<N> w = point-line.p();
     Vector<N> u = line.d().normalized();
@@ -66,9 +66,9 @@ double Distance(const Vector<N>& point, const Line<N>& line)
 }
 
 template<unsigned int N>
-double Distance(const Line<N>& line, const Vector<N>& point)
+double distance(const Line<N>& line, const Vector<N>& point)
 {
-    return Distance(point,line);
+    return distance(point,line);
 }
 
 /**
@@ -77,18 +77,18 @@ double Distance(const Line<N>& line, const Vector<N>& point)
 * @param ray
 **/
 template<unsigned int N>
-double DistanceSq(const Vector<N>& point, const Ray<N>& ray)
+double distanceSq(const Vector<N>& point, const Ray<N>& ray)
 {
     Vector<N> toP = point-ray.p();
     if((ray.d()*toP)>0)
-        return DistanceSq(point,Line<N>(ray.p(), ray.d()));
+        return distanceSq(point,Line<N>(ray.p(), ray.d()));
     return toP.lengthSq();
 }
 
 template<unsigned int N>
-double DistanceSq(const Ray<N>& ray, const Vector<N>& point)
+double distanceSq(const Ray<N>& ray, const Vector<N>& point)
 {
-    return DistanceSq(point,ray);
+    return distanceSq(point,ray);
 }
 
 /**
@@ -97,18 +97,18 @@ double DistanceSq(const Ray<N>& ray, const Vector<N>& point)
 * @param ray
 **/
 template<unsigned int N>
-double Distance(const Vector<N>& point, const Ray<N>& ray)
+double distance(const Vector<N>& point, const Ray<N>& ray)
 {
     Vector<N> toP = point-ray.p();
     if((ray.d()*toP)>0)
-        return Distance(point,Line<N>(ray.p(), ray.d()));
+        return distance(point,Line<N>(ray.p(), ray.d()));
     return toP.length();
 }
 
 template<unsigned int N>
-double Distance(const Ray<N>& ray, const Vector<N>& point)
+double distance(const Ray<N>& ray, const Vector<N>& point)
 {
-    return Distance(point,ray);
+    return distance(point,ray);
 }
 
 /**
@@ -117,7 +117,7 @@ double Distance(const Ray<N>& ray, const Vector<N>& point)
 * @param seg
 **/
 template<unsigned int N>
-double DistanceSq(const Vector<N>& point, const Segment<N>& seg)
+double distanceSq(const Vector<N>& point, const Segment<N>& seg)
 {
     Vector<N> D = seg.d();
     Vector<N> toP = point-seg.p();
@@ -132,14 +132,14 @@ double DistanceSq(const Vector<N>& point, const Segment<N>& seg)
         Vector<N> toP1 = point-seg.P1();
         return toP1.lengthSq();
     }
-    return DistanceSq(point, Line<N>(seg.P0(), seg.d()));
+    return distanceSq(point, Line<N>(seg.P0(), seg.d()));
 
 }
 
 template<unsigned int N>
-double DistanceSq(const Segment<N>& seg, const Vector<N>& point)
+double distanceSq(const Segment<N>& seg, const Vector<N>& point)
 {
-    return DistanceSq(point,seg);
+    return distanceSq(point,seg);
 }
 
 /**
@@ -148,15 +148,15 @@ double DistanceSq(const Segment<N>& seg, const Vector<N>& point)
 * @param seg
 **/
 template<unsigned int N>
-double Distance(const Vector<N>& point, const Segment<N>& seg)
+double distance(const Vector<N>& point, const Segment<N>& seg)
 {
-    return sqrt(DistanceSq(point,seg));
+    return sqrt(distanceSq(point,seg));
 }
 
 template<unsigned int N>
-double Distance(const Segment<N>& seg, const Vector<N>& point)
+double distance(const Segment<N>& seg, const Vector<N>& point)
 {
-    return Distance(point,seg);
+    return distance(point,seg);
 }
 
 } }

@@ -29,6 +29,9 @@ OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISE
 #include <Distances/PointToLinear.h>
 #include <Distances/LinearToLinear.h>
 #include <Distances/LinearToPolyline.h>
+#include <Intersections/2D/LinearToLinear.h>
+
+#include <vector>
 
 TEST(MathTest, VectorTests)
 {
@@ -166,11 +169,32 @@ TEST(DistanceTest, PointToLinearTest)
     using namespace GeometricTools::Distances;
     Vector<2> p{0,1};
     Line<2> l({0,2}, {1,1});
-    EXPECT_DOUBLE_EQ(Distance(l,p), 1.0/sqrt(2));
+    EXPECT_DOUBLE_EQ(distance(l,p), 1.0/sqrt(2));
     Ray<2> r({0,2}, {1,1});
-    EXPECT_DOUBLE_EQ(Distance(r,p), 1.0);
+    EXPECT_DOUBLE_EQ(distance(r,p), 1.0);
     Segment<2> s({0,2}, {0,1.5});
-    EXPECT_DOUBLE_EQ(Distance(p,s), 0.5);
+    EXPECT_DOUBLE_EQ(distance(p,s), 0.5);
+}
+
+TEST(IntersectionTest, LinearToLinearTest)
+{
+    using namespace GeometricTools::Primitives;
+    using namespace GeometricTools::Math;
+    using namespace GeometricTools::Intersections;
+    using std::vector;
+    Segment<2> s1({0,0}, {1,0});
+    Segment<2> s2({0,1}, {1,-1});
+    int N;
+    vector<Vector<2> > p;
+    std::tie(N, p) = intersect(s1, s2);
+    EXPECT_EQ(N, 1);
+    EXPECT_EQ(p[0], Vector<2>(0.5, 0));
+    Segment<2> s3({0.5,0}, {3,0});
+    p.clear();
+    std::tie(N, p) = intersect(s1,s3);
+    EXPECT_EQ(N, 2);
+    EXPECT_EQ(p[0], Vector<2>(0.5,0));
+    EXPECT_EQ(p[1], Vector<2>(1,0));
 }
 
 int main(int argc, char **argv) {
