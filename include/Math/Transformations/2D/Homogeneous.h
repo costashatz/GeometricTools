@@ -25,7 +25,7 @@ OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISE
 #include <Misc/Helper.h>
 #include <cmath>
 
-namespace LinearAlgebraTools { namespace Math {
+namespace GeometricTools { namespace Math {
 
 namespace Transformations2D {
 
@@ -87,9 +87,9 @@ Matrix<3,3> shear(const double& sx, const double& sy)
 **/
 Matrix<3,3> rotation(const double& a)
 {
-    return Matrix<3,3>( cos(a), sin(a), 0.0,
-                       -sin(a), cos(a), 0.0,
-                        0.0,    0.0,    1.0);
+    return Matrix<3,3>( cos(a), -sin(a), 0.0,
+                        sin(a),  cos(a), 0.0,
+                        0.0,     0.0,    1.0);
 }
 
 /**

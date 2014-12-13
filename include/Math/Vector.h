@@ -28,7 +28,7 @@ OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISE
 #include <Misc/Helper.h>
 #include <cblas.h>
 
-namespace LinearAlgebraTools { namespace Math {
+namespace GeometricTools { namespace Math {
 
 template<unsigned int ROWS, unsigned int COLS>
 class Matrix;
@@ -186,11 +186,108 @@ public:
     }
 
     /**
+    * Overloading + operator
+    * Addition of 2 Vectors
+    * @return Vector - the result of the addition
+    **/
+    Vector operator+(const Vector& lh) const
+    {
+        Vector t = (*this);
+        t += lh;
+        return t;
+    }
+
+    /**
+    * Overloading - operator
+    * Subtraction of 2 Vectors
+    * @return Vector - the result of the subtraction
+    **/
+    Vector operator-(const Vector& lh) const
+    {
+        Vector t = (*this);
+        t -= lh;
+        return t;
+    }
+
+    /**
+    * Overloading * operator
+    * Multiplication of 2 Vectors (Dot product)
+    * @return double - the result of the multiplication
+    **/
+    double operator*(const Vector& lh) const
+    {
+        double s = 0.0;
+        for(unsigned int i=0;i<N;i++)
+            s += (*this)[i]*lh[i];
+        return s;
+    }
+
+    /**
+    * Overloading + operator
+    * Addition with scalar (double)
+    * @param other - double to add with
+    * @return Vector - the result
+    **/
+    Vector operator+(const double& other) const
+    {
+        Vector tmp = (*this);
+        tmp += other;
+        return tmp;
+    }
+
+    /**
+    * Overloading - operator
+    * Subtraction of scalar (double)
+    * @param other - double to subtract
+    * @return Vector - the result
+    **/
+    Vector operator-(const double& other) const
+    {
+        Vector tmp = (*this);
+        tmp -= other;
+        return tmp;
+    }
+
+    /**
+    * Overloading * operator
+    * Multiplication with scalar (double)
+    * @param other - double to multiply with
+    * @return Vector - the result
+    **/
+    Vector operator*(const double& other) const
+    {
+        Vector tmp = (*this);
+        tmp *= other;
+        return tmp;
+    }
+
+    /**
+    * Overloading / operator
+    * Division with scalar (double) - if zero ignores division (returns self)
+    * @param other - double to divide with
+    * @return Vector - the result
+    **/
+    Vector operator/(const double& other) const
+    {
+        Vector tmp = (*this);
+        tmp /= other;
+        return tmp;
+    }
+
+    /**
+    * Overloading minus (-) operator
+    **/
+    Vector operator-()
+    {
+        return -1*(*this);
+    }
+
+    /**
     * Overloading == operator
     * @param other - Vector to compare
     * @return bool
     **/
-    bool operator==(const Vector& other)
+    bool operator==(const Vector& other) const
     {
         Vector tmp = (*this)-other;
         return (tmp.lengthSq()<std::numeric_limits<double>::epsilon());
@@ -201,7 +298,7 @@ public:
     * @param other - Vector to compare
     * @return bool
     **/
-    bool operator!=(const Vector& other)
+    bool operator!=(const Vector& other) const
     {
         Vector tmp = (*this)-other;
         return (tmp.lengthSq()>=std::numeric_limits<double>::epsilon());
@@ -327,6 +424,9 @@ public:
     ~Vector(void)
     {
     }
+
+    template<unsigned int ROWS, unsigned int COLS>
+    friend class Matrix;
 };
 
 /**
@@ -347,102 +447,6 @@ template <unsigned int N>
 Vector<N> projection(const Vector<N>& a, const Vector<N>& e)
 {
     return ((e*a)*e/(e*e));
-}
-
-/**
-* Overloading + operator
-* Addition of 2 Vectors
-* @return Vector - the result of the addition
-**/
-template <unsigned int N>
-Vector<N> operator+(const Vector<N>& rh, const Vector<N>& lh)
-{
-    Vector<N> t = rh;
-    t += lh;
-    return t;
-}
-
-/**
-* Overloading - operator
-* Subtraction of 2 Vectors
-* @return Vector - the result of the subtraction
-**/
-template <unsigned int N>
-Vector<N> operator-(const Vector<N>& rh, const Vector<N>& lh)
-{
-    Vector<N> t = rh;
-    t -= lh;
-    return t;
-}
-
-/**
-* Overloading * operator
-* Multiplication of 2 Vectors (Dot product)
-* @return double - the result of the multiplication
-**/
-template <unsigned int N>
-double operator*(const Vector<N>& rh, const Vector<N>& lh)
-{
-    double s = 0.0;
-    for(unsigned int i=0;i<N;i++)
-        s += rh[i]*lh[i];
-    return s;
-}
-
-/**
-* Overloading + operator
-* Addition with scalar (double)
-* @param other - double to add with
-* @return Vector - the result
-**/
-template <unsigned int N>
-Vector<N> operator+(const Vector<N>& vec, const double& other)
-{
-    Vector<N> tmp = vec;
-    tmp += other;
-    return tmp;
-}
-
-/**
-* Overloading - operator
-* Subtraction of scalar (double)
-* @param other - double to subtract
-* @return Vector - the result
-**/
-template <unsigned int N>
-Vector<N> operator-(const Vector<N>& vec, const double& other)
-{
-    Vector<N> tmp = vec;
-    tmp -= other;
-    return tmp;
-}
-
-/**
-* Overloading * operator
-* Multiplication with scalar (double)
-* @param other - double to multiply with
-* @return Vector - the result
-**/
-template <unsigned int N>
-Vector<N> operator*(const Vector<N>& vec, const double& other)
-{
-    Vector<N> tmp = vec;
-    tmp *= other;
-    return tmp;
-}
-
-/**
-* Overloading / operator
-* Division with scalar (double) - if zero ignores division (returns self)
-* @param other - double to divide with
-* @return Vector - the result
-**/
-template <unsigned int N>
-Vector<N> operator/(const Vector<N>& vec, const double& other)
-{
-    Vector<N> tmp = vec;
-    tmp /= other;
-    return tmp;
 }
 
 /**
@@ -502,15 +506,6 @@ template <unsigned int N>
 Vector<N> operator*(const double& a, const Vector<N>& b)
 {
     return b*a;
-}
-
-/**
-* Overloading minus (-) operator
-**/
-template <unsigned int N>
-Vector<N> operator-(const Vector<N>& b)
-{
-    return -1*b;
 }
 
 /**

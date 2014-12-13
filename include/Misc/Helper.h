@@ -20,7 +20,7 @@ OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISE
 
 #include <iostream>
 
-namespace LinearAlgebraTools { namespace Helper {
+namespace GeometricTools { namespace Helper {
 
 const double Pi = 3.14159265358979323846264338327950288419716939937510;
 const double   TwoPi     = Pi * 2;

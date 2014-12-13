@@ -22,7 +22,7 @@ OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISE
 #include <Primitives/Tools/CurveSubdivision.h>
 using namespace std;
 
-using namespace LinearAlgebraTools::Primitives;
+using namespace GeometricTools::Primitives;
 
 //SIMPLE EXAMPLE
 

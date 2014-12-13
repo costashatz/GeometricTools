@@ -30,7 +30,7 @@ extern "C" int dorgqr_(int *m, int *n, int *k, double *
                        a, int *lda, double *tau, double *work, int *lwork,
                        int *info);
 
-namespace LinearAlgebraTools {
+namespace GeometricTools {
 
 namespace Math {
 

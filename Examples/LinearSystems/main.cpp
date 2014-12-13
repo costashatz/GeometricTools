@@ -21,8 +21,8 @@ OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISE
 #include <Math/LinearSystems/SolveLinear.h>
 using namespace std;
 
-using namespace LinearAlgebraTools::Math;
-using namespace LinearAlgebraTools::Math::LinearSystems;
+using namespace GeometricTools::Math;
+using namespace GeometricTools::Math::LinearSystems;
 
 //SIMPLE EXAMPLE
 

@@ -24,7 +24,7 @@ OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISE
 #include <Primitives/2D/PlaneCurve.h>
 #include <Primitives/2D/Polyline.h>
 
-namespace LinearAlgebraTools { namespace Primitives {
+namespace GeometricTools { namespace Primitives {
 
 template<class CurveA, class CurveB>
 Polyline uniformSubdivision(PlaneCurve<CurveA,CurveB>& curve, const int& N)

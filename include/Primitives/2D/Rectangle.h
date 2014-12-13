@@ -24,7 +24,7 @@ OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISE
 #include <Math/Vector.h>
 #include <Primitives/2D/Polygon.h>
 
-namespace LinearAlgebraTools {
+namespace GeometricTools {
 
 using Math::Vector2;
 

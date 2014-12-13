@@ -25,7 +25,7 @@ OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISE
 
 extern "C" int dgetrf_(int *m, int *n, double *a, int * lda, int *ipiv, int *info);
 
-namespace LinearAlgebraTools {
+namespace GeometricTools {
 
 namespace Math {
 

@@ -29,7 +29,7 @@ OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISE
 
 using std::vector;
 
-namespace LinearAlgebraTools {
+namespace GeometricTools {
 
 using Math::Matrix;
 using Math::Vector;

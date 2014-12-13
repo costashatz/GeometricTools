@@ -32,7 +32,7 @@ using std::vector;
 using std::map;
 
 
-namespace LinearAlgebraTools {
+namespace GeometricTools {
 
 using Math::Matrix;
 using Math::Vector;

@@ -28,7 +28,7 @@ OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISE
 extern "C" int dgetrf_(int *m, int *n, double *a, int * lda, int *ipiv, int *info);
 extern "C" int dgetri_(int *n, double *a, int *lda, int *ipiv, double *work, int *lwork, int *info);
 
-namespace LinearAlgebraTools { namespace Math {
+namespace GeometricTools { namespace Math {
 
 /**
 * General Matrix Class
@@ -218,7 +218,7 @@ public:
     * Get Transpose of Matrix
     * @return Matrix - the transposed matrix
     **/
-    Matrix<COLS,ROWS> transpose()
+    Matrix<COLS,ROWS> transpose() const
     {
         Matrix<COLS,ROWS> r;
         for(unsigned int i=0;i<ROWS;i++)
@@ -229,10 +229,113 @@ public:
         return r;
     }
 
-    Matrix<COLS,ROWS> operator~()
+    Matrix<COLS,ROWS> operator~() const
     {
         Matrix<COLS,ROWS> r = this->transpose();
         return r;
+    }
+
+    /**
+    * Overloading + operator
+    * Addition of 2 Matrices
+    * @return Matrix - the result of the addition
+    **/
+    Matrix operator+(const Matrix<ROWS,COLS>& mat2) const
+    {
+        Matrix<ROWS,COLS> t = (*this);
+        t += mat2;
+        return t;
+    }
+
+    /**
+    * Overloading - operator
+    * Subtraction of 2 Matrices
+    * @return Matrix - the result of the subtraction
+    **/
+    Matrix operator-(const Matrix<ROWS,COLS>& mat2) const
+    {
+        Matrix<ROWS,COLS> t = (*this);
+        t -= mat2;
+        return t;
+    }
+
+    /**
+    * Overloading * operator
+    * Multiplication with scalar (double)
+    * @param other - double to multiply with
+    * @return Matrix - the result
+    **/
+    Matrix operator*(const double& other) const
+    {
+        Matrix<ROWS,COLS> t = (*this);
+        t *= other;
+        return t;
+    }
+
+    /**
+    * Overloading / operator
+    * Division with scalar (double) - if zero ignores division (returns self)
+    * @param other - double to divide with
+    * @return Matrix - the result
+    **/
+    Matrix operator/(const double& other) const
+    {
+        Matrix<ROWS,COLS> t = (*this);
+        t /= other;
+        return t;
+    }
+
+    /**
+    * Overloading minus (-) operator
+    **/
+    Matrix operator-() const
+    {
+        return -1*(*this);
+    }
+
+    /**
+    * Overloading * operator
+    * Multiplication with Vector
+    **/
+    Vector<COLS> operator*(const Vector<COLS>& r2) const
+    {
+        Vector<COLS> res;
+        cblas_dgemv(CblasRowMajor, CblasNoTrans, ROWS, COLS, 1.0, values, ROWS, r2.values, 1, 1.0, res.values, 1);
+        return res;
+    }
+
+    /**
+    * Overloading * operator
+    * Multiplication with Matrix
+    **/
+    template<unsigned int R2>
+    Matrix<ROWS,R2> operator*(const Matrix<COLS,R2>& r2)
+    {
+        Matrix<ROWS,R2> res;
+        cblas_dgemm(CblasRowMajor, CblasNoTrans, CblasNoTrans, ROWS, R2, COLS, 1.0, values, ROWS, r2.values, COLS, 0.0, res.values, ROWS);
+        return res;
+    }
+
+    /**
+    * Overloading == operator
+    * @param other - Matrix to compare
+    * @return bool
+    **/
+    bool operator==(const Matrix& other) const
+    {
+        Matrix tmp = (*this)-other;
+        return (tmp.norm()<std::numeric_limits<double>::epsilon());
+    }
+
+    /**
+    * Overloading != operator
+    * @param other - Matrix to compare
+    * @return bool
+    **/
+    bool operator!=(const Matrix& other) const
+    {
+        Matrix tmp = (*this)-other;
+        return (tmp.norm()>=std::numeric_limits<double>::epsilon());
     }
 
     /**
@@ -350,60 +453,6 @@ public:
 };
 
 /**
-* Overloading + operator
-* Addition of 2 Matrices
-* @return Matrix - the result of the addition
-**/
-template <unsigned int ROWS, unsigned int COLS>
-Matrix<ROWS,COLS> operator+(const Matrix<ROWS,COLS>& mat1, const Matrix<ROWS,COLS>& mat2)
-{
-    Matrix<ROWS,COLS> t = mat1;
-    mat1 += mat2;
-    return t;
-}
-
-/**
-* Overloading - operator
-* Subtraction of 2 Matrices
-* @return Matrix - the result of the subtraction
-**/
-template <unsigned int ROWS, unsigned int COLS>
-Matrix<ROWS,COLS> operator-(const Matrix<ROWS,COLS>& mat1, const Matrix<ROWS,COLS>& mat2)
-{
-    Matrix<ROWS,COLS> t = mat1;
-    mat1 -= mat2;
-    return t;
-}
-
-/**
-* Overloading * operator
-* Multiplication with scalar (double)
-* @param other - double to multiply with
-* @return Matrix - the result
-**/
-template <unsigned int ROWS, unsigned int COLS>
-Matrix<ROWS,COLS> operator*(const Matrix<ROWS,COLS>& mat, const double& other)
-{
-    Matrix<ROWS,COLS> t = mat;
-    t *= other;
-    return t;
-}
-
-/**
-* Overloading / operator
-* Division with scalar (double) - if zero ignores division (returns self)
-* @param other - double to divide with
-* @return Matrix - the result
-**/
-template <unsigned int ROWS, unsigned int COLS>
-Matrix<ROWS,COLS> operator/(const Matrix<ROWS,COLS>& mat, const double& other)
-{
-    Matrix<ROWS,COLS> t = mat;
-    t /= other;
-    return t;
-}
-
-/**
 * Overloading << operator
 * "print" matrix to stream
 * @param ostream - stream to print the matrix to
@@ -469,27 +518,6 @@ template<unsigned int N, unsigned int M>
 Matrix<N,M> operator*(const double& a, Matrix<N,M>& b)
 {
     return b*a;
-}
-
-/**
-* Overloading minus (-) operator
-**/
-template<unsigned int N, unsigned int M>
-Matrix<N,M> operator-(Matrix<N,M>& b)
-{
-    return -1*b;
-}
-
-/**
-* Overloading * operator
-* Multiplication with Vector
-**/
-template<unsigned int C1, unsigned int K>
-Vector<C1> operator*(const Matrix<C1,K>& r1, const Vector<K>& r2)
-{
-    Vector<C1> res;
-    cblas_dgemv(CblasRowMajor, CblasNoTrans, C1, K, 1.0, r1.data(), C1, r2.data(), 1, 1.0, res.data(), 1);
-    return res;
 }
 
 /**
@@ -579,18 +607,6 @@ template<>
 double determinant(Matrix<1,1> m)
 {
     return 0.0;
-}
-
-/**
-* Overloading * operator
-* Multiplication with Matrix
-**/
-template<unsigned int C1, unsigned int K, unsigned int R2>
-Matrix<C1,R2> operator*(const Matrix<C1,K>& r1, const Matrix<K,R2>& r2)
-{
-    Matrix<C1,R2> res;
-    cblas_dgemm(CblasRowMajor, CblasNoTrans, CblasNoTrans, C1, R2, K, 1.0, r1.data(), C1, r2.data(), K, 0.0, res.data(), C1);
-    return res;
 }
 
 /**

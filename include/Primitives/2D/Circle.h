@@ -26,7 +26,7 @@ OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISE
 #include <Primitives/2D/QuadraticCurve.h>
 
 
-namespace LinearAlgebraTools {
+namespace GeometricTools {
 
 using Math::Vector;
 

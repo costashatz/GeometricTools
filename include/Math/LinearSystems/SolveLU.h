@@ -27,7 +27,7 @@ extern "C" int dgetrf_(int *m, int *n, double *a, int * lda, int *ipiv, int *inf
 extern "C" int dgetrs_(char *trans, int *n, int *nrhs,
                        double *a, int *lda, int *ipiv, double *b, int * ldb, int *info);
 
-namespace LinearAlgebraTools {
+namespace GeometricTools {
 
 namespace Math {
 

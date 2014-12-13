@@ -23,7 +23,7 @@ OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISE
 **/
 #include <limits>
 
-namespace LinearAlgebraTools {
+namespace GeometricTools {
 
 namespace Math {
 

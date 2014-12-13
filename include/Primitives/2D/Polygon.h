@@ -23,7 +23,7 @@ OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISE
 **/
 #include <Primitives/2D/Polyline.h>
 
-namespace LinearAlgebraTools {
+namespace GeometricTools {
 
 namespace Primitives {
 

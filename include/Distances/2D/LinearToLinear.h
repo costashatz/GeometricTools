@@ -25,7 +25,7 @@ OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISE
 #include <Primitives/LinearShapes.h>
 #include <limits>
 
-namespace LinearAlgebraTools {
+namespace GeometricTools {
 
 using Math::Vector;
 using Primitives::Line;

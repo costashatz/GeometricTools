@@ -27,7 +27,7 @@ OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISE
 #include <Distances/2D/LinearToLinear.h>
 #include <Primitives/2D/Polyline.h>
 
-namespace LinearAlgebraTools {
+namespace GeometricTools {
 
 using Math::Vector;
 using Primitives::Line;

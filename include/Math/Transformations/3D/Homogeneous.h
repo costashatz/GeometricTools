@@ -25,7 +25,7 @@ OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISE
 #include <Misc/Helper.h>
 #include <cmath>
 
-namespace LinearAlgebraTools { namespace Math {
+namespace GeometricTools { namespace Math {
 
 namespace Transformations3D {
 

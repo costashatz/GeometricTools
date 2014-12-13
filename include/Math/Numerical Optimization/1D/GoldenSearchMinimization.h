@@ -24,7 +24,7 @@ OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISE
 #include <tuple>
 #include <cmath>
 
-namespace LinearAlgebraTools { namespace Math { namespace NumericalOptimization {
+namespace GeometricTools { namespace Math { namespace NumericalOptimization {
 
 std::tuple<double,double,double> getBracket(double(*f)(double), const double& x1, const double& x2)
 {

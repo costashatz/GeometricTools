@@ -28,7 +28,7 @@ extern "C" int dgesvd_(char *jobu, char *jobvt, int *m, int *n,
                        ldu, double *vt, int *ldvt, double *work, int *lwork,
                        int *info);
 
-namespace LinearAlgebraTools {
+namespace GeometricTools {
 
 namespace Math {
 
