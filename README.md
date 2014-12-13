@@ -18,7 +18,7 @@
 ####How to compile:
 
 ```
-cd path/to/LinearAlgebraTools
+cd path/to/GeometricTools
 mkdir build && cd build
 cmake ..
 make
