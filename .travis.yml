@@ -13,7 +13,6 @@ before_script:
 script: cmake -DBUILD_EXAMPLES=ON -DBUILD_TEST=ON .. && make
 after_script:
   - ./GeometricTools_test
-  - ./
 
 notifications:
   email:
