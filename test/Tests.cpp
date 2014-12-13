@@ -59,10 +59,26 @@ TEST(MathTest, Transformations2D)
     using namespace GeometricTools::Math::Transformations2D;
     typedef Matrix<3,3> Matrix3x3;
     Matrix3x3 T = translation(1.0, -2.0), S = scaling(2.0, 1.0), R = rotationDegrees(45.0);
-    Vector<3> p{-2,3,1.0};
+    Vector<3> p{-2,3,1};
     EXPECT_EQ(T*p, Vector<3>(-1,1,1));
     EXPECT_EQ(S*p, Vector<3>(-4,3,1));
     EXPECT_EQ(R*p, Vector<3>(-3/sqrt(2)-sqrt(2), 3/sqrt(2)-sqrt(2),1));
+}
+
+TEST(MathTest, Transformations3D)
+{
+    using GeometricTools::Math::Vector;
+    using GeometricTools::Math::Matrix;
+    using namespace GeometricTools::Math::Transformations3D;
+    typedef Matrix<4,4> Matrix4x4;
+    Matrix4x4 T = translation(1.0, -2.0, 3.0), S = uniformScaling(4.0), Rx = rotationXDegrees(45.0),
+            Ry = rotationYDegrees(45.0), Rz = rotationZDegrees(45.0);
+    Vector<4> p{-2,3,3,1};
+    EXPECT_EQ(T*p, Vector<4>(-1,1,6,1));
+    EXPECT_EQ(S*p, Vector<4>(-8,12,12,1));
+    EXPECT_EQ(Rz*p, Vector<4>(-3/sqrt(2)-sqrt(2), 3/sqrt(2)-sqrt(2),3,1));
+    EXPECT_EQ(Ry*p, Vector<4>(-3/sqrt(2)-sqrt(2), 3, 3/sqrt(2)-sqrt(2),1));
+    //TO-DO: Test for RotateX
 }
 
 int main(int argc, char **argv) {
