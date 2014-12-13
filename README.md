@@ -2,7 +2,18 @@
 
 ###Math Library for Linear Algebra, Numerical Methods, Geometric Representations and Collision Detection Algorithms
 
-####Needs C++11 compatible compiler to compile!
+####Dependencies
+1. **C++11 compiler**
+	* Tested on gcc>=4.8, clang>=3.1
+	* Should compile on Visual Studio 2013-2015
+2. **CMake**
+	* Tested on CMake>=2.8
+	* Should work on 2.6 too
+3. **LAPACK/BLAS**
+	* Needed for Linear Algebra operations
+	* In *ubuntu Linux, just install the following packages: liblapack3 liblapack-dev libblas3 libblas-dev
+4. **Google Tests (gtest)** *[OPTIONAL]*
+	* Needed to build the test codes
 
 ####How to compile:
 
