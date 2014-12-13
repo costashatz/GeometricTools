@@ -122,8 +122,8 @@ Matrix<4,4> shearZ(const double& a, const double& b)
 Matrix<4,4> rotationX(const double& a)
 {
     return Matrix<4,4>(1.0,   0.0  ,  0.0  , 0.0,
-                       0.0,  cos(a), sin(a), 0.0,
-                       0.0, -sin(a), cos(a), 0.0,
+                       0.0, cos(a), -sin(a), 0.0,
+                       0.0, sin(a),  cos(a), 0.0,
                        0.0,   0.0  ,  0.0  , 1.0);
 }
 
@@ -144,9 +144,9 @@ Matrix<4,4> rotationXDegrees(const double& a)
 **/
 Matrix<4,4> rotationY(const double& a)
 {
-    return Matrix<4,4>(cos(a),  0.0, sin(a), 0.0,
-                       0.0,     1.0,  0.0  , 0.0,
-                       -sin(a), 0.0, cos(a), 0.0,
+    return Matrix<4,4>(cos(a), 0.0, -sin(a), 0.0,
+                       0.0,    1.0,   0.0  , 0.0,
+                       sin(a),  0.0, cos(a), 0.0,
                        0.0,   0.0  ,  0.0  , 1.0);
 }
 
@@ -167,8 +167,8 @@ Matrix<4,4> rotationYDegrees(const double& a)
 **/
 Matrix<4,4> rotationZ(const double& a)
 {
-    return Matrix<4,4>( cos(a), sin(a), 0.0, 0.0,
-                       -sin(a), cos(a), 0.0, 0.0,
+    return Matrix<4,4>( cos(a), -sin(a), 0.0, 0.0,
+                        sin(a),  cos(a), 0.0, 0.0,
                          0.0  ,  0.0  , 1.0, 0.0,
                          0.0  ,  0.0  , 0.0, 1.0);
 }
