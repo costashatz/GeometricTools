@@ -1,4 +1,4 @@
-cmake_minimum_required (VERSION 2.8.12)
+cmake_minimum_required (VERSION 2.6)
 project (GeometricTools)
 
 include(CheckCXXCompilerFlag)
@@ -35,7 +35,11 @@ find_package( LAPACK REQUIRED)
 include_directories(${LAPACK_INCLUDE_DIR})
 
 add_library(${PROJECT_NAME} SHARED ${_srcs})
-target_include_directories(${PROJECT_NAME} PUBLIC ${PROJECT_SOURCE_DIR}/include)
+if((${CMAKE_VERSION} VERSION_GREATER "2.8.9"))
+  target_include_directories(${PROJECT_NAME} PUBLIC ${PROJECT_SOURCE_DIR}/include)
+else()
+  include_directories(${PROJECT_SOURCE_DIR}/include)
+endif()
 target_link_libraries(${PROJECT_NAME} ${LAPACK_LIBRARIES})
 SET_TARGET_PROPERTIES(${PROJECT_NAME} PROPERTIES LINKER_LANGUAGE CXX)
 
