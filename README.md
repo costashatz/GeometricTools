@@ -34,24 +34,24 @@ make
 * Via ExternalProject to always get latest edition:
 	```cmake
 	include(ExternalProject)
-	ExternalProject_Add(LinearAlgebraToolsProj
-	    GIT_REPOSITORY "https://github.com/costashatz/LinearAlgebraTools"
+	ExternalProject_Add(GeometricToolsProj
+	    GIT_REPOSITORY "https://github.com/costashatz/GeometricTools"
 	    CMAKE_ARGS -DBUILD_TEST=OFF -DBUILD_EXAMPLES=OFF
 	    PREFIX "${CMAKE_CURRENT_BINARY_DIR}"
 	    INSTALL_COMMAND ""
 	)
 	# Specify include dir
-	ExternalProject_Get_Property(LinearAlgebraToolsProj source_dir)
-	set(LINEAR_ALGEBRA_TOOLS_INCLUDE_DIRS ${source_dir}/include)
+	ExternalProject_Get_Property(GeometricToolsProj source_dir)
+	set(GEOMETRIC_TOOLS_INCLUDE_DIRS ${source_dir}/include)
 
 	# Specify MainTest's link libraries
-	ExternalProject_Get_Property(LinearAlgebraToolsProj binary_dir)
-	set(LINEAR_ALGEBRA_TOOLS_LIBS_DIR ${binary_dir})
+	ExternalProject_Get_Property(GeometricToolsProj binary_dir)
+	set(GEOMETRIC_TOOLS_LIBS_DIR ${binary_dir})
 
-	link_directories(${LINEAR_ALGEBRA_TOOLS_LIBS_DIR})
-	include_directories(${PROJECT_SOURCE_DIR}/include ${LINEAR_ALGEBRA_TOOLS_INCLUDE_DIRS})
+	link_directories(${GEOMETRIC_TOOLS_LIBS_DIR})
+	include_directories(${PROJECT_SOURCE_DIR}/include ${GEOMETRIC_TOOLS_INCLUDE_DIRS})
 	....
-	target_link_libraries(mytarget LinearAlgebraTools)
+	target_link_libraries(mytarget GeometricToolsProj)
 	```
 
 
