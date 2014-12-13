@@ -20,6 +20,7 @@ OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISE
 #include <Math/Matrix.h>
 #include <Math/Transformations/2D/Homogeneous.h>
 #include <Math/Transformations/3D/Homogeneous.h>
+#include <Math/Numerical Optimization/1D/GoldenSearchMinimization.h>
 
 TEST(MathTest, VectorTests)
 {
@@ -31,9 +32,9 @@ TEST(MathTest, VectorTests)
     Vector<3> c{1,2,3}, d{4,5,6};
     EXPECT_EQ(c*d, 32.0);
     EXPECT_EQ(1.0/c, Vector<3>(1,0.5,1/3.0));
-    EXPECT_EQ(c.normalized().length(), 1.0);
+    EXPECT_DOUBLE_EQ(c.normalized().length(), 1.0);
     d.normalize();
-    EXPECT_EQ(d.length(), 1.0);
+    EXPECT_DOUBLE_EQ(d.length(), 1.0);
 }
 
 TEST(MathTet, MatrixTests)
@@ -49,7 +50,7 @@ TEST(MathTet, MatrixTests)
     EXPECT_EQ(A-B, ID);
     EXPECT_EQ(A+B, Matrix2x2(1,2,0,1));
     EXPECT_EQ(A*B, Matrix2x2(0,1,0,0));
-    EXPECT_EQ(A.norm(), sqrt(3));
+    EXPECT_DOUBLE_EQ(A.norm(), sqrt(3));
 }
 
 TEST(MathTest, Transformations2D)
@@ -78,7 +79,38 @@ TEST(MathTest, Transformations3D)
     EXPECT_EQ(S*p, Vector<4>(-8,12,12,1));
     EXPECT_EQ(Rz*p, Vector<4>(-3/sqrt(2)-sqrt(2), 3/sqrt(2)-sqrt(2),3,1));
     EXPECT_EQ(Ry*p, Vector<4>(-3/sqrt(2)-sqrt(2), 3, 3/sqrt(2)-sqrt(2),1));
-    //TO-DO: Test for RotateX
+    EXPECT_EQ(Rx*p, Vector<4>(-2, 0, 3*sqrt(2),1));
+}
+
+TEST(LinearAlgebraTest, FunctionMin1D)
+{
+    using namespace GeometricTools::Math::NumericalOptimization;
+    struct wrapper
+    {
+        static double f(double x)
+        {
+            return x*x-2*x+2;
+        }
+
+        static double f2(double x)
+        {
+            return x*x+2*x+2;
+        }
+    };
+    double min, fmin;
+    double a,b,c;
+    double tau = 1e-10;
+    std::tie(a,b,c) = getBracket(wrapper::f, 0.0, 2.0);
+    std::tie(min, fmin) = goldenSearchMinimize(wrapper::f, a, b, c, tau);
+    EXPECT_NEAR(min, 1.0, tau);
+    EXPECT_NEAR(fmin, 1.0, tau);
+    std::tie(a,b,c) = getBracket(wrapper::f2, -2.0, 0.0);
+    std::tie(min, fmin) = goldenSearchMinimize(wrapper::f2, a, b, c, tau);
+    EXPECT_NEAR(min, -1.0, tau);
+    EXPECT_NEAR(fmin, 1.0, tau);
+    std::tie(min, fmin) = goldenSearchMinimize(wrapper::f2, 0.0, 0.5, 1.0, tau);
+    EXPECT_NEAR(min, 0.0, tau);
+    EXPECT_NEAR(fmin, 2.0, tau);
 }
 
 int main(int argc, char **argv) {
