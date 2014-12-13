@@ -35,7 +35,9 @@ find_package( LAPACK REQUIRED)
 include_directories(${LAPACK_INCLUDE_DIR})
 
 add_library(${PROJECT_NAME} SHARED ${_srcs})
-target_include_directories(${PROJECT_NAME} PUBLIC ${PROJECT_SOURCE_DIR}/include)
+if((${CMAKE_VERSION} VERSION_GREATER "3.0") OR (${CMAKE_VERSION} VERSION_EQUAL "3.0"))
+  target_include_directories(${PROJECT_NAME} PUBLIC ${PROJECT_SOURCE_DIR}/include)
+endif()
 target_link_libraries(${PROJECT_NAME} ${LAPACK_LIBRARIES})
 SET_TARGET_PROPERTIES(${PROJECT_NAME} PROPERTIES LINKER_LANGUAGE CXX)
 
