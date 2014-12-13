@@ -1,4 +1,6 @@
-###Math Library for Linear Algebra, Numerical Analysis and Collision Detection Algorithms
+## Geometric Tools
+
+###Math Library for Linear Algebra, Numerical Methods, Geometric Representations and Collision Detection Algorithms
 
 ####Needs C++11 compatible compiler to compile!
 
@@ -66,13 +68,13 @@ make
 	* Hermite Cubic Curves
 	* Cardinal Cubic Curves
 8. Distances in 2D
-	* Functions for computing distances between 2D primitives (point-linear shapes, point-polyline, linear shapes-linear shapes)
+	* Functions for computing distances between 2D primitives (point-linear shapes, point-polyline, linear shapes-linear shapes, segment-polyline)
 
 ####Planning to implement:
 
 1. More primitives (both in 2D and 3D)
 	* Piecewise polynomial curves
-	* Space(3D)/Plane(2D) polynomial curves
+	* Space(3D) polynomial curves
 2. Distances, Intersections in 2D/3D
 3. gtests
 4. Improve the templated classes for Matrices and Vectors
