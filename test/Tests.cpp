@@ -30,6 +30,7 @@ OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISE
 #include <Distances/LinearToLinear.h>
 #include <Distances/LinearToPolyline.h>
 #include <Intersections/2D/LinearToLinear.h>
+#include <Intersections/2D/LinearToPolygon.h>
 
 #include <vector>
 
@@ -195,6 +196,22 @@ TEST(IntersectionTest, LinearToLinearTest)
     EXPECT_EQ(N, 2);
     EXPECT_EQ(p[0], Vector<2>(0.5,0));
     EXPECT_EQ(p[1], Vector<2>(1,0));
+}
+
+TEST(IntersectionTest, LinearToPolygonTest)
+{
+    using namespace GeometricTools::Primitives;
+    using namespace GeometricTools::Math;
+    using namespace GeometricTools::Intersections;
+    using std::vector;
+    Rectangle r({0,0}, 3.0, 4.0);
+    Segment<2> seg({-2,1}, {2,1});
+    int N;
+    vector<Vector<2> > p;
+    std::tie(N, p) = intersect(seg, r);
+    EXPECT_EQ(N, 2);
+    EXPECT_EQ(p[0], Vector<2>(-1.5, 1));
+    EXPECT_EQ(p[1], Vector<2>(1.5, 1));
 }
 
 int main(int argc, char **argv) {

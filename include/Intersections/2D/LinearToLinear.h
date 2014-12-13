@@ -62,11 +62,13 @@ std::tuple<int, vector<Vector<2> > > intersect(const Segment<2>& seg1, const Seg
         }
         if(du<epsilon)
         {
+            //TODO: test for inclusion of seg1.P0 in the seg2
             points.push_back(seg1.P0());
             return std::make_tuple(1, points);
         }
         if(dv<epsilon)
         {
+            //TODO: test for inclusion of seg2.P0 in the seg1
             points.push_back(seg2.P0());
             return std::make_tuple(1, points);
         }
