@@ -35,7 +35,7 @@ public:
     * @param p - point P
     * @param d - direction vector d
     **/
-    LinearShape(const Vector<N>& p, const Vector<N>& d):P(d),D(d){}
+    LinearShape(const Vector<N>& p, const Vector<N>& d):P(p),D(d){}
 
     /**
     * Copy Constructor
@@ -78,7 +78,10 @@ public:
     * @param P - point P
     * @param D - direction vector d
     **/
-    Line(const Vector<N>& P, const Vector<N>& D):LinearShape<N>(P,D){}
+    Line(const Vector<N>& P, const Vector<N>& D):LinearShape<N>(P,D)
+    {
+        this->D.normalize();
+    }
 };
 
 
@@ -100,7 +103,10 @@ public:
     * @param P - point P
     * @param D - direction vector d
     **/
-    Ray(const Vector<N>& P, const Vector<N>& D):LinearShape<N>(P,D){}
+    Ray(const Vector<N>& P, const Vector<N>& D):LinearShape<N>(P,D)
+    {
+        this->D.normalize();
+    }
 };
 
 

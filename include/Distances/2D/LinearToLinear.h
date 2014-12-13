@@ -6,6 +6,7 @@
 **/
 #include <Math/Vector.h>
 #include <Primitives/LinearShapes.h>
+#include <limits>
 
 namespace LinearAlgebraTools {
 
@@ -130,6 +131,96 @@ double Distance(const Line<2>& line, const Segment<2>& seg)
 double Distance(const Segment<2>& seg, const Line<2>& line)
 {
     return Distance(line,seg);
+}
+
+/**
+* Computes Segment to Segment Distance Squared
+* @param seg1
+* @param seg2
+**/
+double DistanceSq(const Segment<2>& seg1, const Segment<2>& seg2)
+{
+    Vector<2> u = seg1.P0() - seg1.P1();
+    Vector<2> v = seg2.P0() - seg2.P1();
+    Vector<2> w = seg1.P1() - seg2.P1();
+    double a = u*u, b = u*v, c = v*v, d = u*w, e = v*w;
+    double D = a*c-b*b;
+    double sD = D, tD = D;
+    double sN, tN, sc, tc;
+    if(std::abs(D)<std::numeric_limits<double>::epsilon())
+    {
+        sN = 0.0;
+        sD = 1.0;
+        tN = e;
+        tD = c;
+    }
+    else
+    {
+        sN = b*e-c*d;
+        tN = a*e-b*d;
+        if(sN<0.0)
+        {
+            sN = 0.0;
+            tN = e;
+            tD = c;
+        }
+        else if(sN>sD)
+        {
+            sN = sD;
+            tN = e+b;
+            tD = c;
+        }
+    }
+
+    if(tN<0.0)
+    {
+        tN = 0.0;
+        if(-d<0.0)
+            sN = 0.0;
+        else if(-d>a)
+            sN = sD;
+        else
+        {
+            sN = -d;
+            sD = a;
+        }
+    }
+    else if(tN>tD)
+    {
+        tN = tD;
+        if((b-d)<0.0)
+            sN = 0;
+        else if((b-d)>a)
+            sN = sD;
+        else
+        {
+            sN = b-d;
+            sD = a;
+        }
+    }
+
+    if(std::abs(sN)<std::numeric_limits<double>::epsilon())
+        sc = 0.0;
+    else
+        sc = sN/sD;
+
+    if(std::abs(tN)<std::numeric_limits<double>::epsilon())
+        tc = 0.0;
+    else
+        tc = tN/tD;
+
+    Vector<2> dP = w+sc*u-tc*v;
+    return dP.lengthSq();
+}
+
+/**
+* Computes Segment to Segment Distance
+* @param seg1
+* @param seg2
+**/
+double Distance(const Segment<2>& seg1, const Segment<2>& seg2)
+{
+    return sqrt(DistanceSq(seg1, seg2));
 }
 
 } }

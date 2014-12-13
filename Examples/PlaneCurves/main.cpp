@@ -78,5 +78,7 @@ int main(int argc, char *argv[])
                 cout<<endl;
         }
     }
+    // Subdivide curve to polyline using N segments
+    Polyline poly = uniformSubdivision(hermite, 10);
     return 0;
 }

@@ -60,7 +60,7 @@ public:
     * Get Vertices/Points
     * @return vector<Vector<2> > - the collection of points/vertices
     **/
-    vector<Vector<2> > vertices() {return verts;}
+    vector<Vector<2> > vertices() const {return verts;}
 };
 
 } }

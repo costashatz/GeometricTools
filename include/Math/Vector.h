@@ -366,7 +366,10 @@ Vector<N> operator-(const Vector<N>& rh, const Vector<N>& lh)
 template <unsigned int N>
 double operator*(const Vector<N>& rh, const Vector<N>& lh)
 {
-    return cblas_ddot(N, &rh.values[0], 1, &lh.values[0], 1);
+    double s = 0.0;
+    for(unsigned int i=0;i<N;i++)
+        s += rh[i]*lh[i];
+    return s;
 }
 
 /**
