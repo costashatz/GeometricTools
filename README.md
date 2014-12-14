@@ -58,39 +58,41 @@ make
 ####So far I have implemented:
 
 1. Generic Templated Class for Matrices
-    * Supports any dimension and many properties (many need to be added and some to improve)
+    * Supports any dimension and many properties
 2. Generic Templated Class for Vectors
     * Supports any dimension and most of the vector properties
 3. Solve Linear Systems
-    * Using Gauss Elimination
+    * Using Gauss Elimination - **error prone**
     * Using LU Decomposition
 4. Decompositions
     * LU Decomposition
     * QR Decomposition
-    * SVD Decomposition
+    * SVD Decomposition - **not working right now**
 5. Linear Shapes
-	* Classes for basic 2D linear shapes (line, ray, segment)
+	* Classes for basic linear shapes (line, ray, segment)
 6. Polygons
 	* Classes for basic 2D polygons (triangle, rectangle, polyline, general polygons)
 7. Curves
 	* Specific quadratic curves (defined by xTAx+bTx+c=0)
-	* Generic polynomial curves/splines (templated in size [biggest power of curve])
+	* Generic polynomial curves/splines (templated in size [biggest power of curve]) - 1D functions
 	* Piecewise Curves
 	* Hermite Cubic Curves
 	* Cardinal Cubic Curves
-8. Distances in 2D
-	* Functions for computing distances between 2D primitives (point-linear shapes, point-polyline, linear shapes-linear shapes, segment-polyline)
+	* Plane (2D) Curves
+8. Distances
+	* Functions for computing distances between primitives (point-linear shapes, point-polyline, linear shapes-linear shapes, segment-polyline)
+9. Intersections
+	* Functions for computing intersection points (2D) between primitives (linear shapes-linear shapes, linear shapes-polygon)
+10. Simple gtests (more need to be added)
+11. Simple examples (more interactive ones need to be added)
 
 ####Planning to implement:
 
 1. More primitives (both in 2D and 3D)
 	* Piecewise polynomial curves
 	* Space(3D) polynomial curves
-2. Distances, Intersections in 2D/3D
-3. gtests
-4. Improve the templated classes for Matrices and Vectors
-    * Cleanify code/add comments
-5. Add more linear systems solving mechanisms (algorithms)
+2. More Distances, Intersections in 2D/3D
+3. Cleanify code/add comments
 
 
 ####WORK IN PROGRESS - WILL BE UPDATED FREQUENTLY
