@@ -31,6 +31,7 @@ OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISE
 #include <Distances/LinearToPolyline.h>
 #include <Intersections/2D/LinearToLinear.h>
 #include <Intersections/2D/LinearToPolygon.h>
+#include <Primitives/Tools/BoundingBox.h>
 
 #include <vector>
 
@@ -161,6 +162,23 @@ TEST(ShapeTest, Shapes2DTest)
     EXPECT_DOUBLE_EQ(r.area(), 12.0);
     r.addPoint({12,1134});
     EXPECT_EQ(r.vertices().size(), 4);
+}
+
+TEST(ShapeTest, BoundingBox2DTest)
+{
+    using namespace GeometricTools::Primitives;
+    using namespace GeometricTools::Math;
+    using std::vector;
+    Triangle t({0,0}, {1,0}, {0,1});
+    Rectangle r({0,0}, 1.0, 1.0);
+    vector<Polygon> polys;
+    polys.push_back(t);
+    polys.push_back(r);
+    Rectangle bb = boundingBox(polys);
+    EXPECT_EQ(bb.vertices()[0], Vector<2>(-0.5, -0.5));
+    EXPECT_EQ(bb.vertices()[1], Vector<2>( 1.0, -0.5));
+    EXPECT_EQ(bb.vertices()[2], Vector<2>( 1.0,  1.0));
+    EXPECT_EQ(bb.vertices()[3], Vector<2>(-0.5,  1.0));
 }
 
 TEST(DistanceTest, PointToLinearTest)
