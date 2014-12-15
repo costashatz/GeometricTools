@@ -4,7 +4,7 @@
 
 ####Dependencies
 1. **C++11 compiler**
-	* Tested on gcc>=4.8, clang>=3.1
+	* Tested on gcc>=4.6, clang>=3.1
 	* Should compile on Visual Studio 2013-2015
 2. **CMake**
 	* Tested on CMake>=2.8
