@@ -42,9 +42,9 @@ class Vector
 {
 protected:
     // values of vector
-    double values[N];
+    double values_[N];
     // helper variable for initialization
-    unsigned int index;
+    unsigned int index_;
 
 
     /**
@@ -54,11 +54,11 @@ protected:
     template<typename... Args>
     void initialize(double h, Args&&... args)
     {
-        if(index>=N)
-            index=0;
+        if(index_>=N)
+            index_=0;
         // add first argument to the vector data
-        values[index] = h;
-        index++;
+        values_[index_] = h;
+        index_++;
         // Initialize with rest of arguments
         initialize(std::forward<Args>(args)...);
     }
@@ -71,7 +71,7 @@ protected:
     template<typename... Args>
     void initialize()
     {
-        index = 0;
+        index_ = 0;
     }
 
 public:	
@@ -82,7 +82,7 @@ public:
     **/
     Vector()
     {
-        memset(values,0,N*sizeof(double));
+        memset(values_,0,N*sizeof(double));
     }
 
     /**
@@ -91,7 +91,7 @@ public:
     **/
     Vector(const Vector& other)
     {
-        memcpy(values,other.values,N*sizeof(double));
+        memcpy(values_,other.values_,N*sizeof(double));
     }
 
     /**
@@ -101,8 +101,8 @@ public:
     template<typename... Args>
     Vector(double h, Args&&... args)
     {
-        index = 0;
-        memset(values,0,N*sizeof(double));
+        index_ = 0;
+        memset(values_,0,N*sizeof(double));
         // use recursive initialization
         initialize(h, args...);
     }
@@ -115,7 +115,7 @@ public:
     **/
     Vector operator+=(const Vector& other)
     {
-        cblas_daxpy(N, 1.0, &other.values[0], 1, &values[0], 1);
+        cblas_daxpy(N, 1.0, &other.values_[0], 1, &values_[0], 1);
         return *this;
     }
 
@@ -127,7 +127,7 @@ public:
     **/
     Vector operator-=(const Vector& other)
     {
-        cblas_daxpy(N, -1.0, &other.values[0], 1, &values[0], 1);
+        cblas_daxpy(N, -1.0, &other.values_[0], 1, &values_[0], 1);
         return *this;
     }
 
@@ -141,7 +141,7 @@ public:
     {
         Vector tmp;
         tmp.ones();
-        cblas_daxpy(N, other, &tmp.values[0], 1, &values[0], 1);
+        cblas_daxpy(N, other, &tmp.values_[0], 1, &values_[0], 1);
         return *this;
     }
 
@@ -155,7 +155,7 @@ public:
     {
         Vector tmp;
         tmp.ones();
-        cblas_daxpy(N, -other, &tmp.values[0], 1, &values[0], 1);
+        cblas_daxpy(N, -other, &tmp.values_[0], 1, &values_[0], 1);
         return *this;
     }
 
@@ -167,7 +167,7 @@ public:
     **/
     Vector operator*=(const double& other)
     {
-        cblas_dscal(N, other, &values[0], 1);
+        cblas_dscal(N, other, &values_[0], 1);
         return *this;
     }
 
@@ -181,7 +181,7 @@ public:
     {
         if(std::abs(other) < std::numeric_limits<double>::epsilon())
             return (*this);
-        cblas_dscal(N, 1.0/other, &values[0], 1);
+        cblas_dscal(N, 1.0/other, &values_[0], 1);
         return *this;
     }
 
@@ -310,7 +310,7 @@ public:
     **/
     double* data()
     {
-        return values;
+        return values_;
     }
 
     /**
@@ -319,7 +319,7 @@ public:
     **/
     double length() const
     {
-        return cblas_dnrm2(N, &values[0], 1);
+        return cblas_dnrm2(N, &values_[0], 1);
     }
 
     /**
@@ -327,7 +327,7 @@ public:
     **/
     void ones()
     {
-        memset(&values[0], 1, N*sizeof(double));
+        memset(&values_[0], 1, N*sizeof(double));
     }
 
 
@@ -337,7 +337,7 @@ public:
     **/
     double lengthSq() const
     {
-        double s = cblas_dnrm2(N, &values[0], 1);
+        double s = cblas_dnrm2(N, &values_[0], 1);
         return s*s;
     }
 
@@ -370,7 +370,7 @@ public:
     **/
     double& operator()(int i) //needs assert legal index
     {
-        return values[i];
+        return values_[i];
     }
 
     /**
@@ -381,7 +381,7 @@ public:
     **/
     double operator()(int i) const //needs assert legal index
     {
-        return values[i];
+        return values_[i];
     }
 
     /**
@@ -392,7 +392,7 @@ public:
     **/
     double& operator[](int i) //assert legal index
     {
-        return values[i];
+        return values_[i];
     }
 
     /**
@@ -403,7 +403,7 @@ public:
     **/
     double operator[](int i) const //assert legal index
     {
-        return values[i];
+        return values_[i];
     }
 
     /**

@@ -38,8 +38,8 @@ class LinearShape
 {
 protected:
     // LinearShape data
-    Vector<N> P;
-    Vector<N> D;
+    Vector<N> p_;
+    Vector<N> d_;
 public:
     /**
     * Default Constructor
@@ -52,7 +52,7 @@ public:
     * @param p - point P
     * @param d - direction vector d
     **/
-    LinearShape(const Vector<N>& p, const Vector<N>& d):P(p),D(d){}
+    LinearShape(const Vector<N>& p, const Vector<N>& d):p_(p),d_(d){}
 
     /**
     * Copy Constructor
@@ -60,21 +60,21 @@ public:
     **/
     LinearShape(const LinearShape& other)
     {
-        P = other.P;
-        D = other.D;
+        p_ = other.p_;
+        d_ = other.d_;
     }
 
     /**
     * Get Point P - Parametric Form
     * @return Vector - the Point p
     **/
-    Vector<N> p()const {return P;}
+    Vector<N> p()const {return p_;}
 
     /**
     * Get Direction Vector d - Parametric Form
     * @return Vector - the direction vector
     **/
-    Vector<N> d()const {return D;}
+    Vector<N> d()const {return d_;}
 };
 
 /**
@@ -97,7 +97,7 @@ public:
     **/
     Line(const Vector<N>& P, const Vector<N>& D):LinearShape<N>(P,D)
     {
-        this->D.normalize();
+        this->d_.normalize();
     }
 };
 
@@ -122,7 +122,7 @@ public:
     **/
     Ray(const Vector<N>& P, const Vector<N>& D):LinearShape<N>(P,D)
     {
-        this->D.normalize();
+        this->d_.normalize();
     }
 };
 
@@ -152,26 +152,26 @@ public:
     * Get Starting Point P0 - Is exactly the same as P() - I've included it for clarity/completeness
     * @return Vector - the Starting Point P0
     **/
-    Vector<N> P0()const {return this->P;}
+    Vector<N> P0()const {return this->p_;}
 
 
     /**
     * Get Ending Point P1
     * @return Vector - the Ending Point P1
     **/
-    Vector<N> P1()const {return this->P+this->D;}
+    Vector<N> P1()const {return this->p_+this->d_;}
 
     /**
     * Get Length of Segment
     * @return double - length of segment
     **/
-    double length()const { return this->D.length();}
+    double length()const { return this->d_.length();}
 
     /**
     * Get Length Squared of Segment
     * @return double - length squared of segment
     **/
-    double lengthSq()const { return this->D.lengthSq();}
+    double lengthSq()const { return this->d_.lengthSq();}
 };
 
 /**

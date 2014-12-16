@@ -56,7 +56,7 @@ inline std::tuple<int, vector<Vector<2> > > intersect(const Segment<2>& seg, con
     Vector<2> dS = seg.d();
     for(int i=0;i<n;i++)
     {
-        int i_p = (i+1)%poly.vertices().size();
+        int i_p = (i+1)%n;
         Vector<2> e = poly.vertices()[i_p]-poly.vertices()[i];
         Vector<2> tmp = seg.P0()-poly.vertices()[i];
         N = e[0]*tmp[1]-e[1]*tmp[0];

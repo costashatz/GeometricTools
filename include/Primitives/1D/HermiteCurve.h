@@ -45,17 +45,17 @@ namespace Primitives {
 class HermiteCurve : public Curve
 {
 protected:
-    Vector<4> coefficients;
-    bool coeff_defined;
+    Vector<4> coefficients_;
+    bool coeff_defined_;
 public:
-    HermiteCurve(): coeff_defined(false) {}
+    HermiteCurve(): coeff_defined_(false) {}
 
-    HermiteCurve(const Vector<4>& coef): coefficients(coef), coeff_defined(true) {}
+    HermiteCurve(const Vector<4>& coef): coefficients_(coef), coeff_defined_(true) {}
 
     virtual vector<double> coeff()
     {
         vector<double> tmp;
-        tmp.insert(tmp.begin(), coefficients.data(), coefficients.data()+4);
+        tmp.insert(tmp.begin(), coefficients_.data(), coefficients_.data()+4);
         return tmp;
     }
 
@@ -64,7 +64,7 @@ public:
         double s = 0.0;
         for(int i=0;i<=3;i++)
         {
-            s += coefficients[i]*std::pow(u, double(3-i));
+            s += coefficients_[i]*std::pow(u, double(3-i));
         }
         return s;
     }
@@ -74,8 +74,8 @@ protected:
     {
         if(!defined())
             return;
-        double p0 = points[0], pd0 = dot_points[0][1];
-        double p1 = points[1], pd1 = dot_points[1][1];
+        double p0 = points_[0], pd0 = dot_points_[0][1];
+        double p1 = points_[1], pd1 = dot_points_[1][1];
         Matrix<4,4> A{0.0, 0.0, 0.0, 1.0,
                       1.0, 1.0, 1.0, 1.0,
                       0.0, 0.0, 1.0, 0.0,
@@ -86,14 +86,14 @@ protected:
             pd1 /= (p1-p0);
         }
         Vector<4> y{p0, p1, pd0, pd1};
-        coefficients = solveLU(A, y);
+        coefficients_ = solveLU(A, y);
     }
 
     bool defined() const
     {
-        if(coeff_defined)
+        if(coeff_defined_)
             return true;
-        return (points.size()==2 && dot_points.size()==2);
+        return (points_.size()==2 && dot_points_.size()==2);
     }
 
     bool canAddPoint(const double& point)

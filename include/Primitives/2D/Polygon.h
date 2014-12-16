@@ -49,10 +49,10 @@ public:
     virtual double area()
     {
         double sum = 0.0;
-        for(int i=0;i<this->verts.size();i++)
+        for(int i=0;i<this->vertices_.size();i++)
         {
-            unsigned int i_p = (i+1)%this->verts.size();
-            sum += this->verts[i][0]*this->verts[i_p][1]-this->verts[i][1]*this->verts[i_p][0];
+            unsigned int i_p = (i+1)%this->vertices_.size();
+            sum += this->vertices_[i][0]*this->vertices_[i_p][1]-this->vertices_[i][1]*this->vertices_[i_p][0];
         }
         sum /= 2.0;
         return std::abs(sum);
@@ -66,10 +66,10 @@ public:
     {
         //clockwise (sum<0)
         double sum = 0.0;
-        for(int i=0;i<this->verts.size();i++)
+        for(int i=0;i<this->vertices_.size();i++)
         {
-            unsigned int i_p = (i+1)%this->verts.size();
-            sum += this->verts[i][0]*this->verts[i_p][1]-this->verts[i][1]*this->verts[i_p][0];
+            unsigned int i_p = (i+1)%this->vertices_.size();
+            sum += this->vertices_[i][0]*this->vertices_[i_p][1]-this->vertices_[i][1]*this->vertices_[i_p][0];
         }
         if(sum < 0)
             return true;
@@ -84,10 +84,10 @@ public:
     {
         //convex (all cross products same sign)
         int plus=0,minus=0;
-        for(int i=1;i<this->verts.size();i++)
+        for(int i=1;i<this->vertices_.size();i++)
         {
-            int i_p = (i+1)%this->verts.size();
-            if(((this->verts[i][0]-this->verts[i-1][0])*(this->verts[i_p][1]-this->verts[i][1])-(this->verts[i][1]-this->verts[i-1][1])*(this->verts[i_p][0]-this->verts[i][0]))<0)
+            int i_p = (i+1)%this->vertices_.size();
+            if(((this->vertices_[i][0]-this->vertices_[i-1][0])*(this->vertices_[i_p][1]-this->vertices_[i][1])-(this->vertices_[i][1]-this->vertices_[i-1][1])*(this->vertices_[i_p][0]-this->vertices_[i][0]))<0)
                 minus++;
             else
                 plus++;

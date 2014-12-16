@@ -39,9 +39,9 @@ class Matrix
 {
 protected:
     // matrix data
-    double values[COLS*ROWS+1];
+    double values_[COLS*ROWS+1];
     // helper variable for initialization
-    unsigned int index;
+    unsigned int index_;
 
     /**
     * Initialize Matrix from double values
@@ -50,11 +50,11 @@ protected:
     template<typename... Args>
     void initialize(double h, Args&&... args)
     {
-        if(index>=(COLS*ROWS))
-            index=0;
+        if(index_>=(COLS*ROWS))
+            index_=0;
         // add first argument to the matrix data
-        values[index] = h;
-        index++;
+        values_[index_] = h;
+        index_++;
         // Initialize with rest of arguments
         initialize(std::forward<Args>(args)...);
     }
@@ -67,7 +67,7 @@ protected:
     template<typename... Args>
     void initialize()
     {
-        index = 0;
+        index_ = 0;
     }
 
 public:	
@@ -78,7 +78,7 @@ public:
     **/
     Matrix()
     {
-        memset(values,0,COLS*ROWS*sizeof(double));
+        memset(values_,0,COLS*ROWS*sizeof(double));
     }
 
     /**
@@ -87,7 +87,7 @@ public:
     **/
     Matrix(const Matrix& other)
     {
-        memcpy(values,other.values,COLS*ROWS*sizeof(double));
+        memcpy(values_,other.values_,COLS*ROWS*sizeof(double));
     }
 
     /**
@@ -97,8 +97,8 @@ public:
     template<typename... Args>
     Matrix(double h, Args&&... args)
     {
-        index = 0;
-        memset(values,0,COLS*ROWS*sizeof(double));
+        index_ = 0;
+        memset(values_,0,COLS*ROWS*sizeof(double));
         initialize(h, args...);
     }
 
@@ -111,7 +111,7 @@ public:
     {
         if(COLS!=ROWS)
             return;
-        memset(values,0,COLS*ROWS*sizeof(double));
+        memset(values_,0,COLS*ROWS*sizeof(double));
         for(unsigned int i=0;i<COLS;i++)
             (*this)(i,i) = 1.0;
     }
@@ -121,7 +121,7 @@ public:
     **/
     void zero()
     {
-        memset(values,0,COLS*ROWS*sizeof(double));
+        memset(values_,0,COLS*ROWS*sizeof(double));
     }
 
     /**
@@ -133,7 +133,7 @@ public:
     **/
     double& operator()(unsigned int i, unsigned int j) //assert legal index
     {
-        return values[i*COLS+j];
+        return values_[i*COLS+j];
     }
 
     /**
@@ -145,7 +145,7 @@ public:
     **/
     double operator()(unsigned int i, unsigned int j) const //assert legal index
     {
-        return values[i*COLS+j];
+        return values_[i*COLS+j];
     }
 
     /**
@@ -169,7 +169,7 @@ public:
     Matrix operator+=(const Matrix& other)
     {
         unsigned int N = COLS*ROWS;
-        cblas_daxpy(N, 1.0, &other.values[0], 1, &values[0], 1);
+        cblas_daxpy(N, 1.0, &other.values_[0], 1, &values_[0], 1);
         return *this;
     }
 
@@ -182,7 +182,7 @@ public:
     Matrix operator-=(const Matrix& other)
     {
         unsigned int N = COLS*ROWS;
-        cblas_daxpy(N, -1.0, &other.values[0], 1, &values[0], 1);
+        cblas_daxpy(N, -1.0, &other.values_[0], 1, &values_[0], 1);
         return *this;
     }
 
@@ -195,7 +195,7 @@ public:
     Matrix operator*=(const double& other)
     {
         unsigned int N = COLS*ROWS;
-        cblas_dscal(N, other, &values[0], 1);
+        cblas_dscal(N, other, &values_[0], 1);
         return *this;
     }
 
@@ -210,7 +210,7 @@ public:
         if(std::abs(other) < std::numeric_limits<double>::epsilon())
             return (*this);
         unsigned int N = COLS*ROWS;
-        cblas_dscal(N, 1.0/other, &values[0], 1);
+        cblas_dscal(N, 1.0/other, &values_[0], 1);
         return *this;
     }
 
@@ -300,7 +300,7 @@ public:
     Vector<COLS> operator*(const Vector<COLS>& r2) const
     {
         Vector<COLS> res;
-        cblas_dgemv(CblasRowMajor, CblasNoTrans, ROWS, COLS, 1.0, values, ROWS, r2.values, 1, 1.0, res.values, 1);
+        cblas_dgemv(CblasRowMajor, CblasNoTrans, ROWS, COLS, 1.0, values_, ROWS, r2.values_, 1, 1.0, res.values_, 1);
         return res;
     }
 
@@ -312,7 +312,7 @@ public:
     Matrix<ROWS,R2> operator*(const Matrix<COLS,R2>& r2)
     {
         Matrix<ROWS,R2> res;
-        cblas_dgemm(CblasRowMajor, CblasNoTrans, CblasNoTrans, ROWS, R2, COLS, 1.0, values, ROWS, r2.values, COLS, 0.0, res.values, ROWS);
+        cblas_dgemm(CblasRowMajor, CblasNoTrans, CblasNoTrans, ROWS, R2, COLS, 1.0, values_, ROWS, r2.values_, COLS, 0.0, res.values_, ROWS);
         return res;
     }
 
@@ -344,7 +344,7 @@ public:
     **/
     double* data()
     {
-        return values;
+        return values_;
     }
 
     /**
@@ -354,7 +354,7 @@ public:
     double norm()
     {
         unsigned int N = COLS*ROWS;
-        return cblas_dnrm2(N, &values[0], 1);
+        return cblas_dnrm2(N, &values_[0], 1);
     }
 
     /**
@@ -364,7 +364,7 @@ public:
     Vector<COLS> getRow(const unsigned int& i)
     {
         Vector<COLS> tmp;
-        memcpy(tmp.data(), &values[i*COLS], COLS*sizeof(double));
+        memcpy(tmp.data(), &values_[i*COLS], COLS*sizeof(double));
         return tmp;
     }
 
@@ -374,7 +374,7 @@ public:
     **/
     void setRow(const unsigned int& i, const Vector<COLS>& vec)
     {
-        memcpy(&values[i*COLS], vec.data(), COLS*sizeof(double));
+        memcpy(&values_[i*COLS], vec.data(), COLS*sizeof(double));
     }
 
     /**
@@ -385,7 +385,7 @@ public:
     {
         Vector<COLS> tmp;
         for(unsigned int j=0;j<ROWS;j++)
-            tmp[j] = values[j*COLS+i];
+            tmp[j] = values_[j*COLS+i];
         return tmp;
     }
 
@@ -396,7 +396,7 @@ public:
     void setCol(const unsigned int& i, const Vector<ROWS>& vec)
     {
         for(unsigned int j=0;j<ROWS;j++)
-            values[j*COLS+i] = vec[j];
+            values_[j*COLS+i] = vec[j];
     }
 
     /**

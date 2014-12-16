@@ -48,35 +48,35 @@ public:
 
     void addDotPoint(const Vector<2> &point)
     {
-        points.push_back(point[0]);
-        dot_points.push_back(point);
+        points_.push_back(point[0]);
+        dot_points_.push_back(point);
         if(defined())
             calculateCoefficients();
     }
 
     void addDotPointInPlace(const Vector<2>& point, const unsigned int& i)
     {
-        if(i>=points.size())
+        if(i>=points_.size())
             return addDotPoint(point);
         int c = int(i)-1;
         if(c<0)
         {
-            points.insert(points.begin(), point[0]);
-            dot_points.insert(dot_points.begin(), point);
-            curves.insert(curves.begin(), new HermiteCurve());
-            ((HermiteCurve*)curves[0])->addDotPoint(dot_points[0]);
-            ((HermiteCurve*)curves[0])->addDotPoint(dot_points[1]);
+            points_.insert(points_.begin(), point[0]);
+            dot_points_.insert(dot_points_.begin(), point);
+            curves_.insert(curves_.begin(), new HermiteCurve());
+            ((HermiteCurve*)curves_[0])->addDotPoint(dot_points_[0]);
+            ((HermiteCurve*)curves_[0])->addDotPoint(dot_points_[1]);
             return;
         }
-        curves[c]->getPoints().clear();
-        curves[c]->getDotPoints().clear();
-        points.insert(points.begin()+i, point[0]);
-        dot_points.insert(dot_points.begin()+i, point);
-        ((HermiteCurve*)curves[c])->addDotPoint(dot_points[i-1]);
-        ((HermiteCurve*)curves[c])->addDotPoint(dot_points[i]);
-        curves.insert(curves.begin()+i, new HermiteCurve());
-        ((HermiteCurve*)curves[i])->addDotPoint(dot_points[i]);
-        ((HermiteCurve*)curves[i])->addDotPoint(dot_points[i+1]);
+        curves_[c]->getPoints().clear();
+        curves_[c]->getDotPoints().clear();
+        points_.insert(points_.begin()+i, point[0]);
+        dot_points_.insert(dot_points_.begin()+i, point);
+        ((HermiteCurve*)curves_[c])->addDotPoint(dot_points_[i-1]);
+        ((HermiteCurve*)curves_[c])->addDotPoint(dot_points_[i]);
+        curves_.insert(curves_.begin()+i, new HermiteCurve());
+        ((HermiteCurve*)curves_[i])->addDotPoint(dot_points_[i]);
+        ((HermiteCurve*)curves_[i])->addDotPoint(dot_points_[i+1]);
     }
 
 protected:
@@ -84,17 +84,17 @@ protected:
     {
         if(!defined())
             return;
-        for(int i=dot_points.size()-2;i<dot_points.size()-1;i++)
+        for(int i=dot_points_.size()-2;i<dot_points_.size()-1;i++)
         {
-            curves.push_back(new HermiteCurve());
-            ((HermiteCurve*)curves[i])->addDotPoint(dot_points[i]);
-            ((HermiteCurve*)curves[i])->addDotPoint(dot_points[i+1]);
+            curves_.push_back(new HermiteCurve());
+            ((HermiteCurve*)curves_[i])->addDotPoint(dot_points_[i]);
+            ((HermiteCurve*)curves_[i])->addDotPoint(dot_points_[i+1]);
         }
     }
 
     bool defined() const
     {
-        return (points.size()>=2 && dot_points.size()>=2);
+        return (points_.size()>=2 && dot_points_.size()>=2);
     }
 
     bool canAddPoint(const double& point)

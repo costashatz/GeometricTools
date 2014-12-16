@@ -39,20 +39,20 @@ namespace Primitives {
 class Circle
 {
 protected:
-    Vector<2> Center;
-    double Radius;
+    Vector<2> center_;
+    double radius_;
 public:
     Circle() {}
 
-    Circle(const Vector<2>& center, const double& radius): Center(center), Radius(radius) {}
+    Circle(const Vector<2>& center, const double& radius): center_(center), radius_(radius) {}
 
-    Vector<2> center() { return Center; }
+    Vector<2> center() { return center_; }
 
-    double radius() { return Radius; }
+    double radius() { return radius_; }
 
-    double area() { return Helper::Pi*Radius*Radius; }
+    double area() { return Helper::Pi*radius_*radius_; }
 
-    QuadraticCurve asQuadratic() { return QuadraticCurve({}, -2.0*Center, Center*Center-Radius*Radius); }
+    QuadraticCurve asQuadratic() { return QuadraticCurve({}, -2.0*center_, center_*center_-radius_*radius_); }
 };
 
 } }

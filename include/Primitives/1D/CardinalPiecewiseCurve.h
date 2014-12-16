@@ -60,7 +60,7 @@ public:
 
     void addPoint(const double& point)
     {
-        points.push_back(point);
+        points_.push_back(point);
         if(defined())
             calculateCoefficients();
     }
@@ -70,16 +70,16 @@ protected:
     {
         if(!defined())
             return;
-        curves.push_back(new CardinalCurve(t_));
-        for(int i=points.size()-4;i<points.size();i++)
+        curves_.push_back(new CardinalCurve(t_));
+        for(int i=points_.size()-4;i<points_.size();i++)
         {
-            ((CardinalCurve*)curves[curves.size()-1])->addPoint(points[i]);
+            ((CardinalCurve*)curves_[curves_.size()-1])->addPoint(points_[i]);
         }
     }
 
     bool defined() const
     {
-        return (points.size()>=4);
+        return (points_.size()>=4);
     }
 
     bool canAddPoint(const double& point)

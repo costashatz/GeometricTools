@@ -41,9 +41,9 @@ namespace Primitives {
 class Curve
 {
 protected:
-    vector<double> points;
-    vector<Vector<2> > dot_points;
-    vector<Vector<2> > ddot_points;
+    vector<double> points_;
+    vector<Vector<2> > dot_points_;
+    vector<Vector<2> > ddot_points_;
 protected:
     virtual void calculateCoefficients() = 0;
 
@@ -59,7 +59,7 @@ public:
     {
         if(defined() || !canAddPoint(point))
             return;
-        points.push_back(point);
+        points_.push_back(point);
         if(defined())
             calculateCoefficients();
     }
@@ -74,8 +74,8 @@ public:
     {
         if(defined() || !canAddDotPoint(point))
             return;
-        points.push_back(point[0]);
-        dot_points.push_back(point);
+        points_.push_back(point[0]);
+        dot_points_.push_back(point);
         if(defined())
             calculateCoefficients();
     }
@@ -90,8 +90,8 @@ public:
     {
         if(defined() || !canAddDDotPoint(point))
             return;
-        points.push_back(point[0]);
-        ddot_points.push_back(point);
+        points_.push_back(point[0]);
+        ddot_points_.push_back(point);
         if(defined())
             calculateCoefficients();
     }
@@ -106,9 +106,9 @@ public:
 
     virtual vector<double> coeff() = 0;
 
-    vector<double>& getPoints() { return points; }
-    vector<Vector<2> >& getDotPoints() { return dot_points; }
-    vector<Vector<2> >& getDDotPoints() { return ddot_points; }
+    vector<double>& getPoints() { return points_; }
+    vector<Vector<2> >& getDotPoints() { return dot_points_; }
+    vector<Vector<2> >& getDDotPoints() { return ddot_points_; }
 };
 
 } }

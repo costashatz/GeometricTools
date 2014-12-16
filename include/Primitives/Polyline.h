@@ -43,7 +43,7 @@ class Polyline
 {
 protected:
     // Collection of points (called vertices)
-    vector<Vector<N> > verts;
+    vector<Vector<N> > vertices_;
 public:
     /**
     * Default Constructor
@@ -51,7 +51,7 @@ public:
     **/
     Polyline()
     {
-        verts = vector<Vector<N> >();
+        vertices_ = vector<Vector<N> >();
     }
 
     /**
@@ -61,7 +61,7 @@ public:
     **/
     virtual void addPoint(const Vector<N>& point)
     {
-        verts.push_back(point);
+        vertices_.push_back(point);
     }
 
     /**
@@ -71,14 +71,14 @@ public:
     **/
     virtual void removePoint(const Vector<N>& point)
     {
-        remove(verts.begin(), verts.end(), point);
+        remove(vertices_.begin(), vertices_.end(), point);
     }
 
     /**
     * Get Vertices/Points
     * @return vector<Vector<N> > - the collection of points/vertices
     **/
-    vector<Vector<N> > vertices() const {return verts;}
+    vector<Vector<N> > vertices() const {return vertices_;}
 };
 
 } }

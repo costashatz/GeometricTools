@@ -38,19 +38,19 @@ namespace Primitives {
 class QuadraticCurve
 {
 protected:
-    Matrix<2,2> A;
-    Vector<2> B;
-    double C;
+    Matrix<2,2> a_;
+    Vector<2> b_;
+    double c_;
 public:
     QuadraticCurve() {}
 
-    QuadraticCurve(const Matrix<2,2>& a, const Vector<2>& b, const double& c): A(a), B(b), C(c) {}
+    QuadraticCurve(const Matrix<2,2>& a, const Vector<2>& b, const double& c): a_(a), b_(b), c_(c) {}
 
-    Matrix<2,2> a() { return A; }
+    Matrix<2,2> a() { return a_; }
 
-    Vector<2> b() { return B; }
+    Vector<2> b() { return b_; }
 
-    double c() { return C; }
+    double c() { return c_; }
 };
 
 } }

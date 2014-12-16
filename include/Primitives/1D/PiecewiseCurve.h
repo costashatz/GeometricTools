@@ -44,18 +44,18 @@ namespace Primitives {
 class PiecewiseCurve : public Curve
 {
 protected:
-    vector<Curve*> curves;
+    vector<Curve*> curves_;
 public:
     PiecewiseCurve() {}
 
     virtual vector<double> coeff()
     {
-        if(curves.size()==0)
+        if(curves_.size()==0)
             return vector<double>();
-        vector<double> coef = curves[0]->coeff();
-        for(int i=1;i<curves.size();i++)
+        vector<double> coef = curves_[0]->coeff();
+        for(int i=1;i<curves_.size();i++)
         {
-            auto tmp = curves[i]->coeff();
+            auto tmp = curves_[i]->coeff();
             coef.insert(coef.end(), tmp.begin(), tmp.end());
         }
         return coef;
@@ -64,19 +64,19 @@ public:
     double getPoint(const double &u)
     {
         // Assumes that all the piecewise curve is in u[0,1]
-        int c = getCurveFromU(u*curves.size());
+        int c = getCurveFromU(u*curves_.size());
         if(c==-1)
             return 0.0;
-        return curves[c]->getPoint(u*curves.size()-c);
+        return curves_[c]->getPoint(u*curves_.size()-c);
     }
 protected:
     int getCurveFromU(const double& u)
     {
-        if(curves.size()==0)
+        if(curves_.size()==0)
             return -1;
         int c = int(u);
-        if(c>=curves.size())
-            c = curves.size()-1;
+        if(c>=curves_.size())
+            c = curves_.size()-1;
         return c;
     }
 };

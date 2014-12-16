@@ -45,13 +45,13 @@ namespace Primitives {
 class CardinalCurve : public Curve
 {
 protected:
-    Vector<4> coefficients;
-    bool coeff_defined;
+    Vector<4> coefficients_;
+    bool coeff_defined_;
     double t_;
 public:
-    CardinalCurve(const double& t = 0.0): t_(t), coeff_defined(false) {}
+    CardinalCurve(const double& t = 0.0): t_(t), coeff_defined_(false) {}
 
-    CardinalCurve(const Vector<4>& coef, const double& t = 0.0): t_(t), coefficients(coef), coeff_defined(true) {}
+    CardinalCurve(const Vector<4>& coef, const double& t = 0.0): t_(t), coefficients_(coef), coeff_defined_(true) {}
 
     double& t()
     {
@@ -68,7 +68,7 @@ public:
         double s = 0.0;
         for(int i=0;i<=3;i++)
         {
-            s += coefficients[i]*std::pow(u, double(3-i));
+            s += coefficients_[i]*std::pow(u, double(3-i));
         }
         return s;
     }
@@ -76,7 +76,7 @@ public:
     virtual vector<double> coeff()
     {
         vector<double> tmp;
-        tmp.insert(tmp.begin(), coefficients.data(), coefficients.data()+4);
+        tmp.insert(tmp.begin(), coefficients_.data(), coefficients_.data()+4);
         return tmp;
     }
 
@@ -85,8 +85,8 @@ protected:
     {
         if(!defined())
             return;
-        double p0 = points[1], pd0 = 0.5*(1.0-t_)*(points[2]-points[0]);
-        double p1 = points[2], pd1 = 0.5*(1.0-t_)*(points[3]-points[1]);
+        double p0 = points_[1], pd0 = 0.5*(1.0-t_)*(points_[2]-points_[0]);
+        double p1 = points_[2], pd1 = 0.5*(1.0-t_)*(points_[3]-points_[1]);
         Matrix<4,4> A{0.0, 0.0, 0.0, 1.0,
                       1.0, 1.0, 1.0, 1.0,
                       0.0, 0.0, 1.0, 0.0,
@@ -97,14 +97,14 @@ protected:
             pd1 /= (p1-p0);
         }
         Vector<4> y{p0, p1, pd0, pd1};
-        coefficients = solveLU(A, y);
+        coefficients_ = solveLU(A, y);
     }
 
     bool defined() const
     {
-        if(coeff_defined)
+        if(coeff_defined_)
             return true;
-        return (points.size()==4);
+        return (points_.size()==4);
     }
 
     bool canAddPoint(const double& point)

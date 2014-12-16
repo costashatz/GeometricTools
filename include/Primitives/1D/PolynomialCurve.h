@@ -48,18 +48,18 @@ template<unsigned int N>
 class PolynomialCurve : public Curve
 {
 protected:
-    Vector<N+1> coefficients;
-    bool coeff_defined;
+    Vector<N+1> coefficients_;
+    bool coeff_defined_;
     int n;
 public:
-    PolynomialCurve(): coeff_defined(false), n(N) {}
+    PolynomialCurve(): coeff_defined_(false), n(N) {}
 
-    PolynomialCurve(const Vector<N+1>& coef): coefficients(coef), coeff_defined(true), n(N) {}
+    PolynomialCurve(const Vector<N+1>& coef): coefficients_(coef), coeff_defined_(true), n(N) {}
 
     virtual vector<double> coeff()
     {
         vector<double> tmp;
-        tmp.insert(tmp.begin(), coefficients.data(), coefficients.data()+(n+1));
+        tmp.insert(tmp.begin(), coefficients_.data(), coefficients_.data()+(n+1));
         return tmp;
     }
 
@@ -68,7 +68,7 @@ public:
         double s = 0.0;
         for(int i=0;i<=n;i++)
         {
-            s += coefficients[i]*std::pow(u, double(n-i));
+            s += coefficients_[i]*std::pow(u, double(n-i));
         }
         return s;
     }
@@ -82,57 +82,57 @@ protected:
         Matrix<N+1,N+1> A;
         Vector<N+1> y;
         map<double,double> us;
-        for(int i=0;i<points.size();i++)
+        for(int i=0;i<points_.size();i++)
         {
-            double d = double(points.size()-1);
-            if(points.size()<=1)
+            double d = double(points_.size()-1);
+            if(points_.size()<=1)
                 d = 1.0;
-            us[points[i]] = double(i)/d;
+            us[points_[i]] = double(i)/d;
         }
-        int ddot = ddot_points.size();
-        int dot = dot_points.size();
+        int ddot = ddot_points_.size();
+        int dot = dot_points_.size();
         for(int i=0;i<ddot;i++)
         {
-            y[i] = ddot_points[i][1];
+            y[i] = ddot_points_[i][1];
             for(int j=0;j<=n-2;j++)
             {
-                A(i,j) = (n-j)*(n-j-1)*std::pow(us[ddot_points[i][0]], n-j-2);
+                A(i,j) = (n-j)*(n-j-1)*std::pow(us[ddot_points_[i][0]], n-j-2);
             }
         }
         for(int i=ddot;i<ddot+dot;i++)
         {
-            y[i] = dot_points[i-ddot][1];
+            y[i] = dot_points_[i-ddot][1];
             for(int j=0;j<=n-1;j++)
             {
-                A(i,j) = (n-j)*std::pow(us[dot_points[i-ddot][0]], n-j-1);
+                A(i,j) = (n-j)*std::pow(us[dot_points_[i-ddot][0]], n-j-1);
             }
         }
         for(unsigned int i=dot+ddot;i<=n;i++)
         {
-            y[i] = points[i-(dot+ddot)];
+            y[i] = points_[i-(dot+ddot)];
             for(unsigned int j=0;j<=n;j++)
             {
-                A(i,j) = std::pow(us[points[i-(dot+ddot)]], n-j);
+                A(i,j) = std::pow(us[points_[i-(dot+ddot)]], n-j);
             }
         }
-        coefficients = solveLinear(A, y);
+        coefficients_ = solveLinear(A, y);
     }
 
     bool defined() const
     {
-        if(coeff_defined)
+        if(coeff_defined_)
             return true;
-        if (points.size() + dot_points.size() + ddot_points.size() <= N)
+        if (points_.size() + dot_points_.size() + ddot_points_.size() <= N)
             return false;
         for(int i=0;i<=n;i++)
         {
-            int d = dot_points.size();
-            int dd = ddot_points.size();
+            int d = dot_points_.size();
+            int dd = ddot_points_.size();
             if(i>=n)
                 d = 0;
             if(i>=(n-1))
                 dd = 0;
-            if((points.size()+d+dd)==0)
+            if((points_.size()+d+dd)==0)
                 return false;
         }
         return true;
@@ -145,12 +145,12 @@ protected:
 
     bool canAddDotPoint(const Vector<2>& point)
     {
-        return int(points.size()+dot_points.size()+ddot_points.size()) <= (n-1);
+        return int(points_.size()+dot_points_.size()+ddot_points_.size()) <= (n-1);
     }
 
     bool canAddDDotPoint(const Vector<2>& point)
     {
-        return int(points.size()+dot_points.size()+ddot_points.size()) <= (n-1);
+        return int(points_.size()+dot_points_.size()+ddot_points_.size()) <= (n-1);
     }
 };
 
