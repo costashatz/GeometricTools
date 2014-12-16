@@ -37,7 +37,7 @@ namespace Distances {
 * @param poly1
 * @param poly2
 **/
-double distanceSq(const Polygon& poly1, const Polygon& poly2)
+inline double distanceSq(const Polygon& poly1, const Polygon& poly2)
 {
     double m = std::numeric_limits<double>::infinity();
     for(int i=0;i<poly1.vertices().size();i++)
@@ -59,7 +59,7 @@ double distanceSq(const Polygon& poly1, const Polygon& poly2)
 * @param poly1
 * @param poly2
 **/
-double distance(const Polygon& poly1, const Polygon& poly2)
+inline double distance(const Polygon& poly1, const Polygon& poly2)
 {
     return sqrt(distanceSq(poly1, poly2));
 }

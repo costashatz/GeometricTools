@@ -51,7 +51,7 @@ make
 	link_directories(${GEOMETRIC_TOOLS_LIBS_DIR})
 	include_directories(${PROJECT_SOURCE_DIR}/include ${GEOMETRIC_TOOLS_INCLUDE_DIRS})
 	....
-	target_link_libraries(mytarget GeometricToolsProj)
+	target_link_libraries(mytarget GeometricTools)
 	```
 
 

@@ -67,13 +67,13 @@ public:
     **/
     Rectangle(const Vector<2>& p, const double& a, const double& b)
     {
-        Vector2 p0 = Vector2(p[0]-a/2.0, p[1]-b/2.0);
+        Vector<2> p0 = Vector<2>(p[0]-a/2.0, p[1]-b/2.0);
         Polygon::addPoint(p0);
-        Vector2 p1 = Vector2(p[0]+a/2.0, p[1]-b/2.0);
+        Vector<2> p1 = Vector<2>(p[0]+a/2.0, p[1]-b/2.0);
         Polygon::addPoint(p1);
-        Vector2 p2 = Vector2(p[0]+a/2.0, p[1]+b/2.0);
+        Vector<2> p2 = Vector<2>(p[0]+a/2.0, p[1]+b/2.0);
         Polygon::addPoint(p2);
-        Vector2 p3 = Vector2(p[0]-a/2.0, p[1]+b/2.0);
+        Vector<2> p3 = Vector<2>(p[0]-a/2.0, p[1]+b/2.0);
         Polygon::addPoint(p3);
     }
 
