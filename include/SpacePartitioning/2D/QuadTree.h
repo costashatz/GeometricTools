@@ -21,9 +21,13 @@ OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISE
 /**
 * Includes
 **/
+#include <Primitives/LinearShapes.h>
 #include <Primitives/2D/Rectangle.h>
 #include <Primitives/2D/Polygon.h>
+#include <Primitives/Polyline.h>
 #include <Distances/2D/PolygonToPolygon.h>
+#include <Intersections/2D/RectangleToRectangle.h>
+#include <Primitives/Tools/BoundingBox.h>
 #include <vector>
 #include <limits>
 #include <algorithm>
@@ -36,7 +40,10 @@ namespace GeometricTools {
 using Math::Vector;
 using Primitives::Rectangle;
 using Primitives::Polygon;
+using Primitives::Polyline;
+using Primitives::Segment;
 using namespace Distances;
+using namespace Intersections;
 
 namespace SpacePartitioning {
 
@@ -137,10 +144,65 @@ public:
             return false;
         for(int i=0;i<objects_.size();i++)
         {
+            // TO-DO: Create Polygon-Polygon Intersection
             if(distanceSq(objects_[i], obj)<std::numeric_limits<double>::epsilon())
                 return true;
         }
         return false;
+    }
+
+    bool queryPolyline(const Polyline<2>& poly)
+    {
+        Rectangle poly_bound = Primitives::boundingBox(poly);
+        if(!canContainObject(poly_bound))
+        if(children_[0]!=nullptr)
+        {
+            for(int i=0;i<4;i++)
+            {
+                if(children_[i]->queryPolyline(poly))
+                    return true;
+            }
+            return false;
+        }
+        if(objects_.size()==0)
+            return false;
+        int N;
+        vector<Vector<2> > p;
+        for(int i=0;i<objects_.size()-1;i++)
+        {
+            std::tie(N, p) = intersect(poly_bound, Primitives::boundingBox(objects_[i]));
+            if(N>0)
+                return true;
+        }
+        return false;
+    }
+
+    int intersectPolyline(const Polyline<2>& poly)
+    {
+        Rectangle poly_bound = Primitives::boundingBox(poly);
+        if(!canContainObject(poly_bound))
+            return -1;
+        if(children_[0]!=nullptr)
+        {
+            for(int i=0;i<4;i++)
+            {
+                int s = children_[i]->intersectPolyline(poly);
+                if(s != -1)
+                    return s;
+            }
+            return -1;
+        }
+        if(objects_.size()==0)
+            return -1;
+        int N;
+        vector<Vector<2> > p;
+        for(int i=0;i<objects_.size()-1;i++)
+        {
+            std::tie(N, p) = intersect(poly_bound, Primitives::boundingBox(objects_[i]));
+            if(N>0)
+                return i;
+        }
+        return -1;
     }
 
     bool full()
@@ -196,7 +258,10 @@ protected:
 
     bool canContainObject(const Polygon& obj)
     {
-        return (distanceSq(obj, boundary_)<std::numeric_limits<double>::epsilon());
+        int N;
+        vector<Vector<2> > p;
+        std::tie(N, p) = intersect(boundary_, Primitives::boundingBox(obj));
+        return (N>0);
     }
 
     void clear()

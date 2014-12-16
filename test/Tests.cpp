@@ -32,6 +32,7 @@ OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISE
 #include <Intersections/2D/LinearToLinear.h>
 #include <Intersections/2D/LinearToPolygon.h>
 #include <Primitives/Tools/BoundingBox.h>
+#include <SpacePartitioning/2D/QuadTree.h>
 
 #include <vector>
 
@@ -171,7 +172,7 @@ TEST(ShapeTest, BoundingBox2DTest)
     using std::vector;
     Triangle t({0,0}, {1,0}, {0,1});
     Rectangle r({0,0}, 1.0, 1.0);
-    vector<Polygon> polys;
+    vector<Polyline<2> > polys;
     polys.push_back(t);
     polys.push_back(r);
     Rectangle bb = boundingBox(polys);
@@ -230,6 +231,21 @@ TEST(IntersectionTest, LinearToPolygonTest)
     EXPECT_EQ(N, 2);
     EXPECT_EQ(p[0], Vector<2>(-1.5, 1));
     EXPECT_EQ(p[1], Vector<2>(1.5, 1));
+}
+
+TEST(QuadTreeTest, SimpleQuadTree)
+{
+    using namespace GeometricTools::Primitives;
+    using namespace GeometricTools::Math;
+    using namespace GeometricTools::SpacePartitioning;
+    using std::vector;
+    Rectangle r({0,0}, 3, 4);
+    QuadTree tree(r, 0, 4);
+    tree.addObject(Triangle({1,1}, {1,2}, {0,3}));
+    tree.addObject(Triangle({1,0}, {1,1}, {0,1}));
+    EXPECT_EQ(tree.queryObject(Triangle({1,0}, {1,1}, {0,1})), true);
+    EXPECT_EQ(tree.queryObject(Triangle({1,0}, {1,1}, {0,1})), true);
+    EXPECT_EQ(tree.queryObject(Triangle({10000,0}, {100000,1}, {100000,2})), false);
 }
 
 int main(int argc, char **argv) {
