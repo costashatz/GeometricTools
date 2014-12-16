@@ -46,8 +46,8 @@ namespace Distances {
 template<unsigned int N>
 double distanceSq(const Segment<N>& seg, const Polyline<N>& polyline)
 {
-    double m = distanceSq(seg, Segment<N>(polyline.vertices()[0], polyline.vertices()[1]));
-    for(unsigned int i=1;i<polyline.vertices().size()-1;i++)
+    double m = std::numeric_limits<double>::infinity();
+    for(unsigned int i=0;i<polyline.vertices().size()-1;i++)
     {
         double tmp = distanceSq(seg, Segment<N>(polyline.vertices()[i], polyline.vertices()[i+1]));
         if(tmp<m)

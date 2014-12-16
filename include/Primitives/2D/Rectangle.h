@@ -37,6 +37,11 @@ class Rectangle: public Polygon
 {
 public:
     /**
+    * Default Constructor
+    **/
+    Rectangle(): Polygon() {}
+
+    /**
     * Constructor
     * @param p0 - lower left point of rectangle
     * @param e0 - direction (with length) of horizontal edge

@@ -15,62 +15,54 @@ INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT
 OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 **/
 
-#ifndef GEOMETRIC_TOOLS_PRIMITIVES_2D_TRIANGLE_H
-#define GEOMETRIC_TOOLS_PRIMITIVES_2D_TRIANGLE_H
+#ifndef GEOMETRIC_TOOLS_DISTANCES_2D_POLYGON_TO_POLYGON_H
+#define GEOMETRIC_TOOLS_DISTANCES_2D_POLYGON_TO_POLYGON_H
 
 /**
 * Includes
 **/
+#include <Distances/PolylineToPolyline.h>
+#include <Primitives/Polyline.h>
 #include <Primitives/2D/Polygon.h>
 
 namespace GeometricTools {
 
-using Math::Vector2;
+using Primitives::Polygon;
+using Primitives::Polyline;
 
-namespace Primitives {
+namespace Distances {
 
 /**
-* Triangle Class
+* Computes Polygon to Polygon Distance Squared
+* @param poly1
+* @param poly2
 **/
-class Triangle: public Polygon
+double distanceSq(const Polygon& poly1, const Polygon& poly2)
 {
-public:
-    /**
-    * Default Constructor
-    **/
-    Triangle(): Polygon() {}
-
-    /**
-    * Constructor
-    * @param p0 - the first point of the triangle
-    * @param p1 - the second point of the triangle
-    * @param p2 - the third point of the triangle
-    **/
-    Triangle(const Vector<2>& p0, const Vector<2>& p1, const Vector<2>& p2):Polygon()
+    double m = std::numeric_limits<double>::infinity();
+    for(int i=0;i<poly1.vertices().size();i++)
     {
-        Polygon::addPoint(p0);
-        Polygon::addPoint(p1);
-        Polygon::addPoint(p2);
+        int i_p = (i+1)%poly1.vertices().size();
+        for(int j=0;j<poly2.vertices().size();j++)
+        {
+            int j_p = (j+1)%poly2.vertices().size();
+            double tmp = distanceSq(Segment<2>(poly1.vertices()[i], poly1.vertices()[i_p]), Segment<2>(poly2.vertices()[j], poly2.vertices()[j_p]));
+            if(tmp<m)
+                m = tmp;
+        }
     }
+    return m;
+}
 
-    /**
-    * Overwrite virtual method AddPoint so that it does nothing
-    * We do not want other points to be added in a triangle
-    **/
-    void addPoint(const Vector<2>& point)
-    {
-        return;
-    }
-
-    /**
-    * Overwrite virtual method RemovePoint so that it does nothing
-    * We do not want points to be removed in a triangle
-    **/
-    void removePoint(const Vector<2>& point)
-    {
-        return;
-    }
-};
+/**
+* Computes Polygon to Polygon Distance
+* @param poly1
+* @param poly2
+**/
+double distance(const Polygon& poly1, const Polygon& poly2)
+{
+    return sqrt(distanceSq(poly1, poly2));
+}
 
 } }
 
