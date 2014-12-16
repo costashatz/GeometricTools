@@ -26,7 +26,7 @@ OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISE
 
 namespace GeometricTools { namespace Math { namespace NumericalOptimization {
 
-std::tuple<double,double,double> getBracket(double(*f)(double), const double& x1, const double& x2)
+inline std::tuple<double,double,double> getBracket(double(*f)(double), const double& x1, const double& x2)
 {
     double X1 = (x1<x2)? x1 : x2;
     double X2 = (x2>x1)? x2 : x1;
@@ -44,7 +44,7 @@ std::tuple<double,double,double> getBracket(double(*f)(double), const double& x1
     return getBracket(f, X1, X2);
 }
 
-std::tuple<double,double> goldenSearchMinimize(double(*f)(double), const double& a, const double& b, const double& c, const double& tau_ = 1e-10)
+inline std::tuple<double,double> goldenSearchMinimize(double(*f)(double), const double& a, const double& b, const double& c, const double& tau_ = 1e-10)
 {
     double tau = sqrt(tau_);
     static double w_ = 2-(1+sqrt(5))/2;

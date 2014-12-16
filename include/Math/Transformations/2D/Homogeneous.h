@@ -35,7 +35,7 @@ namespace Transformations2D {
 * @param dy - y translation
 * @return Matrix<3,3> - translation matrix
 **/
-Matrix<3,3> translation(const double& dx, const double& dy)
+inline Matrix<3,3> translation(const double& dx, const double& dy)
 {
     return Matrix<3,3>(1.0, 0.0, dx,
                        0.0, 1.0, dy,
@@ -48,7 +48,7 @@ Matrix<3,3> translation(const double& dx, const double& dy)
 * @param sy - y scaling factor
 * @return Matrix<3,3> - scaling matrix
 **/
-Matrix<3,3> scaling(const double& sx, const double& sy)
+inline Matrix<3,3> scaling(const double& sx, const double& sy)
 {
     return Matrix<3,3>(sx , 0.0, 0.0,
                        0.0, sy , 0.0,
@@ -60,7 +60,7 @@ Matrix<3,3> scaling(const double& sx, const double& sy)
 * @param s - scaling factor
 * @return Matrix<3,3> - uniform scaling matrix
 **/
-Matrix<3,3> uniformScaling(const double& s)
+inline Matrix<3,3> uniformScaling(const double& s)
 {
     return Matrix<3,3>( s , 0.0, 0.0,
                        0.0,  s , 0.0,
@@ -73,7 +73,7 @@ Matrix<3,3> uniformScaling(const double& s)
 * @param sy - y shearing factor
 * @return Matrix<3,3> - shear matrix
 **/
-Matrix<3,3> shear(const double& sx, const double& sy)
+inline Matrix<3,3> shear(const double& sx, const double& sy)
 {
     return Matrix<3,3>(1.0, sx , 0.0,
                        sy , 0.0, 0.0,
@@ -85,7 +85,7 @@ Matrix<3,3> shear(const double& sx, const double& sy)
 * @param a - angle in radians
 * @return Matrix<3,3> - rotation matrix
 **/
-Matrix<3,3> rotation(const double& a)
+inline Matrix<3,3> rotation(const double& a)
 {
     return Matrix<3,3>( cos(a), -sin(a), 0.0,
                         sin(a),  cos(a), 0.0,
@@ -97,7 +97,7 @@ Matrix<3,3> rotation(const double& a)
 * @param a - angle in degrees
 * @return Matrix<3,3> - rotation matrix
 **/
-Matrix<3,3> rotationDegrees(const double& a)
+inline Matrix<3,3> rotationDegrees(const double& a)
 {
     return rotation(Helper::degreesToRadians(a));
 }

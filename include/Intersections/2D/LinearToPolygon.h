@@ -40,7 +40,7 @@ namespace Intersections {
 
 using std::vector;
 
-std::tuple<int, vector<Vector<2> > > intersect(const Segment<2>& seg, const Polygon& poly)
+inline std::tuple<int, vector<Vector<2> > > intersect(const Segment<2>& seg, const Polygon& poly)
 {
     vector<Vector<2> > points;
     if(seg.P0()==seg.P1())
@@ -93,7 +93,7 @@ std::tuple<int, vector<Vector<2> > > intersect(const Segment<2>& seg, const Poly
     return std::make_tuple(2, points);
 }
 
-std::tuple<int, vector<Vector<2> > > intersect(const Polygon& poly, const Segment<2>& seg)
+inline std::tuple<int, vector<Vector<2> > > intersect(const Polygon& poly, const Segment<2>& seg)
 {
     return intersect(seg, poly);
 }

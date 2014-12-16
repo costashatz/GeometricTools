@@ -41,7 +41,7 @@ namespace Distances {
 * @param point
 * @param line
 **/
-double distanceSq(const Vector<2>& point, const Polyline<2>& line)
+inline double distanceSq(const Vector<2>& point, const Polyline<2>& line)
 {
     double m = distanceSq(point, Segment<2>(line.vertices()[0], line.vertices()[1]));
     Vector<2> prev = line.vertices()[1];
@@ -62,7 +62,7 @@ double distanceSq(const Vector<2>& point, const Polyline<2>& line)
     return m;
 }
 
-double distanceSq(const Polyline<2>& line, const Vector<2>& point)
+inline double distanceSq(const Polyline<2>& line, const Vector<2>& point)
 {
     return distanceSq(point,line);
 }
@@ -71,7 +71,7 @@ double distanceSq(const Polyline<2>& line, const Vector<2>& point)
 * @param point
 * @param line
 **/
-double distance(const Vector<2>& point, const Polyline<2>& line)
+inline double distance(const Vector<2>& point, const Polyline<2>& line)
 {
     double m = distance(point, Segment<2>(line.vertices()[0], line.vertices()[1]));
     Vector<2> prev = line.vertices()[1];
@@ -92,7 +92,7 @@ double distance(const Vector<2>& point, const Polyline<2>& line)
     return m;
 }
 
-double distance(const Polyline<2>& line, const Vector<2>& point)
+inline double distance(const Polyline<2>& line, const Vector<2>& point)
 {
     return distance(point,line);
 }

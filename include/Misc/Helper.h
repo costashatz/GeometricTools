@@ -27,17 +27,17 @@ const double   TwoPi     = Pi * 2;
 const double   HalfPi    = Pi / 2;
 const double   QuarterPi = Pi / 4;
 
-double radiansToDegrees(double rad)
+inline double radiansToDegrees(double rad)
 {
     return rad*(180.0/Pi);
 }
 
-double degreesToRadians(double deg)
+inline double degreesToRadians(double deg)
 {
     return deg*(Pi/180.0);
 }
 
-double clamp(double a, double min, double max)
+inline double clamp(double a, double min, double max)
 {
     return std::min(max, std::max(min, a));
 }

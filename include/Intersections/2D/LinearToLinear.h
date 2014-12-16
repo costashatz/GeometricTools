@@ -38,7 +38,7 @@ namespace Intersections {
 
 using std::vector;
 
-std::tuple<int, vector<Vector<2> > > intersect(const Segment<2>& seg1, const Segment<2>& seg2)
+inline std::tuple<int, vector<Vector<2> > > intersect(const Segment<2>& seg1, const Segment<2>& seg2)
 {
     double epsilon = std::numeric_limits<double>::epsilon();
     vector<Vector<2> > points;

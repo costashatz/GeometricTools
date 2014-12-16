@@ -34,7 +34,7 @@ using Math::Vector;
 
 namespace Primitives {
 
-Rectangle boundingBox(const vector<Vector<2> >& points)
+inline Rectangle boundingBox(const vector<Vector<2> >& points)
 {
     //TODO: assert points size > 1
     double minX, maxX, minY, maxY;
@@ -58,7 +58,7 @@ Rectangle boundingBox(const vector<Vector<2> >& points)
     return Rectangle(Vector<2>(minX+a/2, minY+b/2), a, b);
 }
 
-Rectangle boundingBox(const vector<Polygon>& polygons)
+inline Rectangle boundingBox(const vector<Polygon>& polygons)
 {
     //TODO: assert polygons size >= 1
     vector<Vector<2> > points = polygons[0].vertices();
