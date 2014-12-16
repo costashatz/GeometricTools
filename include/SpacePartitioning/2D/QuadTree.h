@@ -26,8 +26,10 @@ OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISE
 #include <Distances/2D/PolygonToPolygon.h>
 #include <vector>
 #include <limits>
+#include <algorithm>
 
 using std::vector;
+using std::find;
 
 namespace GeometricTools {
 
@@ -112,9 +114,59 @@ public:
             }
             return false;
         }
-        //TO-DO: Remove polygon
+        if(objects_.size()==0)
+            return false;
+        objects_.erase(find(objects_.begin(), objects_.end(), obj));
         return true;
     }
+
+    bool queryObject(const Polygon& obj)
+    {
+        if(!canContainObject(obj))
+            return false;
+        if(children_[0]!=nullptr)
+        {
+            for(int i=0;i<4;i++)
+            {
+                if(children_[i]->queryObject(obj))
+                    return true;
+            }
+            return false;
+        }
+        if(objects_.size()==0)
+            return false;
+        for(int i=0;i<objects_.size();i++)
+        {
+            if(distanceSq(objects_[i], obj)<std::numeric_limits<double>::epsilon())
+                return true;
+        }
+        return false;
+    }
+
+    bool full()
+    {
+        if(level_ == max_level_ || children_[0]==nullptr)
+            return (objects_.size()==max_objects_);
+        for(int i=0;i<4;i++)
+        {
+            if(!children_[i]->full())
+                return false;
+        }
+        return true;
+    }
+
+    bool empty()
+    {
+        if(level_ == max_level_ || children_[0]==nullptr)
+            return (objects_.size()==0);
+        for(int i=0;i<4;i++)
+        {
+            if(!children_[i]->empty())
+                return false;
+        }
+        return true;
+    }
+
 protected:
     bool subdivide()
     {

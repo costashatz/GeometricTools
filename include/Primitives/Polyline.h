@@ -79,6 +79,40 @@ public:
     * @return vector<Vector<N> > - the collection of points/vertices
     **/
     vector<Vector<N> > vertices() const {return vertices_;}
+
+    /**
+    * Overloading == operator
+    * @param other - Polyline to compare
+    * @return bool
+    **/
+    bool operator==(const Polyline& other) const
+    {
+        if(other.vertices_.size()!=vertices_.size())
+            return false;
+        for(int i=0;i<vertices_.size();i++)
+        {
+            if(vertices_[i]!=other.vertices_[i])
+                return false;
+        }
+        return true;
+    }
+
+    /**
+    * Overloading != operator
+    * @param other - Polyline to compare
+    * @return bool
+    **/
+    bool operator!=(const Polyline& other) const
+    {
+        if(other.vertices_.size()!=vertices_.size())
+            return true;
+        for(int i=0;i<vertices_.size();i++)
+        {
+            if(vertices_[i]!=other.vertices_[i])
+                return true;
+        }
+        return false;
+    }
 };
 
 } }
