@@ -15,69 +15,25 @@ INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT
 OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 **/
 
-#ifndef GEOMETRIC_TOOLS_INTERSECTIONS_2D_RECTANGLE_TO_RECTANGLE_H
-#define GEOMETRIC_TOOLS_INTERSECTIONS_2D_RECTANGLE_TO_RECTANGLE_H
+#ifndef GEOMETRIC_TOOLS_INTERSECTIONS_INTERSECTION_INFO_H
+#define GEOMETRIC_TOOLS_INTERSECTIONS_INTERSECTION_INFO_H
 
 /**
 * Includes
 **/
 #include <Math/Vector.h>
-#include <Primitives/2D/Rectangle.h>
-#include <Intersections/IntersectionInfo.h>
-#include <limits>
 
 namespace GeometricTools {
 
 using Math::Vector;
-using Primitives::Rectangle;
 
 namespace Intersections {
 
-inline Intersection2DInfo* intersect(const Rectangle& r1, const Rectangle& r2)
+struct Intersection2DInfo
 {
-    Intersection2DInfo* info = new Intersection2DInfo;
-
-    Vector<2> p1 = r1.vertices()[0];
-    Vector<2> e11 = r1.vertices()[1]-p1;
-    Vector<2> e12 = r1.vertices()[3]-p1;
-    Vector<2> center1 = (e11+e12)/2.0;
-
-    Vector<2> p2 = r2.vertices()[0];
-    Vector<2> e21 = r2.vertices()[1]-p2;
-    Vector<2> e22 = r2.vertices()[3]-p2;
-    Vector<2> center2 = (e21+e22)/2.0;
-
-    double half1x = e11.length()/2.0;
-    double half1y = e12.length()/2.0;
-
-    double half2x = e21.length()/2.0;
-    double half2y = e22.length()/2.0;
-
-    Vector<2> dC = center2-center1;
-    double px = half1x+half2x-std::abs(dC[0]);
-    if(px < std::numeric_limits<double>::epsilon())
-        return nullptr;
-    double py = half1y+half2y-std::abs(dC[1]);
-    if(py < std::numeric_limits<double>::epsilon())
-        return nullptr;
-    Vector<2> p;
-    Vector<2> n;
-    if(px<py)
-    {
-        int sx = std::abs(dC[0])/dC[0];
-        p = Vector<2>(center1[0]+half1x*sx, center2[1]);
-        n = Vector<2>(sx*px, 0.0);
-    }
-    else
-    {
-        int sy = std::abs(dC[1])/dC[1];
-        p = Vector<2>(center2[0], center1[1]+half1y*sy);
-        n = Vector<2>(0.0, sy*py);
-    }
-    info->point = p;
-    info->delta = n;
-    return info;
-}
+    Vector<2> point;
+    Vector<2> delta;
+};
 
 } }
 

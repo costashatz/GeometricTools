@@ -26,6 +26,7 @@ OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISE
 #include <Primitives/2D/Polygon.h>
 #include <Primitives/Polyline.h>
 #include <Distances/2D/PolygonToPolygon.h>
+#include <Intersections/IntersectionInfo.h>
 #include <Intersections/2D/RectangleToRectangle.h>
 #include <Primitives/Tools/BoundingBox.h>
 #include <vector>
@@ -166,12 +167,11 @@ public:
         }
         if(objects_.size()==0)
             return false;
-        int N;
-        vector<Vector<2> > p;
+        Intersection2DInfo* info;
         for(int i=0;i<objects_.size()-1;i++)
         {
-            std::tie(N, p) = intersect(poly_bound, Primitives::boundingBox(objects_[i]));
-            if(N>0)
+            info = intersect(poly_bound, Primitives::boundingBox(objects_[i]));
+            if(info != nullptr)
                 return true;
         }
         return false;
@@ -194,12 +194,11 @@ public:
         }
         if(objects_.size()==0)
             return -1;
-        int N;
-        vector<Vector<2> > p;
+        Intersection2DInfo* info;
         for(int i=0;i<objects_.size()-1;i++)
         {
-            std::tie(N, p) = intersect(poly_bound, Primitives::boundingBox(objects_[i]));
-            if(N>0)
+            info = intersect(poly_bound, Primitives::boundingBox(objects_[i]));
+            if(info != nullptr)
                 return i;
         }
         return -1;
@@ -258,10 +257,9 @@ protected:
 
     bool canContainObject(const Polygon& obj)
     {
-        int N;
-        vector<Vector<2> > p;
-        std::tie(N, p) = intersect(boundary_, Primitives::boundingBox(obj));
-        return (N>0);
+        Intersection2DInfo* info;
+        info = intersect(boundary_, Primitives::boundingBox(obj));
+        return (info != nullptr);
     }
 
     void clear()

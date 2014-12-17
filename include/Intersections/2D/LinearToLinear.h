@@ -23,9 +23,8 @@ OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISE
 **/
 #include <Math/Vector.h>
 #include <Primitives/LinearShapes.h>
+#include <Intersections/IntersectionInfo.h>
 #include <limits>
-#include <tuple>
-#include <vector>
 
 namespace GeometricTools {
 
@@ -36,12 +35,10 @@ using Primitives::Segment;
 
 namespace Intersections {
 
-using std::vector;
-
-inline std::tuple<int, vector<Vector<2> > > intersect(const Segment<2>& seg1, const Segment<2>& seg2)
+inline Intersection2DInfo* intersect(const Segment<2>& seg1, const Segment<2>& seg2)
 {
+    Intersection2DInfo* info = new Intersection2DInfo;
     double epsilon = std::numeric_limits<double>::epsilon();
-    vector<Vector<2> > points;
     Vector<2> u = seg1.d();
     Vector<2> v = seg2.d();
     Vector<2> w = seg1.P0()-seg2.P0();
@@ -50,27 +47,27 @@ inline std::tuple<int, vector<Vector<2> > > intersect(const Segment<2>& seg1, co
     if(std::abs(D)<epsilon)
     {
         if(std::abs(tmp1)>epsilon || std::abs(tmp2)>epsilon)
-            return std::make_tuple(0, points);
+            return nullptr;
         double du = u*u;
         double dv = v*v;
         if(du<epsilon && dv<epsilon)
         {
             if(std::abs(du-dv)>epsilon)
-                return std::make_tuple(0, points);
-            points.push_back(seg1.P0());
-            return std::make_tuple(1, points);
+                return nullptr;
+            info->point = seg1.P0();
+            return info;
         }
         if(du<epsilon)
         {
             //TODO: test for inclusion of seg1.P0 in the seg2
-            points.push_back(seg1.P0());
-            return std::make_tuple(1, points);
+            info->point = seg1.P0();
+            return info;
         }
         if(dv<epsilon)
         {
             //TODO: test for inclusion of seg2.P0 in the seg1
-            points.push_back(seg2.P0());
-            return std::make_tuple(1, points);
+            info->point = seg2.P0();
+            return info;
         }
         double t0, t1;
         Vector<2> w2 = seg1.P1()-seg2.P0();
@@ -91,27 +88,27 @@ inline std::tuple<int, vector<Vector<2> > > intersect(const Segment<2>& seg1, co
             t1 = t0;
         }
         if(t0>1 || t1 < 0)
-            return std::make_tuple(0, points);
+            return nullptr;
         t0 = (t0<0)? 0 : t0;
         t1 = (t1>1)? 1 : t1;
         if((t1-t0)<epsilon)
         {
-            points.push_back(seg2.P0()+t0*v);
-            return std::make_tuple(1, points);
+            info->point = seg2.P0()+t0*v;
+            return info;
         }
-        points.push_back(seg2.P0()+t0*v);
-        points.push_back(seg2.P0()+t1*v);
-        return std::make_tuple(2, points);
+        info->point = seg2.P0()+t0*v;
+        info->delta = (seg2.P0()+t1*v)-info->point;
+        return info;
     }
     double sI = tmp1/D;
     if(sI<0.0 || sI>1.0)
-        return std::make_tuple(0, points);
+        return nullptr;
     double tI = tmp2/D;
     if(tI<0.0 || tI>1.0)
-        return std::make_tuple(0, points);
+        return nullptr;
 
-    points.push_back(seg1.P0()+sI*u);
-    return std::make_tuple(1, points);
+    info->point = seg1.P0()+sI*u;
+    return info;
 }
 
 } }

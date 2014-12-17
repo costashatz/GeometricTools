@@ -29,6 +29,7 @@ OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISE
 #include <Distances/PointToLinear.h>
 #include <Distances/LinearToLinear.h>
 #include <Distances/LinearToPolyline.h>
+#include <Intersections/IntersectionInfo.h>
 #include <Intersections/2D/LinearToLinear.h>
 #include <Intersections/2D/LinearToPolygon.h>
 #include <Primitives/Tools/BoundingBox.h>
@@ -204,17 +205,15 @@ TEST(IntersectionTest, LinearToLinearTest)
     using std::vector;
     Segment<2> s1({0,0}, {1,0});
     Segment<2> s2({0,1}, {1,-1});
-    int N;
-    vector<Vector<2> > p;
-    std::tie(N, p) = intersect(s1, s2);
-    EXPECT_EQ(N, 1);
-    EXPECT_EQ(p[0], Vector<2>(0.5, 0));
+    Intersection2DInfo* info;
+    info = intersect(s1, s2);
+    EXPECT_TRUE(info != nullptr);
+    EXPECT_EQ(info->point, Vector<2>(0.5, 0));
     Segment<2> s3({0.5,0}, {3,0});
-    p.clear();
-    std::tie(N, p) = intersect(s1,s3);
-    EXPECT_EQ(N, 2);
-    EXPECT_EQ(p[0], Vector<2>(0.5,0));
-    EXPECT_EQ(p[1], Vector<2>(1,0));
+    info = intersect(s1,s3);
+    EXPECT_TRUE(info != nullptr);
+    EXPECT_EQ(info->point, Vector<2>(0.5,0));
+    EXPECT_EQ(info->delta, Vector<2>(1,0)-Vector<2>(0.5,0));
 }
 
 TEST(IntersectionTest, LinearToPolygonTest)
@@ -225,12 +224,11 @@ TEST(IntersectionTest, LinearToPolygonTest)
     using std::vector;
     Rectangle r({0,0}, 3.0, 4.0);
     Segment<2> seg({-2,1}, {2,1});
-    int N;
-    vector<Vector<2> > p;
-    std::tie(N, p) = intersect(seg, r);
-    EXPECT_EQ(N, 2);
-    EXPECT_EQ(p[0], Vector<2>(-1.5, 1));
-    EXPECT_EQ(p[1], Vector<2>(1.5, 1));
+    Intersection2DInfo* info;
+    info = intersect(seg, r);
+    EXPECT_TRUE(info != nullptr);
+    EXPECT_EQ(info->point, Vector<2>(-1.5, 1));
+    EXPECT_EQ(info->delta, Vector<2>(1.5, 1)-Vector<2>(-1.5, 1));
 }
 
 TEST(QuadTreeTest, SimpleQuadTree)

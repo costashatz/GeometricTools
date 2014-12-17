@@ -24,9 +24,8 @@ OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISE
 #include <Math/Vector.h>
 #include <Primitives/LinearShapes.h>
 #include <Primitives/2D/Polygon.h>
+#include <Intersections/IntersectionInfo.h>
 #include <limits>
-#include <tuple>
-#include <vector>
 
 namespace GeometricTools {
 
@@ -38,17 +37,15 @@ using Primitives::Polygon;
 
 namespace Intersections {
 
-using std::vector;
-
-inline std::tuple<int, vector<Vector<2> > > intersect(const Segment<2>& seg, const Polygon& poly)
+inline Intersection2DInfo* intersect(const Segment<2>& seg, const Polygon& poly)
 {
-    vector<Vector<2> > points;
+    Intersection2DInfo* info = new Intersection2DInfo;
     if(seg.P0()==seg.P1())
     {
         //TODO: test for inclusion of seg.P0 in the poly
-        points.push_back(seg.P0());
-        points.push_back(seg.P1());
-        return std::make_tuple(2, points);
+        info->point = seg.P0();
+        info->delta = seg.d();
+        return info;
     }
     double tE = 0.0, tL = 1.0;
     double t, N, D;
@@ -64,7 +61,7 @@ inline std::tuple<int, vector<Vector<2> > > intersect(const Segment<2>& seg, con
         if(std::abs(D)<std::numeric_limits<double>::epsilon())
         {
             if(N<0)
-                return std::make_tuple(0, points);
+                return nullptr;
             else
                 continue;
         }
@@ -75,7 +72,7 @@ inline std::tuple<int, vector<Vector<2> > > intersect(const Segment<2>& seg, con
             {
                 tE = t;
                 if(tE>tL)
-                    return std::make_tuple(0, points);
+                    return nullptr;
             }
         }
         else
@@ -84,16 +81,16 @@ inline std::tuple<int, vector<Vector<2> > > intersect(const Segment<2>& seg, con
             {
                 tL = t;
                 if(tL<tE)
-                    return std::make_tuple(0, points);
+                    return nullptr;
             }
         }
     }
-    points.push_back(seg.P0()+tE*dS);
-    points.push_back(seg.P0()+tL*dS);
-    return std::make_tuple(2, points);
+    info->point = seg.P0()+tE*dS;
+    info->delta = (seg.P0()+tL*dS)-info->point;
+    return info;
 }
 
-inline std::tuple<int, vector<Vector<2> > > intersect(const Polygon& poly, const Segment<2>& seg)
+inline Intersection2DInfo* intersect(const Polygon& poly, const Segment<2>& seg)
 {
     return intersect(seg, poly);
 }
