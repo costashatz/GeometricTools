@@ -177,31 +177,31 @@ public:
         return false;
     }
 
-    int intersectPolyline(const Polyline<2>& poly)
+    Intersection2DInfo* intersectPolyline(const Polyline<2>& poly)
     {
         Rectangle poly_bound = Primitives::boundingBox(poly);
         if(!canContainObject(poly_bound))
-            return -1;
+            return nullptr;
         if(children_[0]!=nullptr)
         {
             for(int i=0;i<4;i++)
             {
-                int s = children_[i]->intersectPolyline(poly);
-                if(s != -1)
+                Intersection2DInfo* s = children_[i]->intersectPolyline(poly);
+                if(s != nullptr)
                     return s;
             }
-            return -1;
+            return nullptr;
         }
         if(objects_.size()==0)
-            return -1;
+            return nullptr;
         Intersection2DInfo* info;
         for(int i=0;i<objects_.size()-1;i++)
         {
             info = intersect(poly_bound, Primitives::boundingBox(objects_[i]));
             if(info != nullptr)
-                return i;
+                return info;
         }
-        return -1;
+        return nullptr;
     }
 
     bool full()
