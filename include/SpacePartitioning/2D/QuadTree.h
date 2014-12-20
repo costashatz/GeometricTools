@@ -25,7 +25,6 @@ OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISE
 #include <Primitives/2D/Rectangle.h>
 #include <Primitives/2D/Polygon.h>
 #include <Primitives/Polyline.h>
-#include <Distances/2D/PolygonToPolygon.h>
 #include <Intersections/IntersectionInfo.h>
 #include <Intersections/2D/RectangleToRectangle.h>
 #include <Primitives/Tools/BoundingBox.h>
@@ -43,7 +42,6 @@ using Primitives::Rectangle;
 using Primitives::Polygon;
 using Primitives::Polyline;
 using Primitives::Segment;
-using namespace Distances;
 using namespace Intersections;
 
 namespace SpacePartitioning {
@@ -145,8 +143,8 @@ public:
             return false;
         for(int i=0;i<objects_.size();i++)
         {
-            // TO-DO: Create Polygon-Polygon Intersection
-            if(distanceSq(objects_[i], obj)<std::numeric_limits<double>::epsilon())
+            Intersection2DInfo* info = intersect(Primitives::boundingBox(objects_[i]), Primitives::boundingBox(obj));
+            if(info!=nullptr)
                 return true;
         }
         return false;
@@ -257,8 +255,7 @@ protected:
 
     bool canContainObject(const Polygon& obj)
     {
-        Intersection2DInfo* info;
-        info = intersect(boundary_, Primitives::boundingBox(obj));
+        Intersection2DInfo* info = intersect(boundary_, Primitives::boundingBox(obj));
         return (info != nullptr);
     }
 

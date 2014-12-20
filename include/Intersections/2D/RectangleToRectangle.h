@@ -40,12 +40,12 @@ inline Intersection2DInfo* intersect(const Rectangle& r1, const Rectangle& r2)
     Vector<2> p1 = r1.vertices()[0];
     Vector<2> e11 = r1.vertices()[1]-p1;
     Vector<2> e12 = r1.vertices()[3]-p1;
-    Vector<2> center1 = (e11+e12)/2.0;
+    Vector<2> center1 = p1+(e11+e12)/2.0;
 
     Vector<2> p2 = r2.vertices()[0];
     Vector<2> e21 = r2.vertices()[1]-p2;
     Vector<2> e22 = r2.vertices()[3]-p2;
-    Vector<2> center2 = (e21+e22)/2.0;
+    Vector<2> center2 = p2+(e21+e22)/2.0;
 
     double half1x = e11.length()/2.0;
     double half1y = e12.length()/2.0;
@@ -55,10 +55,10 @@ inline Intersection2DInfo* intersect(const Rectangle& r1, const Rectangle& r2)
 
     Vector<2> dC = center2-center1;
     double px = half1x+half2x-std::abs(dC[0]);
-    if(px < std::numeric_limits<double>::epsilon())
+    if(px < 0)
         return nullptr;
     double py = half1y+half2y-std::abs(dC[1]);
-    if(py < std::numeric_limits<double>::epsilon())
+    if(py < 0)
         return nullptr;
     Vector<2> p;
     Vector<2> n;

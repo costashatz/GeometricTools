@@ -242,7 +242,8 @@ TEST(QuadTreeTest, SimpleQuadTree)
     tree.addObject(Triangle({1,1}, {1,2}, {0,3}));
     tree.addObject(Triangle({1,0}, {1,1}, {0,1}));
     EXPECT_EQ(tree.queryObject(Triangle({1,0}, {1,1}, {0,1})), true);
-    EXPECT_EQ(tree.queryObject(Triangle({1,0}, {1,1}, {0,1})), true);
+    EXPECT_EQ(tree.queryObject(Triangle({1,1}, {1,2}, {0,3})), true);
+    EXPECT_EQ(tree.queryObject(Triangle({-1,-1}, {0,-0.5}, {-1,-0.5})), false);
     EXPECT_EQ(tree.queryObject(Triangle({10000,0}, {100000,1}, {100000,2})), false);
 }
 
