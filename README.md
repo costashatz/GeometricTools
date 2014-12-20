@@ -11,7 +11,7 @@
 	* Should work on 2.6 too
 3. **LAPACK/BLAS**
 	* Needed for Linear Algebra operations
-	* In *ubuntu Linux, just install the following packages: liblapack3 liblapack-dev libblas3 libblas-dev
+	* In *ubuntu Linux, just install the following packages: liblapack-dev libblas-dev
 4. **Google Tests (gtest)** *[OPTIONAL]*
 	* Needed to build the test codes
 
