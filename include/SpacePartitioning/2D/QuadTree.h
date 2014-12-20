@@ -234,7 +234,7 @@ protected:
         Vector<2> p = boundary_.vertices()[0];
         Vector<2> e1 = boundary_.vertices()[1]-p;
         Vector<2> e2 = boundary_.vertices()[3]-p;
-        Vector<2> center = (e1+e2)/2.0;
+        Vector<2> center = p+(e1+e2)/2.0;
         double a = e1.length(), b = e2.length(), a_2 = a/2.0, b_2 = b/2.0;
         Vector<2> t1{-a_2, -b_2}, t2{a_2, -b_2}, t3{-a_2, b_2}, t4=-t1;
 
