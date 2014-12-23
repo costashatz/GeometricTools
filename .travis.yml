@@ -10,9 +10,9 @@ install:
 before_script: 
   - mkdir build
   - cd build
-script: cmake -DBUILD_EXAMPLES=ON -DBUILD_TEST=ON .. && make
-after_script:
-  - ./GeometricTools_test
+script: cmake -DBUILD_EXAMPLES=ON -DBUILD_TEST=ON -DRUN_TEST=ON .. && make
+#after_script:
+#  - ./GeometricTools_test
 
 notifications:
   email:
