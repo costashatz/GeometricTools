@@ -27,6 +27,7 @@ make
 * Optional CMake options:
 	1. BUILD_TEST (ON/OFF) - Determine to either build tests or not. Defaults to OFF.
 	2. BUILD_EXAMPLES (ON/OFF) - Specify whether you want to build tests or not. Defaults to OFF.
+	3. RUN_TEST (ON/OFF) - Specify whether you want to automatically execute all tests upon build. Defaults to OFF. 
 
 ####How to use:
 
