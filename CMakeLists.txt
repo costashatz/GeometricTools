@@ -18,6 +18,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fpermissive")
 
 option(BUILD_TEST "Use Gtest to create the test cases for the code" OFF)
 option(BUILD_EXAMPLES "Build examples of the code" OFF)
+option(RUN_TEST "Run Gtest after build to confirm the code" OFF)
 
 if(BUILD_TEST)
     # Setup testing
@@ -31,8 +32,11 @@ file(GLOB_RECURSE _srcs
     include/*.h
     include/*.hpp)
 
-find_package( LAPACK REQUIRED)
+find_package(LAPACK REQUIRED)
 include_directories(${LAPACK_INCLUDE_DIR})
+set( ENV{BLA_VENDOR} "Generic" )
+find_package(BLAS REQUIRED)
+include_directories(${BLAS_INCLUDE_DIRS})
 
 add_library(${PROJECT_NAME} SHARED ${_srcs})
 if((${CMAKE_VERSION} VERSION_GREATER "2.8.9"))
@@ -40,8 +44,8 @@ if((${CMAKE_VERSION} VERSION_GREATER "2.8.9"))
 else()
   include_directories(${PROJECT_SOURCE_DIR}/include)
 endif()
-target_link_libraries(${PROJECT_NAME} ${LAPACK_LIBRARIES})
-SET_TARGET_PROPERTIES(${PROJECT_NAME} PROPERTIES LINKER_LANGUAGE CXX)
+target_link_libraries(${PROJECT_NAME} ${LAPACK_LIBRARIES} ${BLAS_LIBRARIES})
+set_target_properties(${PROJECT_NAME} PROPERTIES LINKER_LANGUAGE CXX)
 
 if(BUILD_TEST)
     ##############
@@ -66,4 +70,13 @@ endif()
 
 if(BUILD_EXAMPLES)
   add_subdirectory(Examples)
+endif()
+
+if(RUN_TEST)
+  add_custom_target(all_tests ALL 
+                    DEPENDS ${PROJECT_TEST_NAME})
+  add_custom_command(TARGET all_tests
+                     COMMENT "Run tests"
+                     POST_BUILD COMMAND ctest ARGS --output-on-failure
+                     WORKING_DIRECTORY ${CMAKE_BINARY_DIR})
 endif()
