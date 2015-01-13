@@ -338,6 +338,7 @@ public:
         return (tmp.norm()>=std::numeric_limits<double>::epsilon());
     }
 
+    // !-- THIS NEEDS TO BE REMOVED --! //
     /**
     * Get pointer to values array
     * @return pointer to array

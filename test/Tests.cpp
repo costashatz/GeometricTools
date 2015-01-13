@@ -52,7 +52,7 @@ TEST(MathTest, VectorTests)
     EXPECT_DOUBLE_EQ(d.length(), 1.0);
 }
 
-TEST(MathTet, MatrixTests)
+TEST(MathTest, MatrixTests)
 {
     using GeometricTools::Math::Vector;
     using GeometricTools::Math::Matrix;

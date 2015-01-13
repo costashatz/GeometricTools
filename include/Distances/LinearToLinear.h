@@ -312,6 +312,77 @@ double distance(const Segment<N>& seg1, const Segment<N>& seg2)
     return sqrt(distanceSq(seg1, seg2));
 }
 
+/**
+* Computes Ray to Segment Distance Squared
+* @param ray
+* @param seg
+**/
+template<unsigned int N>
+double distanceSq(const Ray<N>& ray, const Segment<N>& seg)
+{
+  // NEEDS CHECKING, COULD BE WRONG
+  Vector<N> u = ray.d();
+  Vector<N> v = seg.P0() - seg.P1();
+  Vector<N> w = ray.p() - seg.P0();
+  double a = u*u, b = u*v, c = v*v, d = u*w, e = v*w;
+  double D = a*c-b*b;
+  double sD = D, tD = D;
+  double sN, tN, sc, tc;
+  if(D<std::numeric_limits<double>::epsilon())
+  {
+      sN = 0.0;
+      sD = 1.0;
+      tN = e;
+      tD = c;
+  }
+  else
+  {
+      sN = b*e-c*d;
+      tN = a*e-b*d;
+  }
+
+  if(tN<0.0)
+      tN = 0.0;
+  else if(tN>tD)
+      tN = tD;
+
+  if(std::abs(sN)<std::numeric_limits<double>::epsilon())
+      sc = 0.0;
+  else
+      sc = sN/sD;
+
+  if(std::abs(tN)<std::numeric_limits<double>::epsilon())
+      tc = 0.0;
+  else
+      tc = tN/tD;
+
+  Vector<N> dP = w+sc*u-tc*v;
+  return dP.lengthSq();
+}
+
+template<unsigned int N>
+double distanceSq(const Segment<N>& seg, const Ray<N>& ray)
+{
+  return distanceSq(ray,seg);
+}
+
+/**
+* Computes Ray to Segment Distance
+* @param ray
+* @param seg
+**/
+template<unsigned int N>
+double distance(const Ray<N>& ray, const Segment<N>& seg)
+{
+  return sqrt(distanceSq(ray, seg));
+}
+
+template<unsigned int N>
+double distance(const Segment<N>& seg, const Ray<N>& ray)
+{
+  return distance(ray, seg);
+}
+
 } }
 
 
