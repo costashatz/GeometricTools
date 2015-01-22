@@ -67,9 +67,9 @@ public:
 
     bool addObject(const Polygon& obj)
     {
-        if(level_ == max_level_ || !canContainObject(obj))
+        if(!canContainObject(obj))
             return false;
-        if(children_[0]!=nullptr)
+        if(level_<max_level_ && children_[0]!=nullptr)
         {
             for(int i=0;i<4;i++)
             {

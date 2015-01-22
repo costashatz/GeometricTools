@@ -34,6 +34,10 @@ make
 * You can just edit the CMakeLists.txt and include the headers to your project (after all it is just a header library).
 * Via ExternalProject to always get latest edition:
 	```cmake
+	find_package(LAPACK REQUIRED)
+	set( ENV{BLA_VENDOR} "Generic" )
+	find_package(BLAS REQUIRED)
+
 	include(ExternalProject)
 	ExternalProject_Add(GeometricToolsProj
 	    GIT_REPOSITORY "https://github.com/costashatz/GeometricTools"
@@ -52,7 +56,7 @@ make
 	link_directories(${GEOMETRIC_TOOLS_LIBS_DIR})
 	include_directories(${PROJECT_SOURCE_DIR}/include ${GEOMETRIC_TOOLS_INCLUDE_DIRS})
 	....
-	target_link_libraries(mytarget GeometricTools)
+	target_link_libraries(mytarget GeometricTools ${LAPACK_LIBRARIES} ${BLAS_LIBRARIES})
 	```
 
 
