@@ -35,6 +35,9 @@ namespace Primitives {
 **/
 class Rectangle: public Polygon
 {
+protected:
+    Vector<2> center_point;
+    Vector<2> half_dimension;
 public:
     /**
     * Default Constructor
@@ -56,6 +59,9 @@ public:
         Polygon::addPoint(p0+e0);
         Polygon::addPoint(p0+e0+E1);
         Polygon::addPoint(p0+E1);
+
+        center_point = p0+(e0+e1)/2.0;
+        half_dimension = Vector<2>(e0.length()/2.0, e1.length()/2.0);
     }
 
     /**
@@ -75,6 +81,9 @@ public:
         Polygon::addPoint(p2);
         Vector<2> p3 = Vector<2>(p[0]-a/2.0, p[1]+b/2.0);
         Polygon::addPoint(p3);
+
+        center_point = p;
+        half_dimension = Vector<2>(a/2.0, b/2.0);
     }
 
     /**
@@ -94,6 +103,9 @@ public:
     {
         return;
     }
+
+    Vector<2> center() const { return center_point; }
+    Vector<2> half() const { return half_dimension; }
 };
 
 } }

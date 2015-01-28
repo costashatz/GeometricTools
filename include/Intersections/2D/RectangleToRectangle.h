@@ -37,21 +37,18 @@ inline Intersection2DInfo* intersect(const Rectangle& r1, const Rectangle& r2)
 {
     Intersection2DInfo* info = new Intersection2DInfo;
 
-    Vector<2> p1 = r1.vertices()[0];
-    Vector<2> e11 = r1.vertices()[1]-p1;
-    Vector<2> e12 = r1.vertices()[3]-p1;
-    Vector<2> center1 = p1+(e11+e12)/2.0;
+    Vector<2> center1 = r1.center();
 
-    Vector<2> p2 = r2.vertices()[0];
-    Vector<2> e21 = r2.vertices()[1]-p2;
-    Vector<2> e22 = r2.vertices()[3]-p2;
-    Vector<2> center2 = p2+(e21+e22)/2.0;
+    Vector<2> center2 = r2.center();
 
-    double half1x = e11.length()/2.0;
-    double half1y = e12.length()/2.0;
+    Vector<2> half1 = r1.half();
+    Vector<2> half2 = r2.half();
 
-    double half2x = e21.length()/2.0;
-    double half2y = e22.length()/2.0;
+    double half1x = half1[0];
+    double half1y = half1[1];
+
+    double half2x = half2[0];
+    double half2y = half2[1];
 
     Vector<2> dC = center2-center1;
     double px = half1x+half2x-std::abs(dC[0]);
