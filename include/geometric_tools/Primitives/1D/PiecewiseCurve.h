@@ -15,46 +15,73 @@ INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT
 OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 **/
 
-#include <iostream>
-#include <geometric_tools/Math/LinearSystems/SolveGauss.h>
-#include <geometric_tools/Math/LinearSystems/SolveLU.h>
-#include <geometric_tools/Math/LinearSystems/SolveLinear.h>
-using namespace std;
+#ifndef GEOMETRIC_TOOLS_PRIMITIVES_1D_PIECEWISE_CURVE_H
+#define GEOMETRIC_TOOLS_PRIMITIVES_1D_PIECEWISE_CURVE_H
 
-using namespace GeometricTools::Math;
-using namespace GeometricTools::Math::LinearSystems;
+/**
+* Includes
+**/
+#include <geometric_tools/Primitives/1D/Curve.h>
 
-//SIMPLE EXAMPLE
+#include <geometric_tools/Math/Vector.h>
+#include <geometric_tools/Math/Matrix.h>
+#include <vector>
 
-int main(int argc, char *argv[])
+using std::vector;
+
+
+namespace GeometricTools {
+
+using Math::Matrix;
+using Math::Vector;
+
+namespace Primitives {
+
+/**
+* PiecewiseCurve Class
+* Abstract 1D piecewise curve - base class for all 1D piecewise curves
+**/
+class PiecewiseCurve : public Curve
 {
-    Matrix<3,3> A = Matrix<3,3>(3.,-6.,-3,2.,0.,6.,-4.,7.,4.);
-//    Matrix<4,4> A = Matrix<4,4>(5., 7., 6., 5.,
-//                                7., 10., 8., 7,
-//                                6., 8., 10., 9.,
-//                                5., 7., 9., 10.);
-    Vector<3> B = Vector<3>(-3.,-22.,3.);
-    Vector<3> x = solveLU(A,B);
-    cout<<"Solving System: \n";
-    cout<<A<<endl;
-    cout<<" = \n";
-    cout<<B<<endl;
-    cout<<"\nSOLUTION: ";
-    cout<<x<<endl;
-    cout<<"------------------------------------\n\n";
-    Matrix<4,4> a = Matrix<4,4>(2,1,1,0,4,3,3,1,8,7,9,5,6,7,9,8);
-    Vector<4> b = Vector<4>(1.,2.,3,4);
-    cout<<"SOLUTION with LU: ";
-    Matrix<4,4> a1 = a;
-    Vector<4> y = solveLU(a,b);
-    cout<<y<<endl;
-    Vector<4> y2 = solveGauss(a,b);
-    cout<<"SOLUTION with Gauss: ";
-    cout<<y2<<endl;
-    cout<<"------------------------------------\n\n";
-    Vector<4> y3 = solveLinear(a,b);
-    cout<<"SOLUTION with Linear: ";
-    cout<<y3<<endl;
-    cout<<"------------------------------------\n\n";
-    return 0;
-}
+protected:
+    vector<Curve*> curves_;
+public:
+    PiecewiseCurve() {}
+
+    virtual vector<double> coeff()
+    {
+        if(curves_.size()==0)
+            return vector<double>();
+        vector<double> coef = curves_[0]->coeff();
+        for(int i=1;i<curves_.size();i++)
+        {
+            auto tmp = curves_[i]->coeff();
+            coef.insert(coef.end(), tmp.begin(), tmp.end());
+        }
+        return coef;
+    }
+
+    double getPoint(const double &u)
+    {
+        // Assumes that all the piecewise curve is in u[0,1]
+        int c = getCurveFromU(u*curves_.size());
+        if(c==-1)
+            return 0.0;
+        return curves_[c]->getPoint(u*curves_.size()-c);
+    }
+protected:
+    int getCurveFromU(const double& u)
+    {
+        if(curves_.size()==0)
+            return -1;
+        int c = int(u);
+        if(c>=curves_.size())
+            c = curves_.size()-1;
+        return c;
+    }
+};
+
+} }
+
+
+#endif

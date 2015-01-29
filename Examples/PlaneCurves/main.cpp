@@ -16,10 +16,10 @@ OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISE
 **/
 
 #include <iostream>
-#include <Primitives/2D/PlaneCurve.h>
-#include <Primitives/1D/CardinalPiecewiseCurve.h>
-#include <Primitives/1D/HermitePiecewiseCurve.h>
-#include <Primitives/Tools/CurveSubdivision.h>
+#include <geometric_tools/Primitives/2D/PlaneCurve.h>
+#include <geometric_tools/Primitives/1D/CardinalPiecewiseCurve.h>
+#include <geometric_tools/Primitives/1D/HermitePiecewiseCurve.h>
+#include <geometric_tools/Primitives/Tools/CurveSubdivision.h>
 using namespace std;
 
 using namespace GeometricTools::Primitives;

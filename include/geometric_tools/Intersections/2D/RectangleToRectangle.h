@@ -15,46 +15,67 @@ INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT
 OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 **/
 
-#include <iostream>
-#include <geometric_tools/Math/LinearSystems/SolveGauss.h>
-#include <geometric_tools/Math/LinearSystems/SolveLU.h>
-#include <geometric_tools/Math/LinearSystems/SolveLinear.h>
-using namespace std;
+#ifndef GEOMETRIC_TOOLS_INTERSECTIONS_2D_RECTANGLE_TO_RECTANGLE_H
+#define GEOMETRIC_TOOLS_INTERSECTIONS_2D_RECTANGLE_TO_RECTANGLE_H
 
-using namespace GeometricTools::Math;
-using namespace GeometricTools::Math::LinearSystems;
+/**
+* Includes
+**/
+#include <geometric_tools/Math/Vector.h>
+#include <geometric_tools/Primitives/2D/Rectangle.h>
+#include <geometric_tools/Intersections/IntersectionInfo.h>
+#include <limits>
 
-//SIMPLE EXAMPLE
+namespace GeometricTools {
 
-int main(int argc, char *argv[])
+using Math::Vector;
+using Primitives::Rectangle;
+
+namespace Intersections {
+
+inline Intersection2DInfo* intersect(const Rectangle& r1, const Rectangle& r2)
 {
-    Matrix<3,3> A = Matrix<3,3>(3.,-6.,-3,2.,0.,6.,-4.,7.,4.);
-//    Matrix<4,4> A = Matrix<4,4>(5., 7., 6., 5.,
-//                                7., 10., 8., 7,
-//                                6., 8., 10., 9.,
-//                                5., 7., 9., 10.);
-    Vector<3> B = Vector<3>(-3.,-22.,3.);
-    Vector<3> x = solveLU(A,B);
-    cout<<"Solving System: \n";
-    cout<<A<<endl;
-    cout<<" = \n";
-    cout<<B<<endl;
-    cout<<"\nSOLUTION: ";
-    cout<<x<<endl;
-    cout<<"------------------------------------\n\n";
-    Matrix<4,4> a = Matrix<4,4>(2,1,1,0,4,3,3,1,8,7,9,5,6,7,9,8);
-    Vector<4> b = Vector<4>(1.,2.,3,4);
-    cout<<"SOLUTION with LU: ";
-    Matrix<4,4> a1 = a;
-    Vector<4> y = solveLU(a,b);
-    cout<<y<<endl;
-    Vector<4> y2 = solveGauss(a,b);
-    cout<<"SOLUTION with Gauss: ";
-    cout<<y2<<endl;
-    cout<<"------------------------------------\n\n";
-    Vector<4> y3 = solveLinear(a,b);
-    cout<<"SOLUTION with Linear: ";
-    cout<<y3<<endl;
-    cout<<"------------------------------------\n\n";
-    return 0;
+    Intersection2DInfo* info = new Intersection2DInfo;
+
+    Vector<2> center1 = r1.center();
+
+    Vector<2> center2 = r2.center();
+
+    Vector<2> half1 = r1.half();
+    Vector<2> half2 = r2.half();
+
+    double half1x = half1[0];
+    double half1y = half1[1];
+
+    double half2x = half2[0];
+    double half2y = half2[1];
+
+    Vector<2> dC = center2-center1;
+    double px = half1x+half2x-std::abs(dC[0]);
+    if(px < 0)
+        return nullptr;
+    double py = half1y+half2y-std::abs(dC[1]);
+    if(py < 0)
+        return nullptr;
+    Vector<2> p;
+    Vector<2> n;
+    if(px<py)
+    {
+        int sx = std::abs(dC[0])/dC[0];
+        p = Vector<2>(center1[0]+half1x*sx, center2[1]);
+        n = Vector<2>(sx*px, 0.0);
+    }
+    else
+    {
+        int sy = std::abs(dC[1])/dC[1];
+        p = Vector<2>(center2[0], center1[1]+half1y*sy);
+        n = Vector<2>(0.0, sy*py);
+    }
+    info->point = p;
+    info->delta = n;
+    return info;
 }
+
+} }
+
+#endif

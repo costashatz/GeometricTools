@@ -16,24 +16,24 @@ OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISE
 **/
 
 #include <gtest/gtest.h>
-#include <Math/Vector.h>
-#include <Math/Matrix.h>
-#include <Math/Transformations/2D/Homogeneous.h>
-#include <Math/Transformations/3D/Homogeneous.h>
-#include <Math/Numerical Optimization/1D/GoldenSearchMinimization.h>
-#include <Primitives/LinearShapes.h>
-#include <Primitives/Polyline.h>
-#include <Primitives/2D/Triangle.h>
-#include <Primitives/2D/Rectangle.h>
-#include <Primitives/2D/Circle.h>
-#include <Distances/PointToLinear.h>
-#include <Distances/LinearToLinear.h>
-#include <Distances/LinearToPolyline.h>
-#include <Intersections/IntersectionInfo.h>
-#include <Intersections/2D/LinearToLinear.h>
-#include <Intersections/2D/LinearToPolygon.h>
-#include <Primitives/Tools/BoundingBox.h>
-#include <SpacePartitioning/2D/QuadTree.h>
+#include <geometric_tools/Math/Vector.h>
+#include <geometric_tools/Math/Matrix.h>
+#include <geometric_tools/Math/Transformations/2D/Homogeneous.h>
+#include <geometric_tools/Math/Transformations/3D/Homogeneous.h>
+#include <geometric_tools/Math/Numerical Optimization/1D/GoldenSearchMinimization.h>
+#include <geometric_tools/Primitives/LinearShapes.h>
+#include <geometric_tools/Primitives/Polyline.h>
+#include <geometric_tools/Primitives/2D/Triangle.h>
+#include <geometric_tools/Primitives/2D/Rectangle.h>
+#include <geometric_tools/Primitives/2D/Circle.h>
+#include <geometric_tools/Distances/PointToLinear.h>
+#include <geometric_tools/Distances/LinearToLinear.h>
+#include <geometric_tools/Distances/LinearToPolyline.h>
+#include <geometric_tools/Intersections/IntersectionInfo.h>
+#include <geometric_tools/Intersections/2D/LinearToLinear.h>
+#include <geometric_tools/Intersections/2D/LinearToPolygon.h>
+#include <geometric_tools/Primitives/Tools/BoundingBox.h>
+#include <geometric_tools/SpacePartitioning/2D/QuadTree.h>
 
 #include <vector>
 

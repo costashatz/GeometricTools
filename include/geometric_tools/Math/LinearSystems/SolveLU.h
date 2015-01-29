@@ -15,46 +15,47 @@ INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT
 OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 **/
 
-#include <iostream>
-#include <geometric_tools/Math/LinearSystems/SolveGauss.h>
-#include <geometric_tools/Math/LinearSystems/SolveLU.h>
-#include <geometric_tools/Math/LinearSystems/SolveLinear.h>
-using namespace std;
+#ifndef GEOMETRIC_TOOLS_MATH_LINEAR_SYSTEMS_SOLVE_LU_H
+#define GEOMETRIC_TOOLS_MATH_LINEAR_SYSTEMS_SOLVE_LU_H
 
-using namespace GeometricTools::Math;
-using namespace GeometricTools::Math::LinearSystems;
+/**
+* Includes
+**/
+#include <geometric_tools/Math/Matrix.h>
 
-//SIMPLE EXAMPLE
+extern "C" int dgetrf_(int *m, int *n, double *a, int * lda, int *ipiv, int *info);
+extern "C" int dgetrs_(char *trans, int *n, int *nrhs,
+                       double *a, int *lda, int *ipiv, double *b, int * ldb, int *info);
 
-int main(int argc, char *argv[])
+namespace GeometricTools {
+
+namespace Math {
+
+namespace LinearSystems {
+
+/**
+* Solve Linear System using LU Decomposition
+* @param A - parameter Matrix
+* @param B - constant Vector
+* @return Vector<D> - solution
+**/
+template<unsigned int D>
+Vector<D> solveLU(const Matrix<D,D>& A, const Vector<D>& B)
 {
-    Matrix<3,3> A = Matrix<3,3>(3.,-6.,-3,2.,0.,6.,-4.,7.,4.);
-//    Matrix<4,4> A = Matrix<4,4>(5., 7., 6., 5.,
-//                                7., 10., 8., 7,
-//                                6., 8., 10., 9.,
-//                                5., 7., 9., 10.);
-    Vector<3> B = Vector<3>(-3.,-22.,3.);
-    Vector<3> x = solveLU(A,B);
-    cout<<"Solving System: \n";
-    cout<<A<<endl;
-    cout<<" = \n";
-    cout<<B<<endl;
-    cout<<"\nSOLUTION: ";
-    cout<<x<<endl;
-    cout<<"------------------------------------\n\n";
-    Matrix<4,4> a = Matrix<4,4>(2,1,1,0,4,3,3,1,8,7,9,5,6,7,9,8);
-    Vector<4> b = Vector<4>(1.,2.,3,4);
-    cout<<"SOLUTION with LU: ";
-    Matrix<4,4> a1 = a;
-    Vector<4> y = solveLU(a,b);
-    cout<<y<<endl;
-    Vector<4> y2 = solveGauss(a,b);
-    cout<<"SOLUTION with Gauss: ";
-    cout<<y2<<endl;
-    cout<<"------------------------------------\n\n";
-    Vector<4> y3 = solveLinear(a,b);
-    cout<<"SOLUTION with Linear: ";
-    cout<<y3<<endl;
-    cout<<"------------------------------------\n\n";
-    return 0;
+    int dim = int(D), info, nhrs = 1;
+    char trans = 'T';
+    Matrix<D,D> U = A;
+    int* ipiv = new int[dim];
+
+    dgetrf_(&dim, &dim, U.data(), &dim, ipiv, &info);
+
+    Vector<D> res = B;
+
+    dgetrs_(&trans, &dim, &nhrs, U.data(), &dim, ipiv, res.data(), &dim, &info);
+
+    return res;
 }
+
+} } }
+
+#endif
