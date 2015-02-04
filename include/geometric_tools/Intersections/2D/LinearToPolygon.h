@@ -24,6 +24,7 @@ OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISE
 #include <geometric_tools/Math/Vector.h>
 #include <geometric_tools/Primitives/LinearShapes.h>
 #include <geometric_tools/Primitives/2D/Polygon.h>
+#include <geometric_tools/Primitives/Polyline.h>
 #include <geometric_tools/Intersections/IntersectionInfo.h>
 #include <limits>
 
@@ -34,6 +35,7 @@ using Primitives::Line;
 using Primitives::Ray;
 using Primitives::Segment;
 using Primitives::Polygon;
+using Primitives::Polyline;
 
 namespace Intersections {
 
@@ -93,6 +95,27 @@ inline Intersection2DInfo* intersect(const Segment<2>& seg, const Polygon& poly)
 inline Intersection2DInfo* intersect(const Polygon& poly, const Segment<2>& seg)
 {
     return intersect(seg, poly);
+}
+
+inline Intersection2DInfo* intersect(const Polyline<2>& line, const Polygon& poly)
+{
+    Intersection2DInfo* firstInfo = nullptr;
+    Intersection2DInfo* lastInfo = nullptr;
+    for(int i=0;i<line.vertices().size()-1;i++)
+    {
+        Intersection2DInfo* info = intersect(Segment<2>(line.vertices()[i], line.vertices()[i+1]), poly);
+        if(info!=nullptr && firstInfo!=nullptr)
+            firstInfo = info;
+        else if(info!=nullptr)
+            lastInfo = info;
+    }
+    if(firstInfo==nullptr && lastInfo==nullptr)
+        return nullptr;
+    if(lastInfo==nullptr)
+        return firstInfo;
+    Vector<2> point = lastInfo->point+lastInfo->delta;
+    firstInfo->delta = (point-firstInfo->point);
+    return firstInfo;
 }
 
 } }
