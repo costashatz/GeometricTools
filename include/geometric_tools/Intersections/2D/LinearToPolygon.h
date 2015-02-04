@@ -104,18 +104,23 @@ inline Intersection2DInfo* intersect(const Polyline<2>& line, const Polygon& pol
     for(int i=0;i<line.vertices().size()-1;i++)
     {
         Intersection2DInfo* info = intersect(Segment<2>(line.vertices()[i], line.vertices()[i+1]), poly);
-        if(info!=nullptr && firstInfo!=nullptr)
+        if(info!=nullptr && firstInfo==nullptr)
             firstInfo = info;
         else if(info!=nullptr)
             lastInfo = info;
     }
-    if(firstInfo==nullptr && lastInfo==nullptr)
+    if(firstInfo==nullptr || lastInfo==nullptr)
         return nullptr;
     if(lastInfo==nullptr)
         return firstInfo;
     Vector<2> point = lastInfo->point+lastInfo->delta;
-    firstInfo->delta = (point-firstInfo->point);
+    firstInfo->delta = point-firstInfo->point;
     return firstInfo;
+}
+
+inline Intersection2DInfo* intersect(const Polygon& poly, const Polyline<2>& line)
+{
+    return intersect(line, poly);
 }
 
 } }

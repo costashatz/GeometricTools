@@ -231,25 +231,6 @@ TEST(IntersectionTest, LinearToPolygonTest)
     EXPECT_EQ(info->delta, Vector<2>(1.5, 1)-Vector<2>(-1.5, 1));
 }
 
-TEST(IntersectionTest, PolylineToPolygonTest)
-{
-    using namespace GeometricTools::Primitives;
-    using namespace GeometricTools::Math;
-    using namespace GeometricTools::Intersections;
-    using std::vector;
-    Rectangle r({0,0}, 3.0, 4.0);
-    Polyline<2> p;
-    p.addPoint({-2,1});
-    p.addPoint({2,1});
-    p.addPoint({2,0});
-    Intersection2DInfo* info;
-    info = intersect(p, r);
-    EXPECT_TRUE(info != nullptr);
-    EXPECT_EQ(info->point, Vector<2>(-1.5, 1));
-    EXPECT_EQ(info->delta, Vector<2>(1.5, 1)-Vector<2>(-1.5, 1));
-}
-
-
 TEST(QuadTreeTest, SimpleQuadTree)
 {
     using namespace GeometricTools::Primitives;
