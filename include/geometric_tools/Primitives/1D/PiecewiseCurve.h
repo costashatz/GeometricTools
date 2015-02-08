@@ -61,7 +61,7 @@ public:
         return coef;
     }
 
-    double getPoint(const double &u)
+    const double getPoint(const double &u) const
     {
         // Assumes that all the piecewise curve is in u[0,1]
         int c = getCurveFromU(u*curves_.size());
@@ -70,7 +70,7 @@ public:
         return curves_[c]->getPoint(u*curves_.size()-c);
     }
 protected:
-    int getCurveFromU(const double& u)
+    const int getCurveFromU(const double& u) const
     {
         if(curves_.size()==0)
             return -1;

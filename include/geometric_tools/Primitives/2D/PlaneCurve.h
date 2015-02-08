@@ -87,7 +87,7 @@ public:
         curve_y_->addDDotPointInPlace({point[1], point[3]}, i);
     }
 
-    Vector<2> getPoint(const double& u)
+    const Vector<2> getPoint(const double& u) const
     {
         return {curve_x_->getPoint(u), curve_y_->getPoint(u)};
     }

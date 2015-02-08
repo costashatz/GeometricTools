@@ -102,7 +102,7 @@ public:
         addDDotPoint(point);
     }
 
-    virtual double getPoint(const double& u) = 0;
+    virtual const double getPoint(const double& u) const = 0;
 
     virtual vector<double> coeff() = 0;
 

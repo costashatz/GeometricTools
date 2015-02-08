@@ -59,7 +59,7 @@ public:
         return tmp;
     }
 
-    virtual double getPoint(const double &u)
+    virtual const double getPoint(const double &u) const
     {
         double s = 0.0;
         for(int i=0;i<=3;i++)
