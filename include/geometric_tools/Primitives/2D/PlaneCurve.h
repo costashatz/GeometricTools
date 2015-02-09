@@ -63,6 +63,12 @@ public:
         curve_y_->addPointInPlace(point[1], i);
     }
 
+    void replacePoint(const Vector<2>& point, const unsigned int& i)
+    {
+        curve_x_->replacePoint(point[0], i);
+        curve_y_->replacePoint(point[1], i);
+    }
+
     void addDotPoint(const Vector<4>& point)
     {
         curve_x_->addDotPoint({point[0], point[2]});
@@ -75,6 +81,12 @@ public:
         curve_y_->addDotPointInPlace({point[1], point[3]}, i);
     }
 
+    void replaceDotPoint(const Vector<4>& point, const unsigned int& i)
+    {
+        curve_x_->replaceDotPoint({point[0], point[2]}, i);
+        curve_y_->replaceDotPoint({point[1], point[3]}, i);
+    }
+
     void addDDotPoint(const Vector<4>& point)
     {
         curve_x_->addDDotPoint({point[0], point[2]});
@@ -85,6 +97,12 @@ public:
     {
         curve_x_->addDDotPointInPlace({point[0], point[2]}, i);
         curve_y_->addDDotPointInPlace({point[1], point[3]}, i);
+    }
+
+    void replaceDDotPoint(const Vector<4>& point, const unsigned int& i)
+    {
+        curve_x_->replaceDDotPoint({point[0], point[2]}, i);
+        curve_y_->replaceDDotPoint({point[1], point[3]}, i);
     }
 
     const Vector<2> getPoint(const double& u) const

@@ -70,6 +70,11 @@ public:
         addPoint(point);
     }
 
+    void replacePoint(const double& point, const unsigned int& i)
+    {
+        //Override to give desired functionality
+    }
+
     void addDotPoint(const Vector<2>& point)
     {
         if(defined() || !canAddDotPoint(point))
@@ -86,6 +91,11 @@ public:
         addDotPoint(point);
     }
 
+    void replaceDotPoint(const Vector<2>& point, const unsigned int& i)
+    {
+        //Override to give desired functionality
+    }
+
     void addDDotPoint(const Vector<2>& point)
     {
         if(defined() || !canAddDDotPoint(point))
@@ -100,6 +110,11 @@ public:
     {
         //Override to give desired functionality
         addDDotPoint(point);
+    }
+
+    void replaceDDotPoint(const Vector<2>& point, const unsigned int& i)
+    {
+        //Override to give desired functionality
     }
 
     virtual const double getPoint(const double& u) const = 0;

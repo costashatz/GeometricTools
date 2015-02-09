@@ -79,6 +79,45 @@ public:
         ((HermiteCurve*)curves_[i])->addDotPoint(dot_points_[i+1]);
     }
 
+    void replaceDotPoint(const Vector<2>& point, const unsigned int &i)
+    {
+        if(i>=points_.size() || i< 0)
+            return;
+        int c = int(i)-1;
+        if(c<0)
+        {
+            points_[0] = point[0];
+            dot_points_[0] = point;
+            curves_[0]->getPoints().clear();
+            curves_[0]->getDotPoints().clear();
+            ((HermiteCurve*)curves_[0])->addDotPoint(dot_points_[0]);
+            ((HermiteCurve*)curves_[0])->addDotPoint(dot_points_[1]);
+            return;
+        }
+        if(i==(points_.size()-1))
+        {
+            points_[i] = point[0];
+            dot_points_[i] = point;
+            curves_[c]->getPoints().clear();
+            curves_[c]->getDotPoints().clear();
+            ((HermiteCurve*)curves_[c])->addDotPoint(dot_points_[i-1]);
+            ((HermiteCurve*)curves_[c])->addDotPoint(dot_points_[i]);
+            return;
+        }
+        points_[i] = point[0];
+        dot_points_[i] = point;
+        // change previous piece
+        curves_[c]->getPoints().clear();
+        curves_[c]->getDotPoints().clear();
+        ((HermiteCurve*)curves_[c])->addDotPoint(dot_points_[i-1]);
+        ((HermiteCurve*)curves_[c])->addDotPoint(dot_points_[i]);
+        // change next piece
+        curves_[i]->getPoints().clear();
+        curves_[i]->getDotPoints().clear();
+        ((HermiteCurve*)curves_[i])->addDotPoint(dot_points_[i]);
+        ((HermiteCurve*)curves_[i])->addDotPoint(dot_points_[i+1]);
+    }
+
 protected:
     void calculateCoefficients()
     {
