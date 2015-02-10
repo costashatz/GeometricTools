@@ -81,7 +81,7 @@ public:
 
     void replaceDotPoint(const Vector<2>& point, const unsigned int &i)
     {
-        if(i>=points_.size() || i< 0)
+        if(i>=points_.size())
             return;
         int c = int(i)-1;
         if(c<0)
