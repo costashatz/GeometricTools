@@ -48,6 +48,15 @@ protected:
 public:
     PiecewiseCurve() {}
 
+    ~PiecewiseCurve()
+    {
+        for(unsigned int i=0;i<curves_.size();i++)
+        {
+            if(curves_[i])
+                delete curves_[i];
+        }
+    }
+
     virtual vector<double> coeff()
     {
         if(curves_.size()==0)

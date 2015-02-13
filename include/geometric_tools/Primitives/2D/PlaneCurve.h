@@ -51,6 +51,14 @@ public:
         curve_y_ = new CurveTypeB(std::forward<U>(args)...);
     }
 
+    ~PlaneCurve()
+    {
+        if(curve_x_)
+            delete curve_x_;
+        if(curve_y_)
+            delete curve_y_;
+    }
+
     void addPoint(const Vector<2>& point)
     {
         curve_x_->addPoint(point[0]);

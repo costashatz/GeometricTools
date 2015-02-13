@@ -27,7 +27,7 @@ OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISE
 namespace GeometricTools { namespace Primitives {
 
 template<class CurveA, class CurveB>
-Polyline<2> uniformSubdivision(PlaneCurve<CurveA,CurveB>& curve, const int& N, const double& u_min = 0.0, const double& u_max = 1.0)
+Polyline<2> uniformSubdivision(const PlaneCurve<CurveA,CurveB>& curve, const int& N, const double& u_min = 0.0, const double& u_max = 1.0)
 {
     Polyline<2> res;
     double umin = std::min(std::max(0.0, u_min), 1.0);

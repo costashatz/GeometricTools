@@ -55,6 +55,8 @@ protected:
 
     virtual bool canAddDDotPoint(const Vector<2>& point) = 0;
 public:
+    virtual ~Curve() {}
+
     void addPoint(const double& point)
     {
         if(defined() || !canAddPoint(point))
