@@ -1,8 +1,8 @@
 ## Geometric Tools
 
-###Math Library for Linear Algebra, Numerical Methods, Geometric Representations and Collision Detection Algorithms
+### Math Library for Linear Algebra, Numerical Methods, Geometric Representations and Collision Detection Algorithms
 
-####Dependencies
+#### Dependencies
 1. **C++11 compiler**
 	* Tested on gcc>=4.6, clang>=3.1
 	* Should compile on Visual Studio 2013-2015
@@ -15,7 +15,7 @@
 4. **Google Tests (gtest)** *[OPTIONAL]*
 	* Needed to build the test codes
 
-####How to compile:
+#### How to compile:
 
 ```
 cd path/to/GeometricTools
@@ -29,7 +29,7 @@ make
 	2. BUILD_EXAMPLES (ON/OFF) - Specify whether you want to build tests or not. Defaults to OFF.
 	3. RUN_TEST (ON/OFF) - Specify whether you want to automatically execute all tests upon build. Defaults to OFF. 
 
-####How to use:
+#### How to use:
 
 * You can just edit the CMakeLists.txt and include the headers to your project (after all it is just a header library).
 * Via ExternalProject to always get latest edition:
@@ -60,7 +60,7 @@ make
 	```
 
 
-####So far I have implemented:
+#### So far I have implemented:
 
 1. Generic Templated Class for Matrices
     * Supports any dimension and many properties
@@ -91,7 +91,7 @@ make
 10. Simple gtests (more need to be added)
 11. Simple examples (more interactive ones need to be added)
 
-####Planning to implement:
+#### Planning to implement:
 
 1. More primitives (both in 2D and 3D)
 	* Piecewise polynomial curves
@@ -100,6 +100,3 @@ make
 3. Cleanify code/add comments
 
 
-####WORK IN PROGRESS - WILL BE UPDATED FREQUENTLY
-
-I am currently working on this little library/project and will be pushing more updated stuff. Any suggestions of course are more than welcomed.
